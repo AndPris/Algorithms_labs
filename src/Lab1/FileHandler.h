@@ -2,6 +2,7 @@
 
 #include <string>
 #include <fstream>
+#include <iostream>
 #include "RandomGenerator.h"
 using namespace std;
 
@@ -19,6 +20,7 @@ public:
 	FileHandler(int size_of_initial_file_in_mb, int amount_of_supporting_files);
 
 	void create_initial_file();
+	void display_initial_file();
 
 	~FileHandler();
 };
