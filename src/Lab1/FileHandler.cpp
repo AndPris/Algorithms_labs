@@ -1,13 +1,6 @@
 #include "FileHandler.h"
 
 
-int FileHandler::generate_number_from_range(int low_border, int top_border) {
-	srand(time(nullptr));
-
-	return low_border + rand() % (top_border - low_border + 1);
-}
-
-
 FileHandler::FileHandler(int size_of_initial_file_in_mb, int amount_of_supporting_files) : size_of_initial_file_in_mb(size_of_initial_file_in_mb), amount_of_suporting_files(amount_of_suporting_files) {
 	file_extension = ".bin";
 	initial_file_name = "initial" + file_extension;
