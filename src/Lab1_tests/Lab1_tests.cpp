@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
+#include "../Lab1/FileHandler.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -8,9 +9,19 @@ namespace Lab1tests
 	TEST_CLASS(Lab1tests)
 	{
 	public:
-		
-		TEST_METHOD(TestMethod1)
+
+		TEST_METHOD(generate_number_from_range1)
 		{
+			FileHandler test(0, 0);
+			Assert::AreEqual(test.generate_number_from_range(1, 1), 1);
+		}
+
+		TEST_METHOD(generate_number_from_range2)
+		{
+			FileHandler test(0, 0);
+			int low_border = 1, top_border = 5;
+			int random_number = test.generate_number_from_range(low_border, top_border);
+			Assert::IsTrue(random_number >= low_border && random_number <= top_border);
 		}
 	};
 }

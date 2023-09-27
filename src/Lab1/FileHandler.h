@@ -14,10 +14,10 @@ class FileHandler
 	string initial_file_name;
 	string supporting_file_prefix;
 	string *supporting_files_names;
-
-	int generate_number_from_range(int low_border, int top_border);
 public:
 	FileHandler(int size_of_initial_file_in_mb, int amount_of_supporting_files);
+
+	int generate_number_from_range(int low_border, int top_border);
 
 	~FileHandler();
 };
