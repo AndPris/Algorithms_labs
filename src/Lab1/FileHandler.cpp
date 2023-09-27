@@ -1,21 +1,13 @@
 #include "FileHandler.h"
 
 
-FileHandler::FileHandler(int size_of_initial_file_in_mb, int amount_of_supporting_files) : size_of_initial_file_in_mb(size_of_initial_file_in_mb), amount_of_suporting_files(amount_of_suporting_files) {
-	path_to_folder = "x64/Debug/";
-	file_extension = ".bin";
-	initial_file_name = path_to_folder + "initial" + file_extension;
-	supporting_file_prefix = path_to_folder + "supporting_";
-
-	supporting_files_names = new string[amount_of_suporting_files];
-	for (int i = 0; i < amount_of_suporting_files; i++)
-		supporting_files_names[i] = supporting_file_prefix + to_string(i) + file_extension;
-
+FileHandler::FileHandler(string initial_file_path, int size_of_initial_file_in_mb) : size_of_initial_file_in_mb(size_of_initial_file_in_mb) {
+	this->initial_file_path = initial_file_path;
 }
 
-void FileHandler::create_initial_file() {
+void FileHandler::create_initial_file() const{
 	RandomGenerator generator;
-	ofstream initial_file(initial_file_name, ios::binary);
+	ofstream initial_file(initial_file_path, ios::binary);
 
 	int amount_of_numbers = size_of_initial_file_in_mb;// TODO: size_of_initial_file_in_mb * 1024 / sizeof(int);
 	for (int i = 0; i < amount_of_numbers; i++) {
@@ -26,8 +18,8 @@ void FileHandler::create_initial_file() {
 	initial_file.close();
 }
 
-void FileHandler::display_initial_file() {
-	ifstream initial_file(initial_file_name, ios::binary);
+void FileHandler::display_initial_file() const{
+	ifstream initial_file(initial_file_path, ios::binary);
 
 	int number;
 	while (initial_file.peek() != EOF) {
@@ -39,6 +31,6 @@ void FileHandler::display_initial_file() {
 	initial_file.close();
 }
 
-FileHandler::~FileHandler() {
-	delete[] supporting_files_names;
+string FileHandler::get_initial_file_path() const {
+	return initial_file_path;
 }

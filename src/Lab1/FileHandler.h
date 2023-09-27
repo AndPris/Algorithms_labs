@@ -9,19 +9,14 @@ using namespace std;
 
 class FileHandler {
 	const int size_of_initial_file_in_mb;
-	const int amount_of_suporting_files;
 
-	string path_to_folder;
-	string file_extension;
-	string initial_file_name;
-	string supporting_file_prefix;
-	string *supporting_files_names;
+	string initial_file_path;
 public:
-	FileHandler(int size_of_initial_file_in_mb, int amount_of_supporting_files);
+	FileHandler(string initial_file_path, int size_of_initial_file_in_mb);
 
-	void create_initial_file();
-	void display_initial_file();
+	void create_initial_file() const;
+	void display_initial_file() const;
 
-	~FileHandler();
+	string get_initial_file_path() const;
 };
 

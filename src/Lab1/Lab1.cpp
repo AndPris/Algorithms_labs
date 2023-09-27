@@ -1,10 +1,19 @@
 #include "FileHandler.h"
-
+#include "FileSorter.h"
 int main() {
-    FileHandler handler(21, 2);
+    const int amoutn_of_supporting_files = 3;
+    string path_to_folder = "x64/Debug/";
+    string file_extension = ".bin";
+    string initial_file_path = path_to_folder + "initial" + file_extension;
+    string supporting_file_prefix = path_to_folder + "supporting_";
 
-    handler.create_initial_file();
+
+    FileHandler handler(initial_file_path, 21);
+
+    //handler.create_initial_file();
     handler.display_initial_file();
 
+    
+    FileSorter sorter(handler.get_initial_file_path(), file_extension, supporting_file_prefix, amoutn_of_supporting_files);
     return 0;
 }
