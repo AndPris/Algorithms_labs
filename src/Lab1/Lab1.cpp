@@ -1,5 +1,6 @@
 #include "FileHandler.h"
 #include "FileSorter.h"
+
 int main() {
     const int amoutn_of_supporting_files = 3;
     string path_to_folder = "x64/Debug/";
@@ -15,5 +16,6 @@ int main() {
 
     
     FileSorter sorter(handler.get_initial_file_path(), file_extension, supporting_file_prefix, amoutn_of_supporting_files);
+    sorter.make_initial_spliting();
     return 0;
 }
