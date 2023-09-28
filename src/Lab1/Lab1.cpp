@@ -11,7 +11,7 @@ int main() {
 
     FileHandler handler(initial_file_path, 21);
 
-    //handler.create_initial_file();
+    handler.create_initial_file();
     handler.display_initial_file();
 
     
