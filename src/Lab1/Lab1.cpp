@@ -2,7 +2,7 @@
 #include "FileSorter.h"
 
 int main() {
-    const int amoutn_of_supporting_files = 3;
+    const int amount_of_supporting_files = 6;
     const int size_of_initial_file_in_mb = 1;
     string path_to_folder = "x64/Debug/";
     string file_extension = ".bin";
@@ -13,10 +13,10 @@ int main() {
     FileHandler handler(initial_file_path, size_of_initial_file_in_mb);
 
     handler.create_initial_file();
-    handler.display_initial_file();
+    //handler.display_initial_file();
 
     
-    FileSorter sorter(handler.get_initial_file_path(), file_extension, supporting_file_prefix, amoutn_of_supporting_files);
+    FileSorter sorter(handler.get_initial_file_path(), file_extension, supporting_file_prefix, amount_of_supporting_files);
     sorter.make_initial_spliting();
     sorter.polyphase_merge_sort();
     return 0;

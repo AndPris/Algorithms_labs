@@ -12,7 +12,7 @@ class FileSorter {
 	string* supporting_files_names;
 	int	*active_supporting_files_indexes;
 	int* ideal_amount_of_series, *amount_of_empty_series;
-	long *start_position_of_reading;
+	size_t *start_position_of_reading;
 
 	int level;
 public:

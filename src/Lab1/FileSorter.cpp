@@ -5,7 +5,9 @@ void display(string path) {
 	ifstream file(path, ios::binary);
 
 	int number;
-	while (file.peek() != EOF) {
+	int i = 0;
+	while (i < 100 && file.peek() != EOF) {
+		i++;
 		file.read((char*)&number, sizeof(number));
 		std::cout << number << " ";
 	}
@@ -26,7 +28,7 @@ FileSorter::FileSorter(string file_to_sort_path, string file_extension, string s
 
 	ideal_amount_of_series = new int[amount_of_supporting_files];
 	amount_of_empty_series = new int[amount_of_supporting_files];
-	start_position_of_reading = new long[amount_of_supporting_files];
+	start_position_of_reading = new size_t[amount_of_supporting_files];
 	active_supporting_files_indexes = new int[amount_of_supporting_files - 1];
 	for (int i = 0; i < amount_of_supporting_files-1; i++) {
 		ideal_amount_of_series[i] = 1;
@@ -35,6 +37,7 @@ FileSorter::FileSorter(string file_to_sort_path, string file_extension, string s
 	}
 	ideal_amount_of_series[amount_of_supporting_files-1] = 0;
 	amount_of_empty_series[amount_of_supporting_files-1] = 0;
+	start_position_of_reading[amount_of_supporting_files - 1] = 0;
 	level = 1;
 }
 
@@ -145,7 +148,7 @@ void FileSorter::polyphase_merge_sort() {
 		string last_supporting_file_name = supporting_files_names[amount_of_supporting_files - 1];
 		int amount_of_empty_series_in_last_file = amount_of_empty_series[amount_of_supporting_files - 1];
 		max_amount_of_merged_series = ideal_amount_of_series[amount_of_supporting_files - 2];
-		long last_file_start_position = start_position_of_reading[amount_of_supporting_files - 1];
+		size_t last_file_start_position = start_position_of_reading[amount_of_supporting_files - 1];
 		for (int i = amount_of_supporting_files - 1; i > 0; i--) {
 			supporting_files_names[i] = supporting_files_names[i - 1];
 			amount_of_empty_series[i] = amount_of_empty_series[i - 1];
@@ -173,7 +176,7 @@ void FileSorter::polyphase_merge_sort() {
 
 void FileSorter::merge_one_serie(int amount_of_active_files, ifstream* active_supporting_files, ofstream& output_file) {
 	do {
-		int i = 0, index_of_file_with_min_element = active_supporting_files_indexes[0], min = get_next_number(active_supporting_files[active_supporting_files_indexes[0]]);
+		int i = 0, index_of_file_with_min_element = 0, min = get_next_number(active_supporting_files[active_supporting_files_indexes[index_of_file_with_min_element]]);
 		while (i < amount_of_active_files - 1) {
 			i++;
 			int current_element = get_next_number(active_supporting_files[active_supporting_files_indexes[i]]);
@@ -186,7 +189,7 @@ void FileSorter::merge_one_serie(int amount_of_active_files, ifstream* active_su
 		start_position_of_reading[active_supporting_files_indexes[index_of_file_with_min_element]] = active_supporting_files[active_supporting_files_indexes[index_of_file_with_min_element]].tellg();
 		output_file.write((char*)&min, sizeof(min));
 
-		if (get_next_number(active_supporting_files[index_of_file_with_min_element]) < min) {
+		if (get_next_number(active_supporting_files[active_supporting_files_indexes[index_of_file_with_min_element]]) < min) {
 			active_supporting_files_indexes[index_of_file_with_min_element] = active_supporting_files_indexes[amount_of_active_files - 1];
 			amount_of_active_files--;
 		}
