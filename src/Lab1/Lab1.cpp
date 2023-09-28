@@ -3,13 +3,14 @@
 
 int main() {
     const int amoutn_of_supporting_files = 3;
+    const int size_of_initial_file_in_mb = 1;
     string path_to_folder = "x64/Debug/";
     string file_extension = ".bin";
     string initial_file_path = path_to_folder + "initial" + file_extension;
     string supporting_file_prefix = path_to_folder + "supporting_";
 
 
-    FileHandler handler(initial_file_path, 21);
+    FileHandler handler(initial_file_path, size_of_initial_file_in_mb);
 
     handler.create_initial_file();
     handler.display_initial_file();

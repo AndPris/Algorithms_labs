@@ -22,6 +22,8 @@ public:
 	void select_supporting_file_to_write_series(int& index_of_file_to_write);
 	int write_series(ifstream& from, ofstream& destination);
 
+	int get_next_number(ifstream& from);
+
 	void polyphase_merge_sort();
 	void merge_one_serie(int amount_of_active_files, ifstream* active_supporting_files, ofstream& output_file);
 
