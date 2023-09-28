@@ -17,5 +17,6 @@ int main() {
     
     FileSorter sorter(handler.get_initial_file_path(), file_extension, supporting_file_prefix, amoutn_of_supporting_files);
     sorter.make_initial_spliting();
+    sorter.polyphase_merge_sort();
     return 0;
 }
