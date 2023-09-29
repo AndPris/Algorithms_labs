@@ -10,9 +10,8 @@ class FileSorter {
 
 	string file_to_sort_path;
 	string* supporting_files_names;
-	int	*active_supporting_files_indexes;
-	int* ideal_amount_of_series, *amount_of_empty_series;
-	size_t *start_position_of_reading;
+	int	*active_supporting_files_indexes, *supporting_files_names_indexes,
+		*ideal_amount_of_series, *amount_of_empty_series;
 
 	int level;
 public:
@@ -20,12 +19,12 @@ public:
 
 	void make_initial_spliting();
 	void select_supporting_file_to_write_series(int& index_of_file_to_write);
-	int write_series(ifstream& from, ofstream& destination);
+	int write_series(fstream& from, ofstream& destination);
 
-	int get_next_number(ifstream& from);
+	int get_next_number(fstream& from);
 
 	void polyphase_merge_sort();
-	void merge_one_serie(int amount_of_active_files, ifstream* active_supporting_files, ofstream& output_file);
+	void merge_one_serie(int amount_of_active_files, fstream* active_supporting_files);
 
 	~FileSorter();
 };
