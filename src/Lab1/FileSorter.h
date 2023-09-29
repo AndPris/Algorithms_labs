@@ -3,19 +3,23 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <Windows.h>
+#include <algorithm>
 using namespace std;
 
 class FileSorter {
 	const int amount_of_supporting_files;
 
-	string file_to_sort_path;
+	const wchar_t* file_to_sort_path;
 	string* supporting_files_names;
 	int	*active_supporting_files_indexes, *supporting_files_names_indexes,
 		*ideal_amount_of_series, *amount_of_empty_series;
 
 	int level;
 public:
-	FileSorter(string file_to_sort_path, string file_extension, string supporting_file_prefix, int amount_of_supporting_files);
+	FileSorter(const wchar_t* file_to_sort_path, string file_extension, string supporting_file_prefix, int amount_of_supporting_files);
+
+	void pre_sort();
 
 	void make_initial_spliting();
 	void select_supporting_file_to_write_series(int& index_of_file_to_write);

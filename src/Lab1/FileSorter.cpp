@@ -17,7 +17,7 @@ void display(string path) {
 }
 
 
-FileSorter::FileSorter(string file_to_sort_path, string file_extension, string supporting_file_prefix, int amount_of_supporting_files)
+FileSorter::FileSorter(const wchar_t* file_to_sort_path, string file_extension, string supporting_file_prefix, int amount_of_supporting_files)
 	: amount_of_supporting_files(amount_of_supporting_files) {
 
 	this->file_to_sort_path = file_to_sort_path;
@@ -41,6 +41,47 @@ FileSorter::FileSorter(string file_to_sort_path, string file_extension, string s
 	supporting_files_names_indexes[amount_of_supporting_files - 1] = amount_of_supporting_files - 1;
 	
 	level = 1;
+}
+
+
+void FileSorter::pre_sort() {
+	_SYSTEM_INFO s;
+	GetSystemInfo(&s);
+
+	const int amount_of_parts = 9;
+
+	HANDLE test_file = CreateFile(file_to_sort_path, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (test_file == INVALID_HANDLE_VALUE) {
+		throw "File Creation error";
+	}
+
+	DWORD file_size = GetFileSize(test_file, NULL);
+	DWORD part_size = (file_size / s.dwAllocationGranularity / amount_of_parts) * s.dwAllocationGranularity;
+
+	HANDLE file_mapping = CreateFileMapping(test_file, NULL, PAGE_READWRITE, 0, 0, NULL);
+	if (file_mapping == NULL) {
+		CloseHandle(test_file);
+		throw "File Mapping Creation error";
+	}
+
+	for (int k = 0; k < file_size / part_size; ++k) {
+		DWORD offset = k * part_size;
+		DWORD part_file_size = (k == amount_of_parts - 1) ? (file_size - offset) : part_size;
+
+		LPVOID mapped_data = MapViewOfFile(file_mapping, FILE_MAP_READ | FILE_MAP_WRITE, 0, offset, part_file_size);
+		if (mapped_data == NULL) {
+			CloseHandle(file_mapping);
+			CloseHandle(test_file);
+			throw "Map View error";
+		}
+
+		int* data = static_cast<int*>(mapped_data);
+		sort(data, data + part_file_size / sizeof(int));
+		UnmapViewOfFile(mapped_data);
+	}
+
+	CloseHandle(file_mapping);
+	CloseHandle(test_file);
 }
 
 void FileSorter::make_initial_spliting() {

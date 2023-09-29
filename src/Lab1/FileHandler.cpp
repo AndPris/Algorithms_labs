@@ -1,7 +1,7 @@
 #include "FileHandler.h"
 
 
-FileHandler::FileHandler(string initial_file_path, int size_of_initial_file_in_mb) : size_of_initial_file_in_mb(size_of_initial_file_in_mb) {
+FileHandler::FileHandler(const wchar_t* initial_file_path, int size_of_initial_file_in_mb) : size_of_initial_file_in_mb(size_of_initial_file_in_mb) {
 	this->initial_file_path = initial_file_path;
 }
 
@@ -32,6 +32,6 @@ void FileHandler::display_initial_file() const{
 	initial_file.close();
 }
 
-string FileHandler::get_initial_file_path() const {
+const wchar_t* FileHandler::get_initial_file_path() const {
 	return initial_file_path;
 }
