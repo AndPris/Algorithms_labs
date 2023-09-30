@@ -13,7 +13,7 @@ class FileSorter {
 	const wchar_t* file_to_sort_path;
 	string* supporting_files_names;
 	int	*active_supporting_files_indexes, *supporting_files_names_indexes,
-		*ideal_amount_of_series, *amount_of_empty_series;
+		*ideal_amount_of_series, *amount_of_empty_series, *first_numbers;
 
 	int level;
 public:
