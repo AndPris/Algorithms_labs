@@ -15,7 +15,6 @@ public:
 	FileHandler(const wchar_t* initial_file_path, int size_of_initial_file_in_mb);
 
 	void create_initial_file() const;
-	void display_initial_file() const;
 
 	const wchar_t* get_initial_file_path() const;
 };

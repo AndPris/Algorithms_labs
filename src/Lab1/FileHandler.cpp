@@ -18,20 +18,6 @@ void FileHandler::create_initial_file() const{
 	initial_file.close();
 }
 
-void FileHandler::display_initial_file() const{
-	ifstream initial_file(initial_file_path, ios::binary);
-
-	int number;
-	cout << "Initial file:" << endl;
-	while (initial_file.peek() != EOF) {
-		initial_file.read((char*)&number, sizeof(number));
-		cout << number << " ";
-	}
-	cout << endl << "---------------------------" << endl;
-
-	initial_file.close();
-}
-
 const wchar_t* FileHandler::get_initial_file_path() const {
 	return initial_file_path;
 }

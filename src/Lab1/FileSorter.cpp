@@ -49,7 +49,7 @@ void FileSorter::pre_sort() {
 	_SYSTEM_INFO s;
 	GetSystemInfo(&s);
 
-	const int amount_of_parts = 5;
+	const int amount_of_parts = 9;
 
 	HANDLE file_to_sort = CreateFile(file_to_sort_path, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (file_to_sort == INVALID_HANDLE_VALUE) {
@@ -65,7 +65,7 @@ void FileSorter::pre_sort() {
 		throw "File Mapping Creation error";
 	}
 
-	for (int k = 0; k < file_size / part_size; ++k) {
+	for (int k = 0; k < amount_of_parts; ++k) {
 		DWORD offset = k * part_size;
 		DWORD part_file_size = (k == amount_of_parts - 1) ? (file_size - offset) : part_size;
 
@@ -142,13 +142,25 @@ void FileSorter::select_supporting_file_to_write_series(int& index_of_file_to_wr
 }
 
 int FileSorter::write_series(fstream& from, ofstream& destination) {
-	int current_number;
+	int current_number, previous_number = -1;
+	bool run = true;
 	do {
 		from.read((char*)&current_number, sizeof(current_number));
-		destination.write((char*)&current_number, sizeof(current_number));
-	} while (from.peek() != EOF && get_next_number(from) >= current_number);
 
-	return current_number; //last recorded number
+		if (current_number < previous_number) {
+			run = false;
+			from.seekg(-1 * sizeof(current_number), ios::cur);
+		} else {
+			destination.write((char*)&current_number, sizeof(current_number));
+			previous_number = current_number;
+		}
+
+		if (from.peek() == EOF)
+			run = false;
+
+	} while (run);
+
+	return previous_number; //last recorded number
 }
 
 

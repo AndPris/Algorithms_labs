@@ -5,13 +5,11 @@
 
 
 int main() {
-    const int amount_of_supporting_files = 3;
+    const int amount_of_supporting_files = 6;
     const int size_of_initial_file_in_mb = 10;
     string path_to_folder = "x64/Debug/";
     string file_extension = ".bin";
     string supporting_file_prefix = path_to_folder + "supporting_";
-
-    //string initial_file_path = path_to_folder + "initial" + file_extension;
 
     const wchar_t* initial_file_path = L"x64/Debug/initial.bin";
 
@@ -24,13 +22,12 @@ int main() {
     beginning_of_creation = clock();
     handler.create_initial_file();
     end_of_creation = clock();
-    //handler.display_initial_file();
     cout << "Creation of the file took " << fixed << double(end_of_creation - beginning_of_creation) / CLOCKS_PER_SEC << setprecision(5) << " seconds" << endl;
 
     try {
         FileSorter sorter(handler.get_initial_file_path(), file_extension, supporting_file_prefix, amount_of_supporting_files);
         beginning_of_sorting = clock();
-        //sorter.pre_sort();
+        sorter.pre_sort();
 
         beginning_of_spliting = clock();
         sorter.make_initial_spliting();
