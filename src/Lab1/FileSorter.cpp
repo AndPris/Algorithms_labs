@@ -50,87 +50,39 @@ FileSorter::FileSorter(const wchar_t* file_to_sort_path, string file_extension, 
 
 
 void FileSorter::pre_sort() {
-	const int amount_of_parts = 9;
+	const int part_size_in_granularity = 10 * 1024 / memory_allocation_granularity;
 
-	HANDLE file_to_sort = CreateFile(file_to_sort_path, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (file_to_sort == INVALID_HANDLE_VALUE) {
-		throw "File Creation error";
-	}
+	FileMapping file_to_sort(file_to_sort_path);
 
-	DWORD file_size = GetFileSize(file_to_sort, NULL);
-	DWORD part_size = (file_size / memory_allocation_granularity / amount_of_parts) * memory_allocation_granularity;
-
-	HANDLE file_mapping = CreateFileMapping(file_to_sort, NULL, PAGE_READWRITE, 0, 0, NULL);
-	if (file_mapping == NULL) {
-		CloseHandle(file_to_sort);
-		throw "File Mapping Creation error";
-	}
-
-	for (int k = 0; k < amount_of_parts; ++k) {
-		DWORD offset = k * part_size;
-		DWORD part_file_size = (k == amount_of_parts - 1) ? (file_size - offset) : part_size;
-
-		LPVOID mapped_data = MapViewOfFile(file_mapping, FILE_MAP_READ | FILE_MAP_WRITE, 0, offset, part_file_size);
-		if (mapped_data == NULL) {
-			CloseHandle(file_mapping);
-			CloseHandle(file_to_sort);
-			throw "Map View error";
-		}
-
-		int* data = static_cast<int*>(mapped_data);
-		sort(data, data + part_file_size / sizeof(int));
-		UnmapViewOfFile(mapped_data);
-	}
-
-	CloseHandle(file_mapping);
-	CloseHandle(file_to_sort);
+	file_to_sort.open(GENERIC_READ | GENERIC_WRITE, OPEN_ALWAYS, PAGE_READWRITE, FILE_MAP_READ | FILE_MAP_WRITE, part_size_in_granularity);
+	file_to_sort.partial_sort();
+	file_to_sort.close();
 }
 
 void FileSorter::make_initial_spliting() {
-	HANDLE file_to_sort = CreateFile(file_to_sort_path, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (file_to_sort == INVALID_HANDLE_VALUE) {
-		throw "File Creation error";
-	}
+	const int part_size_in_granularity = 10 * 1024 * 1024 / memory_allocation_granularity;
 
-	DWORD file_size = GetFileSize(file_to_sort, NULL);
-	DWORD recorded_data_size = 0;
-	DWORD part_size = 10 * memory_allocation_granularity;
-	int part_counter = 0;
-
-	HANDLE file_mapping = CreateFileMapping(file_to_sort, NULL, PAGE_READONLY, 0, 0, NULL);
-	if (file_mapping == NULL) {
-		CloseHandle(file_to_sort);
-		throw "File Mapping Creation error";
-	}
-
-	LPVOID mapped_data = MapViewOfFile(file_mapping, FILE_MAP_READ, 0, part_counter * part_size, (part_size > file_size - part_size * part_counter ? file_size - part_size * part_counter : part_size));
-	part_counter++;
-	if (mapped_data == NULL) {
-		CloseHandle(file_mapping);
-		CloseHandle(file_to_sort);
-		throw "Map View error";
-	}
-
-	int* data = static_cast<int*>(mapped_data);
+	FileMapping file_to_sort(file_to_sort_path);
+	file_to_sort.open(GENERIC_READ, OPEN_EXISTING, PAGE_READONLY, FILE_MAP_READ, part_size_in_granularity);
 
 	ofstream* supporting_files = new ofstream[amount_of_supporting_files - 1];
 	int* last_recorded_number = new int[amount_of_supporting_files - 1];
 
-	for (int i = 0; i < amount_of_supporting_files - 1 && recorded_data_size < file_size; ++i) {
+	for (int i = 0; i < amount_of_supporting_files - 1 && !file_to_sort.is_end(); ++i) {
 		supporting_files[i].open(supporting_files_names[i], ios::binary);
-		last_recorded_number[i] = write_series(data, supporting_files[i], part_counter, file_size, part_size, recorded_data_size, file_mapping, mapped_data);
+		last_recorded_number[i] = write_series(file_to_sort, supporting_files[i]);
 		--amount_of_empty_series[i];
 	}
 
 	int index_of_file_to_write = 0;
-	while (file_size != recorded_data_size) {
+	while (!file_to_sort.is_end()) {
 		select_supporting_file_to_write_series(index_of_file_to_write);
-		if (data[(recorded_data_size - part_size * (part_counter - 1)) / sizeof(int) + 1] < last_recorded_number[index_of_file_to_write])
-			last_recorded_number[index_of_file_to_write] = write_series(data, supporting_files[index_of_file_to_write], part_counter, file_size, part_size, recorded_data_size, file_mapping, mapped_data);
+		if (file_to_sort.peek() < last_recorded_number[index_of_file_to_write])
+			last_recorded_number[index_of_file_to_write] = write_series(file_to_sort, supporting_files[index_of_file_to_write]);
 		else {
-			last_recorded_number[index_of_file_to_write] = write_series(data, supporting_files[index_of_file_to_write], part_counter, file_size, part_size, recorded_data_size, file_mapping, mapped_data);
-			if (file_size != recorded_data_size)
-				last_recorded_number[index_of_file_to_write] = write_series(data, supporting_files[index_of_file_to_write], part_counter, file_size, part_size, recorded_data_size, file_mapping, mapped_data);
+			last_recorded_number[index_of_file_to_write] = write_series(file_to_sort, supporting_files[index_of_file_to_write]);
+			if (!file_to_sort.is_end())
+				last_recorded_number[index_of_file_to_write] = write_series(file_to_sort, supporting_files[index_of_file_to_write]);
 			else
 				++amount_of_empty_series[index_of_file_to_write];
 		}
@@ -139,9 +91,6 @@ void FileSorter::make_initial_spliting() {
 	for (int i = 0; i < amount_of_supporting_files - 1; ++i)
 		supporting_files[i].close();
 
-	UnmapViewOfFile(mapped_data);
-	CloseHandle(file_mapping);
-	CloseHandle(file_to_sort);
 	delete[] supporting_files;
 	delete[] last_recorded_number;
 	for (int i = 0; i < amount_of_supporting_files - 1; ++i) {
@@ -169,34 +118,14 @@ void FileSorter::select_supporting_file_to_write_series(int& index_of_file_to_wr
 	--amount_of_empty_series[index_of_file_to_write];
 }
 
-int FileSorter::write_series(int* from, ofstream& destination, int& part_counter, DWORD& file_size, DWORD part_size, DWORD& recorded_data_size, HANDLE& file_mapping, LPVOID& mapped_data) {
-	int current_number, previous_number = -1;
-	bool run = true;
+int FileSorter::write_series(FileMapping& from, ofstream& destination) {
+	int current_number;
 	do {
-		int i = (recorded_data_size - part_size * (part_counter-1)) / sizeof(int);
-		current_number = from[i];
+		current_number = from.read();
+		destination.write((char*)&current_number, sizeof(current_number));
+	} while (from.peek() > current_number && !from.is_end());
 
-		if (current_number < previous_number) {
-			run = false;
-		} else {
-			destination.write((char*)&current_number, sizeof(current_number));
-			previous_number = current_number;
-			recorded_data_size += sizeof(int);
-
-			if (recorded_data_size % part_size == 0) {
-				LPVOID mapped_data = MapViewOfFile(file_mapping, FILE_MAP_READ, 0, part_counter * part_size, (part_size > file_size - part_size*part_counter ? file_size - part_size * part_counter : part_size));
-				part_counter++;
-
-				int* data = static_cast<int*>(mapped_data);
-			}
-		}
-
-		if (file_size == recorded_data_size)
-			run = false;
-
-	} while (run);
-
-	return previous_number; //last recorded number
+	return current_number; //last recorded number
 }
 
 

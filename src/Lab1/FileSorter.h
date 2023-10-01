@@ -3,9 +3,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include <Windows.h>
-#include <algorithm>
-using namespace std;
+#include "FileMapping.h"
 
 class FileSorter {
 	const int amount_of_supporting_files;
@@ -24,7 +22,7 @@ public:
 
 	void make_initial_spliting();
 	void select_supporting_file_to_write_series(int& index_of_file_to_write);
-	int write_series(int* from, ofstream& destination, int& part_counter, DWORD& file_size, DWORD part_size, DWORD& recorded_data_size, HANDLE& file_mapping, LPVOID& mapped_data);
+	int write_series(FileMapping& from, ofstream& destination);
 
 	int get_next_number(fstream& from);
 

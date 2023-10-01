@@ -4,9 +4,25 @@
 #include <iomanip>
 
 
+void display_file(const wchar_t* path) {
+    ifstream file(path, ios::binary);
+
+    int number;
+    int i = 0;
+    while (i < 100 && file.peek() != EOF) {
+        ++i;
+        file.read((char*)&number, sizeof(number));
+        std::cout << number << " ";
+    }
+    std::cout << endl;
+
+    file.close();
+}
+
+
 int main() {
     const int amount_of_supporting_files = 3;
-    const int size_of_initial_file_in_mb = 1024;
+    const int size_of_initial_file_in_mb = 10;
     string path_to_folder = "x64/Debug/";
     string file_extension = ".bin";
     string supporting_file_prefix = path_to_folder + "supporting_";
@@ -21,13 +37,16 @@ int main() {
 
     beginning_of_creation = clock();
     handler.create_initial_file();
+    display_file(initial_file_path);
     end_of_creation = clock();
     cout << "Creation of the file took " << fixed << double(end_of_creation - beginning_of_creation) / CLOCKS_PER_SEC << setprecision(5) << " seconds" << endl;
 
     try {
         FileSorter sorter(handler.get_initial_file_path(), file_extension, supporting_file_prefix, amount_of_supporting_files);
         beginning_of_sorting = clock();
-        sorter.pre_sort();
+        /*sorter.pre_sort();
+        display_file(initial_file_path);*/
+
 
         beginning_of_spliting = clock();
         sorter.make_initial_spliting();
@@ -35,11 +54,11 @@ int main() {
 
         cout << "Spliting of the file took " << fixed << double(end_of_spliting - beginning_of_spliting) / CLOCKS_PER_SEC << setprecision(5) << " seconds" << endl;
 
-        sorter.polyphase_merge_sort();
+        /*sorter.polyphase_merge_sort();
         end_of_sorting = clock();
 
         cout << "Sorting of the file took " << fixed << double(end_of_sorting - beginning_of_sorting) / CLOCKS_PER_SEC << setprecision(5) << " seconds" << endl;
-    }
+    */}
     catch (const char* err) {
         cout << err << endl;
         return -1;
