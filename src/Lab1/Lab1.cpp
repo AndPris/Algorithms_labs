@@ -5,8 +5,8 @@
 
 
 int main() {
-    const int amount_of_supporting_files = 6;
-    const int size_of_initial_file_in_mb = 10;
+    const int amount_of_supporting_files = 3;
+    const int size_of_initial_file_in_mb = 1024;
     string path_to_folder = "x64/Debug/";
     string file_extension = ".bin";
     string supporting_file_prefix = path_to_folder + "supporting_";
