@@ -32,14 +32,32 @@ void display_file(const wchar_t* path) {
 }
 
 
+int input_positive_number() {
+    int number;
+    char ch;
+    bool repeat;
+    do {
+        repeat = false;
+        if (!(cin >> number) || ((ch = getchar()) != '\n') || (number < 0)) {
+            cout << "Invalid data, input integer number greater 0, please." << endl;
+            cin.clear();
+            cin.ignore(100, '\n');
+            repeat = true;
+        }
+    } while (repeat);
+    return number;
+}
+
 int main() {
     const int amount_of_supporting_files = 3;
-    const int size_of_initial_file_in_mb = 100;
-    //string path_to_folder = "x64/Release/";
     string file_extension = ".bin";
     string supporting_file_prefix = "supporting_";
 
     const wchar_t* initial_file_path = L"initial.bin";
+
+    cout << "Enter size of file to sort in megabytes:" << endl;
+    int size_of_initial_file_in_mb = input_positive_number();
+    cout << size_of_initial_file_in_mb << endl;
 
     FileHandler handler(initial_file_path, size_of_initial_file_in_mb);
 
@@ -57,7 +75,7 @@ int main() {
     try {
         FileSorter sorter(handler.get_initial_file_path(), file_extension, supporting_file_prefix, amount_of_supporting_files);
         beginning_of_sorting = clock();
-        //sorter.pre_sort();
+        sorter.pre_sort();
         cout << "Pre sort done" << endl;
 
         //display_file(initial_file_path);
