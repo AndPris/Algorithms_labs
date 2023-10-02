@@ -4,18 +4,6 @@
 #include <iomanip>
 #include <iostream>
 
-void display(const wchar_t* path) {
-    ifstream file(path, ios::binary);
-
-    int number;
-    while (file.peek() != EOF) {
-        file.read((char*)&number, sizeof(number));
-        cout << number << " ";
-    }
-    cout << endl;
-    file.close();
-}
-
 int input_positive_number() {
     int number;
     char ch;
@@ -52,7 +40,6 @@ int main() {
     
     end_of_creation = clock();
     cout << "Creation of the file took " << fixed << double(end_of_creation - beginning_of_creation) / CLOCKS_PER_SEC << setprecision(5) << " seconds" << endl;
-    display(initial_file_path);
     try {
         FileSorter sorter(creator.get_initial_file_path(), file_extension, supporting_file_prefix, AMOUNT_OF_SUPPORTING_FILES);
         beginning_of_sorting = clock();
@@ -62,8 +49,6 @@ int main() {
         end_of_sorting = clock();
 
         cout << "Sorting of the file took " << fixed << double(end_of_sorting - beginning_of_sorting) / CLOCKS_PER_SEC << setprecision(5) << " seconds" << endl;
-        display(initial_file_path);
-
     }
     catch (const char* err) {
         cout << err << endl;
