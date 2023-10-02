@@ -29,7 +29,6 @@ public:
 
 	void partial_sort();
 
-	int* get_data();
 	bool is_end();
 
 	int read();

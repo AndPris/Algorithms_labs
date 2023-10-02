@@ -6,10 +6,22 @@ void display(string path) {
 
 	int number;
 	int i = 0;
-	while (i < 100 && file.peek() != EOF) {
+	bool display = true;
+	int displayed_numbers = 0;
+	while (file.peek() != EOF) {
+		if (i % 10000 == 0) {
+			displayed_numbers = 0;
+			display = true;
+		}
 		++i;
 		file.read((char*)&number, sizeof(number));
-		std::cout << number << " ";
+		if (display) {
+			std::cout << number << " ";
+			displayed_numbers++;
+		}
+		if (displayed_numbers >= 100)
+			display = false;
+
 	}
 	std::cout << endl;
 
@@ -50,7 +62,7 @@ FileSorter::FileSorter(const wchar_t* file_to_sort_path, string file_extension, 
 
 
 void FileSorter::pre_sort() {
-	const int part_size_in_granularity = 10 * 1024 / memory_allocation_granularity;
+	const int part_size_in_granularity = 10 * 1024 * 1024 / memory_allocation_granularity;
 
 	FileMapping file_to_sort(file_to_sort_path);
 
@@ -93,11 +105,11 @@ void FileSorter::make_initial_spliting() {
 
 	delete[] supporting_files;
 	delete[] last_recorded_number;
-	for (int i = 0; i < amount_of_supporting_files - 1; ++i) {
+	/*for (int i = 0; i < amount_of_supporting_files - 1; ++i) {
 		cout << "File " << i + 1 << ":\n";
 		display(supporting_files_names[i]);
 		cout << "------------------------" << endl;
-	}
+	}*/
 }
 
 void FileSorter::select_supporting_file_to_write_series(int& index_of_file_to_write) {
@@ -120,11 +132,12 @@ void FileSorter::select_supporting_file_to_write_series(int& index_of_file_to_wr
 
 int FileSorter::write_series(FileMapping& from, ofstream& destination) {
 	int current_number;
+	int i = 0;
 	do {
 		current_number = from.read();
+		i++;
 		destination.write((char*)&current_number, sizeof(current_number));
-	} while (from.peek() > current_number && !from.is_end());
-
+	} while (from.peek() >= current_number && !from.is_end());
 	return current_number; //last recorded number
 }
 
@@ -192,9 +205,9 @@ void FileSorter::polyphase_merge_sort() {
 	for (int i = 0; i < amount_of_supporting_files - 1; ++i)
 		active_supporting_files[i].close();
 
-	cout << "Result:" << endl;
+	/*cout << "Result:" << endl;
 	display(supporting_files_names[supporting_files_names_indexes[0]]);
-	delete[] active_supporting_files;
+	*/delete[] active_supporting_files;
 }
 
 void FileSorter::merge_one_serie(int amount_of_active_files, fstream* active_supporting_files) {	

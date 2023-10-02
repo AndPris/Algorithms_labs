@@ -40,6 +40,8 @@ void FileMapping::open(DWORD creation_access, DWORD creation_disposition, DWORD 
 void FileMapping::partial_sort() {
 	int amount_of_parts = (file_size % part_size) == 0 ? file_size / part_size : file_size / part_size + 1;
 
+	part_size = (file_size / memory_allocation_granularity / amount_of_parts) * memory_allocation_granularity;
+
 	for (int i = 0; i < amount_of_parts; i++) {
 		DWORD offset = i * part_size;
 		DWORD part_file_size = (i == amount_of_parts - 1) ? (file_size - offset) : part_size;
@@ -73,22 +75,30 @@ int FileMapping::read() {
 }
 
 int FileMapping::peek() {
-	return data[(recorded_data_size - part_size * (part_counter - 1)) / sizeof(int)];
+	if (is_end())
+		return 0;
+
+	int index = (recorded_data_size - part_size * (part_counter - 1)) / sizeof(int);
+
+	return data[index];
 }
 
 void FileMapping::switch_part() {
+	if (is_end())
+		return;
+
 	LPVOID mapped_data = MapViewOfFile(file_mapping, view_access, 0, part_counter * part_size, (part_size > file_size - part_size * part_counter ? file_size - part_size * part_counter : part_size));
+	if (mapped_data == NULL) {
+		CloseHandle(file_mapping);
+		CloseHandle(file);
+		throw "Map View error";
+	}
+
+	data = static_cast<int*>(mapped_data);
 	part_counter++;
 }
 
-int* FileMapping::get_data() {
-	return data;
-}
-
 void FileMapping::close() {
-	recorded_data_size = 0;
-	part_size = 0;
-	part_counter = 0;
 	CloseHandle(file);
 	CloseHandle(file_mapping);
 	UnmapViewOfFile(mapped_data);
