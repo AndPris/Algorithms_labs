@@ -109,6 +109,9 @@ int FileSorter::write_series(FileMapping& from, ofstream& destination) {
 
 
 void FileSorter::polyphase_merge_sort() {
+	pre_sort();
+	make_initial_spliting();
+
 	fstream* active_supporting_files = new fstream[amount_of_supporting_files];
 
 	for (int i = 0; i < amount_of_supporting_files - 1; ++i) {
@@ -163,6 +166,11 @@ void FileSorter::polyphase_merge_sort() {
 
 	for (int i = 0; i < amount_of_supporting_files - 1; ++i)
 		active_supporting_files[i].close();
+
+	_wremove(file_to_sort_path);
+	wstring file_path_w = wstring(supporting_files_names[supporting_files_names_indexes[0]].begin(), supporting_files_names[supporting_files_names_indexes[0]].end());
+	const wchar_t* result_path = file_path_w.c_str();
+	_wrename(result_path, file_to_sort_path);
 
 	delete[] active_supporting_files;
 }

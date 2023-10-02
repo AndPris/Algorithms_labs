@@ -16,6 +16,9 @@ class FileSorter {
 	DWORD memory_allocation_granularity;
 
 private:
+	void pre_sort();
+
+	void make_initial_spliting();
 	void select_supporting_file_to_write_series(int& index_of_file_to_write);
 	int write_series(FileMapping& from, ofstream& destination);
 
@@ -23,8 +26,6 @@ private:
 public:
 	FileSorter(const wchar_t* file_to_sort_path, string file_extension, string supporting_file_prefix, int amount_of_supporting_files);
 
-	void pre_sort();
-	void make_initial_spliting();
 	void polyphase_merge_sort();
 
 	~FileSorter();

@@ -33,8 +33,7 @@ int main() {
     FileCreator creator(initial_file_path, size_of_initial_file_in_mb);
 
     clock_t beginning_of_creation, end_of_creation,
-        beginning_of_spliting, end_of_spliting,
-        beginning_of_sorting, end_of_sorting;
+            beginning_of_sorting, end_of_sorting;
 
     beginning_of_creation = clock();
     creator.create_initial_file();
@@ -45,16 +44,7 @@ int main() {
     try {
         FileSorter sorter(creator.get_initial_file_path(), file_extension, supporting_file_prefix, AMOUNT_OF_SUPPORTING_FILES);
         beginning_of_sorting = clock();
-        sorter.pre_sort();
-        cout << "Pre sort done" << endl;
-
-        beginning_of_spliting = clock();
-        sorter.make_initial_spliting();
-
-        end_of_spliting = clock();
-
-        cout << "Spliting of the file took " << fixed << double(end_of_spliting - beginning_of_spliting) / CLOCKS_PER_SEC << setprecision(5) << " seconds" << endl;
-
+       
         sorter.polyphase_merge_sort();
 
         end_of_sorting = clock();

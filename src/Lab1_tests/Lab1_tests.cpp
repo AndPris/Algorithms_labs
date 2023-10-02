@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "../Lab1/FileCreator.h"
+#include "../Lab1/FileSorter.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -30,6 +31,16 @@ namespace Lab1tests
 			created_file.close();
 
 			remove(file_path.c_str());
+		}
+	};
+
+	TEST_CLASS(FileSorterTest)
+	{
+	public:
+
+		TEST_METHOD(polyphase_merge_sort_test_1)
+		{
+			
 		}
 	};
 }
