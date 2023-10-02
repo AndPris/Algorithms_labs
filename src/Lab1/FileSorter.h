@@ -2,7 +2,6 @@
 
 #include <string>
 #include <fstream>
-#include <iostream>
 #include "FileMapping.h"
 
 class FileSorter {
@@ -23,8 +22,6 @@ public:
 	void make_initial_spliting();
 	void select_supporting_file_to_write_series(int& index_of_file_to_write);
 	int write_series(FileMapping& from, ofstream& destination);
-
-	int get_next_number(fstream& from);
 
 	void polyphase_merge_sort();
 	void merge_one_serie(int amount_of_active_files, fstream* active_supporting_files);

@@ -64,10 +64,9 @@ bool FileMapping::is_end() {
 }
 
 int FileMapping::read() {
-	int i = (recorded_data_size - part_size * (part_counter - 1)) / sizeof(int);
+	int number = data[(recorded_data_size - part_size * (part_counter - 1)) / sizeof(int)];
 	recorded_data_size += sizeof(int);
 
-	int number = data[i];
 	if (recorded_data_size % part_size == 0)
 		switch_part();
 
@@ -78,9 +77,7 @@ int FileMapping::peek() {
 	if (is_end())
 		return 0;
 
-	int index = (recorded_data_size - part_size * (part_counter - 1)) / sizeof(int);
-
-	return data[index];
+	return data[(recorded_data_size - part_size * (part_counter - 1)) / sizeof(int)];
 }
 
 void FileMapping::switch_part() {

@@ -1,34 +1,5 @@
 #include "FileSorter.h"
 
-//TODO: remove
-void display(string path) {
-	ifstream file(path, ios::binary);
-
-	int number;
-	int i = 0;
-	bool display = true;
-	int displayed_numbers = 0;
-	while (file.peek() != EOF) {
-		if (i % 10000 == 0) {
-			displayed_numbers = 0;
-			display = true;
-		}
-		++i;
-		file.read((char*)&number, sizeof(number));
-		if (display) {
-			std::cout << number << " ";
-			displayed_numbers++;
-		}
-		if (displayed_numbers >= 100)
-			display = false;
-
-	}
-	std::cout << endl;
-
-	file.close();
-}
-
-
 FileSorter::FileSorter(const wchar_t* file_to_sort_path, string file_extension, string supporting_file_prefix, int amount_of_supporting_files)
 	: amount_of_supporting_files(amount_of_supporting_files) {
 
@@ -105,11 +76,6 @@ void FileSorter::make_initial_spliting() {
 
 	delete[] supporting_files;
 	delete[] last_recorded_number;
-	/*for (int i = 0; i < amount_of_supporting_files - 1; ++i) {
-		cout << "File " << i + 1 << ":\n";
-		display(supporting_files_names[i]);
-		cout << "------------------------" << endl;
-	}*/
 }
 
 void FileSorter::select_supporting_file_to_write_series(int& index_of_file_to_write) {
@@ -193,21 +159,12 @@ void FileSorter::polyphase_merge_sort() {
 		ideal_amount_of_series[0] = max_amount_of_merged_series;
 		
 		--level;
-
-		/*for (int i = 0; i < amount_of_supporting_files; i++) {
-			cout << supporting_files_names[i] << endl;
-			display(supporting_files_names[i]);
-			cout << "----------------------------" << endl;
-		}
-		cout << endl << endl;*/
 	} while (level > 0);
 
 	for (int i = 0; i < amount_of_supporting_files - 1; ++i)
 		active_supporting_files[i].close();
 
-	/*cout << "Result:" << endl;
-	display(supporting_files_names[supporting_files_names_indexes[0]]);
-	*/delete[] active_supporting_files;
+	delete[] active_supporting_files;
 }
 
 void FileSorter::merge_one_serie(int amount_of_active_files, fstream* active_supporting_files) {	
@@ -230,14 +187,6 @@ void FileSorter::merge_one_serie(int amount_of_active_files, fstream* active_sup
 		}
 	} while (amount_of_active_files > 0);
 }
-
-int FileSorter::get_next_number(fstream& from) {
-	int number;
-	from.read((char*)&number, sizeof(number));
-	from.seekg(-1 * sizeof(number), ios::cur);
-	return number;
-}
-
 
 FileSorter::~FileSorter() {
 	delete[] supporting_files_names;
