@@ -73,6 +73,7 @@ void FileSorter::make_initial_spliting() {
 
 	for (int i = 0; i < amount_of_supporting_files - 1; ++i)
 		supporting_files[i].close();
+	file_to_sort.close();
 
 	delete[] supporting_files;
 	delete[] last_recorded_number;
@@ -164,13 +165,16 @@ void FileSorter::polyphase_merge_sort() {
 		--level;
 	} while (level > 0);
 
-	for (int i = 0; i < amount_of_supporting_files - 1; ++i)
+	for (int i = 0; i < amount_of_supporting_files; ++i)
 		active_supporting_files[i].close();
 
 	_wremove(file_to_sort_path);
 	wstring file_path_w = wstring(supporting_files_names[supporting_files_names_indexes[0]].begin(), supporting_files_names[supporting_files_names_indexes[0]].end());
 	const wchar_t* result_path = file_path_w.c_str();
 	_wrename(result_path, file_to_sort_path);
+
+	for (int i = 0; i < amount_of_supporting_files; i++)
+		remove(supporting_files_names[i].c_str());
 
 	delete[] active_supporting_files;
 }

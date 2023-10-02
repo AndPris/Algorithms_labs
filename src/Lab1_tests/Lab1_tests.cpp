@@ -38,9 +38,25 @@ namespace Lab1tests
 	{
 	public:
 
-		TEST_METHOD(polyphase_merge_sort_test_1)
+		TEST_METHOD(polyphase_merge_sort_test_sorted)
 		{
-			
+			const int SIZE_OF_FILE_IN_MB = 20;
+			const int AMOUNT_OF_SUPPORTING_FILES = 3;
+			string file_extension = ".bin";
+			string supporting_file_prefix = "test_supporting_";
+
+			const wchar_t* initial_file_path = L"test_initial.bin";
+			ofstream test_file(initial_file_path, ios::binary);
+			for (int i = 0; i < SIZE_OF_FILE_IN_MB * 1024 * 1024 / sizeof(int); ++i)
+				test_file.write((char*)&i, sizeof(i));
+			test_file.close();
+
+
+			FileSorter sorter(initial_file_path, file_extension, supporting_file_prefix, AMOUNT_OF_SUPPORTING_FILES);
+			sorter.polyphase_merge_sort();
+
+
+			_wremove(initial_file_path);
 		}
 	};
 }
