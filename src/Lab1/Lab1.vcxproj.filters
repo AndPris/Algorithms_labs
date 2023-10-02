@@ -18,7 +18,7 @@
     <ClCompile Include="Lab1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileHandler.cpp">
+    <ClCompile Include="FileCreator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FileSorter.cpp">
@@ -29,7 +29,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FileHandler.h">
+    <ClInclude Include="FileCreator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FileSorter.h">

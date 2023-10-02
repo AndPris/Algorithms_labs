@@ -1,4 +1,4 @@
-#include "FileHandler.h"
+#include "FileCreator.h"
 #include "FileSorter.h"
 #include <ctime>
 #include <iomanip>
@@ -21,7 +21,7 @@ int input_positive_number() {
 }
 
 int main() {
-    const int amount_of_supporting_files = 3;
+    const int AMOUNT_OF_SUPPORTING_FILES = 3;
     string file_extension = ".bin";
     string supporting_file_prefix = "supporting_";
 
@@ -30,7 +30,7 @@ int main() {
     cout << "Enter size of file to sort in megabytes:" << endl;
     int size_of_initial_file_in_mb = input_positive_number();
 
-    FileHandler handler(initial_file_path, size_of_initial_file_in_mb);
+    FileCreator handler(initial_file_path, size_of_initial_file_in_mb);
 
     clock_t beginning_of_creation, end_of_creation,
         beginning_of_spliting, end_of_spliting,
@@ -43,7 +43,7 @@ int main() {
     cout << "Creation of the file took " << fixed << double(end_of_creation - beginning_of_creation) / CLOCKS_PER_SEC << setprecision(5) << " seconds" << endl;
 
     try {
-        FileSorter sorter(handler.get_initial_file_path(), file_extension, supporting_file_prefix, amount_of_supporting_files);
+        FileSorter sorter(handler.get_initial_file_path(), file_extension, supporting_file_prefix, AMOUNT_OF_SUPPORTING_FILES);
         beginning_of_sorting = clock();
         sorter.pre_sort();
         cout << "Pre sort done" << endl;

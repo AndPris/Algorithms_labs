@@ -127,13 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="FileHandler.cpp" />
+    <ClCompile Include="FileCreator.cpp" />
     <ClCompile Include="FileMapping.cpp" />
     <ClCompile Include="FileSorter.cpp" />
     <ClCompile Include="Lab1.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FileHandler.h" />
+    <ClInclude Include="FileCreator.h" />
     <ClInclude Include="FileMapping.h" />
     <ClInclude Include="FileSorter.h" />
   </ItemGroup>
