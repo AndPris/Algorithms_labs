@@ -2,7 +2,6 @@
 #include "FileSorter.h"
 #include <ctime>
 #include <iomanip>
-#include <iostream>
 
 int input_positive_number() {
     int number;
@@ -10,8 +9,8 @@ int input_positive_number() {
     bool repeat;
     do {
         repeat = false;
-        if (!(cin >> number) || ((ch = getchar()) != '\n') || (number <= 0)) {
-            cout << "Invalid data, input integer number greater 0, please." << endl;
+        if (!(cin >> number) || ((ch = getchar()) != '\n') || (number <= 0) || (number > INT32_MAX)) {
+            cout << "Invalid data, input integer number from 1 to "<<INT32_MAX<<" please." << endl;
             cin.clear();
             cin.ignore(100, '\n');
             repeat = true;
@@ -52,13 +51,16 @@ int main() {
 
             cout << "Sorting of the file took " << fixed << double(end_of_sorting - beginning_of_sorting) / CLOCKS_PER_SEC << setprecision(5) << " seconds" << endl;
 
-            cout << "Enter 1 to run program again or any other positive value to stop it:" << endl;
+            sorter.display_sorted_file();
+
+            cout << "Enter 1 to run program again or any other positive value from 2 to "<< INT32_MAX<<" to stop it : " << endl;
             repeat = input_positive_number();
         }
         catch (const char* err) {
             cout << err << endl;
-            return -1;
+            repeat = 0;
         }
+
     } while (repeat == 1);
 
     return 0;

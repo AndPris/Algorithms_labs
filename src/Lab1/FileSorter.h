@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include "FileMapping.h"
+#include <iostream>
 
 class FileSorter {
 	const int amount_of_supporting_files;
@@ -16,6 +17,10 @@ class FileSorter {
 	DWORD memory_allocation_granularity;
 	int part_size_in_granularity;
 private:
+	void init_memory_granularity();
+	void create_supporting_files_names(string prefix, string extension);
+	void init_files_data();
+
 	void pre_sort();
 
 	void make_initial_spliting();
@@ -28,10 +33,12 @@ private:
 	void delete_supporting_files();
 
 	void merge_one_serie(int amount_of_active_files, fstream* active_supporting_files);
+	void merge_series_from_level(fstream* active_supporting_files);
 public:
 	FileSorter(const wchar_t* file_to_sort_path, string file_extension, string supporting_file_prefix, int amount_of_supporting_files);
 
 	void polyphase_merge_sort();
+	void display_sorted_file();
 
 	~FileSorter();
 };

@@ -5,38 +5,43 @@ FileSorter::FileSorter(const wchar_t* file_to_sort_path, string file_extension, 
 
 	this->file_to_sort_path = file_to_sort_path;
 
+	init_memory_granularity();
+	create_supporting_files_names(supporting_file_prefix, file_extension);
+	init_files_data();
+
+	level = 1;
+}
+void FileSorter::init_memory_granularity() {
 	_SYSTEM_INFO s;
 	GetSystemInfo(&s);
 	memory_allocation_granularity = s.dwAllocationGranularity;
-
 	part_size_in_granularity = 10 * 1024 * 1024 / memory_allocation_granularity;
-	
+}
+void FileSorter::create_supporting_files_names(string prefix, string extension) {
 	supporting_files_names = new string[amount_of_supporting_files];
 	for (int i = 0; i < amount_of_supporting_files; ++i)
-		supporting_files_names[i] = supporting_file_prefix + to_string(i+1) + file_extension;
-
-
+		supporting_files_names[i] = prefix + to_string(i + 1) + extension;
+}
+void FileSorter::init_files_data() {
 	supporting_files_names_indexes = new int[amount_of_supporting_files];
 	ideal_amount_of_series = new int[amount_of_supporting_files];
 	amount_of_empty_series = new int[amount_of_supporting_files];
-	active_supporting_files_indexes = new int[amount_of_supporting_files - 1];
 	first_numbers = new int[amount_of_supporting_files];
-	for (int i = 0; i < amount_of_supporting_files-1; ++i) {
+	active_supporting_files_indexes = new int[amount_of_supporting_files - 1];
+
+	for (int i = 0; i < amount_of_supporting_files - 1; ++i) {
 		ideal_amount_of_series[i] = 1;
 		amount_of_empty_series[i] = 1;
 		supporting_files_names_indexes[i] = i;
 	}
-	ideal_amount_of_series[amount_of_supporting_files-1] = 0;
-	amount_of_empty_series[amount_of_supporting_files-1] = 0;
-	supporting_files_names_indexes[amount_of_supporting_files - 1] = amount_of_supporting_files - 1;
-	
-	level = 1;
-}
 
+	ideal_amount_of_series[amount_of_supporting_files - 1] = 0;
+	amount_of_empty_series[amount_of_supporting_files - 1] = 0;
+	supporting_files_names_indexes[amount_of_supporting_files - 1] = amount_of_supporting_files - 1;
+}
 
 void FileSorter::pre_sort() {
 	FileMapping file_to_sort(file_to_sort_path);
-
 	file_to_sort.open(GENERIC_READ | GENERIC_WRITE, OPEN_ALWAYS, PAGE_READWRITE, FILE_MAP_READ | FILE_MAP_WRITE, part_size_in_granularity);
 	file_to_sort.partial_sort();
 	file_to_sort.close();
@@ -45,7 +50,7 @@ void FileSorter::pre_sort() {
 void FileSorter::make_initial_spliting() {
 	FileMapping file_to_sort(file_to_sort_path);
 	file_to_sort.open(GENERIC_READ, OPEN_EXISTING, PAGE_READONLY, FILE_MAP_READ, part_size_in_granularity);
-
+	
 	ofstream* supporting_files = new ofstream[amount_of_supporting_files - 1];
 	int* last_recorded_number = new int[amount_of_supporting_files - 1];
 
@@ -80,6 +85,7 @@ void FileSorter::make_initial_spliting() {
 
 void FileSorter::select_supporting_file_to_write_series(int& index_of_file_to_write) {
 	int max_ideal_amount_of_series;
+
 	if (amount_of_empty_series[index_of_file_to_write] < amount_of_empty_series[index_of_file_to_write + 1]) {
 		index_of_file_to_write++;
 		--amount_of_empty_series[index_of_file_to_write];
@@ -94,6 +100,7 @@ void FileSorter::select_supporting_file_to_write_series(int& index_of_file_to_wr
 			ideal_amount_of_series[i] = max_ideal_amount_of_series + ideal_amount_of_series[i + 1];
 		}
 	}
+
 	index_of_file_to_write = 0;
 	--amount_of_empty_series[index_of_file_to_write];
 }
@@ -120,22 +127,7 @@ void FileSorter::polyphase_merge_sort() {
 	}
 
 	do {
-		int max_amount_of_merged_series = ideal_amount_of_series[amount_of_supporting_files - 2];
-		amount_of_empty_series[amount_of_supporting_files - 1] = 0;
-		
-		active_supporting_files[supporting_files_names_indexes[amount_of_supporting_files - 1]].close();
-		active_supporting_files[supporting_files_names_indexes[amount_of_supporting_files - 1]].open(supporting_files_names[supporting_files_names_indexes[amount_of_supporting_files-1]], ios::out | ios::trunc | ios::binary);
-
-		do {
-			int amount_of_active_files = calculate_amount_of_active_files();
-
-			if (amount_of_active_files == 0)
-				++amount_of_empty_series[amount_of_supporting_files - 1];
-			else
-				merge_one_serie(amount_of_active_files, active_supporting_files);
-
-			--max_amount_of_merged_series;
-		} while (max_amount_of_merged_series > 0);
+		merge_series_from_level(active_supporting_files);
 
 		active_supporting_files[supporting_files_names_indexes[amount_of_supporting_files - 1]].close();
 		active_supporting_files[supporting_files_names_indexes[amount_of_supporting_files - 1]].open(supporting_files_names[supporting_files_names_indexes[amount_of_supporting_files-1]], ios::in | ios::binary);
@@ -153,6 +145,25 @@ void FileSorter::polyphase_merge_sort() {
 	delete_supporting_files();
 
 	delete[] active_supporting_files;
+}
+
+void FileSorter::merge_series_from_level(fstream* active_supporting_files) {
+	int max_amount_of_merged_series = ideal_amount_of_series[amount_of_supporting_files - 2];
+	amount_of_empty_series[amount_of_supporting_files - 1] = 0;
+
+	active_supporting_files[supporting_files_names_indexes[amount_of_supporting_files - 1]].close();
+	active_supporting_files[supporting_files_names_indexes[amount_of_supporting_files - 1]].open(supporting_files_names[supporting_files_names_indexes[amount_of_supporting_files - 1]], ios::out | ios::trunc | ios::binary);
+
+	do {
+		int amount_of_active_files = calculate_amount_of_active_files();
+
+		if (amount_of_active_files == 0)
+			++amount_of_empty_series[amount_of_supporting_files - 1];
+		else
+			merge_one_serie(amount_of_active_files, active_supporting_files);
+
+		--max_amount_of_merged_series;
+	} while (max_amount_of_merged_series > 0);
 }
 
 int FileSorter::calculate_amount_of_active_files() {
@@ -214,6 +225,29 @@ void FileSorter::merge_one_serie(int amount_of_active_files, fstream* active_sup
 			active_supporting_files_indexes[index_of_file_with_min_element] = active_supporting_files_indexes[amount_of_active_files];
 		}
 	} while (amount_of_active_files > 0);
+}
+
+void FileSorter::display_sorted_file() {
+	ifstream file(file_to_sort_path, ios::binary);
+
+	const int amount_of_displayed_numbers = 5;
+
+	for (int i = 0; i < amount_of_displayed_numbers; ++i) {
+		int number;
+		file.read((char*)&number, sizeof(number));
+		cout << number << " ";
+	}
+
+	file.seekg(-1 * sizeof(int) * amount_of_displayed_numbers, ios::end);
+	cout << "... ";
+
+	for (int i = 0; i < amount_of_displayed_numbers; ++i) {
+		int number;
+		file.read((char*)&number, sizeof(number));
+		cout << number << " ";
+	}
+	cout << endl;
+	file.close();
 }
 
 FileSorter::~FileSorter() {
