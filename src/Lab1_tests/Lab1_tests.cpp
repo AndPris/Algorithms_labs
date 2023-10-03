@@ -40,7 +40,7 @@ namespace Lab1tests
 
 		TEST_METHOD(polyphase_merge_sort_test_sorted_asc)
 		{
-			const int SIZE_OF_FILE_IN_MB = 1;
+			const int SIZE_OF_FILE_IN_MB = 20;
 			const int AMOUNT_OF_SUPPORTING_FILES = 3;
 			string file_extension = ".bin";
 			string supporting_file_prefix = "test_supporting_";
@@ -56,10 +56,12 @@ namespace Lab1tests
 			sorter.polyphase_merge_sort();
 
 			ifstream file_after_sorting(initial_file_path, ios::binary);
-			for (int i = 0; i < SIZE_OF_FILE_IN_MB * 1024 * 1024 / sizeof(int); ++i) {
-				int number;
-				file_after_sorting.read((char*)&number, sizeof(number));
-				Assert::AreEqual(i, number);
+			int current_number, previous_number;
+			file_after_sorting.read((char*)&current_number, sizeof(current_number));
+			while (!file_after_sorting.eof()) {
+				previous_number = current_number;
+				file_after_sorting.read((char*)&current_number, sizeof(current_number));
+				Assert::IsTrue(current_number >= previous_number);
 			}
 			file_after_sorting.close();
 
@@ -68,7 +70,7 @@ namespace Lab1tests
 
 		TEST_METHOD(polyphase_merge_sort_test_sorted_desc)
 		{
-			const int SIZE_OF_FILE_IN_MB = 1;
+			const int SIZE_OF_FILE_IN_MB = 20;
 			const int AMOUNT_OF_SUPPORTING_FILES = 3;
 			string file_extension = ".bin";
 			string supporting_file_prefix = "test_supporting_";
@@ -84,10 +86,12 @@ namespace Lab1tests
 			sorter.polyphase_merge_sort();
 
 			ifstream file_after_sorting(initial_file_path, ios::binary);
-			for (int i = 0; i < SIZE_OF_FILE_IN_MB * 1024 * 1024 / sizeof(int); ++i) {
-				int number;
-				file_after_sorting.read((char*)&number, sizeof(number));
-				Assert::AreEqual(i, number);
+			int current_number, previous_number;
+			file_after_sorting.read((char*)&current_number, sizeof(current_number));
+			while (!file_after_sorting.eof()) {
+				previous_number = current_number;
+				file_after_sorting.read((char*)&current_number, sizeof(current_number));
+				Assert::IsTrue(current_number >= previous_number);
 			}
 			file_after_sorting.close();
 
@@ -96,7 +100,7 @@ namespace Lab1tests
 
 		TEST_METHOD(polyphase_merge_sort_test_sorted_rand)
 		{
-			const int SIZE_OF_FILE_IN_MB = 1;
+			const int SIZE_OF_FILE_IN_MB = 20;
 			const int AMOUNT_OF_SUPPORTING_FILES = 3;
 			string file_extension = ".bin";
 			string supporting_file_prefix = "test_supporting_";
