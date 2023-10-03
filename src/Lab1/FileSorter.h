@@ -14,13 +14,18 @@ class FileSorter {
 
 	int level;
 	DWORD memory_allocation_granularity;
-
+	int part_size_in_granularity;
 private:
 	void pre_sort();
 
 	void make_initial_spliting();
 	void select_supporting_file_to_write_series(int& index_of_file_to_write);
 	int write_series(FileMapping& from, ofstream& destination);
+
+	int calculate_amount_of_active_files();
+	void shift_suppotring_files_indexes();
+	void rename_sorted_file();
+	void delete_supporting_files();
 
 	void merge_one_serie(int amount_of_active_files, fstream* active_supporting_files);
 public:
