@@ -1,15 +1,17 @@
 #include "FileSorter.h"
 
-FileSorter::FileSorter(const wchar_t* file_to_sort_path, string file_extension, string supporting_file_prefix, int amount_of_supporting_files)
-	: amount_of_supporting_files(amount_of_supporting_files) {
+FileSorter::FileSorter(Reader* data, string file_extension, string supporting_file_prefix, int amount_of_supporting_files, string result_file_name)
+	: amount_of_supporting_files(amount_of_supporting_files), result_file_name(result_file_name) {
 
-	this->file_to_sort_path = file_to_sort_path;
+	data_to_sort = data;
 
 	init_memory_granularity();
 	create_supporting_files_names(supporting_file_prefix, file_extension);
 	init_files_data();
 
 	level = 1;
+
+	remove(result_file_name.c_str());
 }
 void FileSorter::init_memory_granularity() {
 	_SYSTEM_INFO s;
@@ -41,43 +43,44 @@ void FileSorter::init_files_data() {
 }
 
 void FileSorter::pre_sort() {
-	FileMapping file_to_sort(file_to_sort_path);
-	file_to_sort.open(GENERIC_READ | GENERIC_WRITE, OPEN_ALWAYS, PAGE_READWRITE, FILE_MAP_READ | FILE_MAP_WRITE, part_size_in_granularity);
-	file_to_sort.partial_sort();
-	file_to_sort.close();
+	const int part_size_in_mb = 10;
+
+	while (!data_to_sort->is_end()) {
+		int *begin, *end;
+		data_to_sort->read_range(begin, end, part_size_in_mb);
+		sort(begin, end);
+	}
+
+	data_to_sort->open_from_beggining();
 }
 
 void FileSorter::make_initial_spliting() {
-	FileMapping file_to_sort(file_to_sort_path);
-	file_to_sort.open(GENERIC_READ, OPEN_EXISTING, PAGE_READONLY, FILE_MAP_READ, part_size_in_granularity);
-	
 	ofstream* supporting_files = new ofstream[amount_of_supporting_files - 1];
 	int* last_recorded_number = new int[amount_of_supporting_files - 1];
 
-	for (int i = 0; i < amount_of_supporting_files - 1 && !file_to_sort.is_end(); ++i) {
+	for (int i = 0; i < amount_of_supporting_files - 1 && !data_to_sort->is_end(); ++i) {
 		supporting_files[i].open(supporting_files_names[i], ios::binary);
-		last_recorded_number[i] = write_series(file_to_sort, supporting_files[i]);
+		last_recorded_number[i] = write_series(data_to_sort, supporting_files[i]);
 		--amount_of_empty_series[i];
 	}
 
 	int index_of_file_to_write = 0;
-	while (!file_to_sort.is_end()) {
+	while (!data_to_sort->is_end()) {
 		select_supporting_file_to_write_series(index_of_file_to_write);
-		bool is_series_concat = file_to_sort.peek() > last_recorded_number[index_of_file_to_write];
-		last_recorded_number[index_of_file_to_write] = write_series(file_to_sort, supporting_files[index_of_file_to_write]);
+		bool is_series_concat = data_to_sort->peek() > last_recorded_number[index_of_file_to_write];
+		last_recorded_number[index_of_file_to_write] = write_series(data_to_sort, supporting_files[index_of_file_to_write]);
 		
 		if (!is_series_concat)
 			continue;
 
-		if (!file_to_sort.is_end())
-			last_recorded_number[index_of_file_to_write] = write_series(file_to_sort, supporting_files[index_of_file_to_write]);
+		if (!data_to_sort->is_end())
+			last_recorded_number[index_of_file_to_write] = write_series(data_to_sort, supporting_files[index_of_file_to_write]);
 		else
 			++amount_of_empty_series[index_of_file_to_write];
 	}
 
 	for (int i = 0; i < amount_of_supporting_files - 1; ++i)
 		supporting_files[i].close();
-	file_to_sort.close();
 
 	delete[] supporting_files;
 	delete[] last_recorded_number;
@@ -105,12 +108,12 @@ void FileSorter::select_supporting_file_to_write_series(int& index_of_file_to_wr
 	--amount_of_empty_series[index_of_file_to_write];
 }
 
-int FileSorter::write_series(FileMapping& from, ofstream& destination) {
+int FileSorter::write_series(Reader* from, ofstream& destination) {
 	int current_number;
 	do {
-		current_number = from.read();
+		current_number = from->read();
 		destination.write((char*)&current_number, sizeof(current_number));
-	} while (from.peek() >= current_number && !from.is_end());
+	} while (from->peek() >= current_number && !from->is_end());
 	return current_number; //last recorded number
 }
 
@@ -196,10 +199,7 @@ void FileSorter::shift_suppotring_files_indexes() {
 	ideal_amount_of_series[0] = max_amount_of_merged_series;
 }
 void FileSorter::rename_sorted_file() {
-	_wremove(file_to_sort_path);
-	wstring file_path_w = wstring(supporting_files_names[supporting_files_names_indexes[0]].begin(), supporting_files_names[supporting_files_names_indexes[0]].end());
-	const wchar_t* result_path = file_path_w.c_str();
-	_wrename(result_path, file_to_sort_path);
+	rename(supporting_files_names[supporting_files_names_indexes[0]].c_str(), result_file_name.c_str());
 }
 void FileSorter::delete_supporting_files() {
 	for (int i = 0; i < amount_of_supporting_files; i++)
@@ -228,7 +228,7 @@ void FileSorter::merge_one_serie(int amount_of_active_files, fstream* active_sup
 }
 
 void FileSorter::display_sorted_file() {
-	ifstream file(file_to_sort_path, ios::binary);
+	ifstream file(result_file_name, ios::binary);
 
 	const int amount_of_displayed_numbers = 5;
 

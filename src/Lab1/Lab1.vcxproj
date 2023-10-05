@@ -127,15 +127,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArrayReader.cpp" />
     <ClCompile Include="FileCreator.cpp" />
     <ClCompile Include="FileMapping.cpp" />
     <ClCompile Include="FileSorter.cpp" />
     <ClCompile Include="Lab1.cpp" />
+    <ClCompile Include="Reader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArrayReader.h" />
     <ClInclude Include="FileCreator.h" />
     <ClInclude Include="FileMapping.h" />
     <ClInclude Include="FileSorter.h" />
+    <ClInclude Include="Reader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

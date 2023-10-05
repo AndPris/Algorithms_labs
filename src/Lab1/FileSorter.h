@@ -3,13 +3,16 @@
 #include <string>
 #include <fstream>
 #include "FileMapping.h"
+#include "ArrayReader.h"
 #include <iostream>
 
 class FileSorter {
 	const int amount_of_supporting_files;
 
-	const wchar_t* file_to_sort_path;
+	Reader* data_to_sort;
+
 	string* supporting_files_names;
+	string result_file_name;
 	int	*active_supporting_files_indexes, *supporting_files_names_indexes,
 		*ideal_amount_of_series, *amount_of_empty_series, *first_numbers;
 
@@ -25,7 +28,7 @@ private:
 
 	void make_initial_spliting();
 	void select_supporting_file_to_write_series(int& index_of_file_to_write);
-	int write_series(FileMapping& from, ofstream& destination);
+	int write_series(Reader* from, ofstream& destination);
 
 	int calculate_amount_of_active_files();
 	void shift_suppotring_files_indexes();
@@ -35,7 +38,7 @@ private:
 	void merge_one_serie(int amount_of_active_files, fstream* active_supporting_files);
 	void merge_series_from_level(fstream* active_supporting_files);
 public:
-	FileSorter(const wchar_t* file_to_sort_path, string file_extension, string supporting_file_prefix, int amount_of_supporting_files);
+	FileSorter(Reader* data, string file_extension, string supporting_file_prefix, int amount_of_supporting_files, string result_file_name);
 
 	void polyphase_merge_sort();
 	void display_sorted_file();

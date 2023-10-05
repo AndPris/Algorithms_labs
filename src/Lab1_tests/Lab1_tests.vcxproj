@@ -100,7 +100,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;..\Lab1\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FileCreator.obj;FileSorter.obj;FileMapping.obj;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>FileCreator.obj;FileSorter.obj;FileMapping.obj;Reader.obj;ArrayReader.obj;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

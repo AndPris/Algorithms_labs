@@ -53,25 +53,22 @@ namespace Lab1tests
 	TEST_CLASS(FileSorterTest)
 	{
 	public:
-
-		TEST_METHOD(polyphase_merge_sort_test_sorted_asc)
+		TEST_METHOD(polyphase_merge_sort_test_asc)
 		{
-			const int SIZE_OF_FILE_IN_MB = 20;
+			const int AMOUNT_OF_NUMBERS = 10;
 			const int AMOUNT_OF_SUPPORTING_FILES = 3;
 			string file_extension = ".bin";
 			string supporting_file_prefix = "test_supporting_";
+			string result_file_path = "test_result" + file_extension;
 
-			const wchar_t* initial_file_path = L"test_initial.bin";
-			ofstream test_file(initial_file_path, ios::binary);
-			for (int i = 0; i < SIZE_OF_FILE_IN_MB * 1024 * 1024 / sizeof(int); ++i)
-				test_file.write((char*)&i, sizeof(i));
-			test_file.close();
+			int* data{ new int[AMOUNT_OF_NUMBERS] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} };
 
 
-			FileSorter sorter(initial_file_path, file_extension, supporting_file_prefix, AMOUNT_OF_SUPPORTING_FILES);
+			ArrayReader data_to_sort(data);
+			FileSorter sorter(&data_to_sort, file_extension, supporting_file_prefix, AMOUNT_OF_SUPPORTING_FILES, result_file_path);
 			sorter.polyphase_merge_sort();
 
-			ifstream file_after_sorting(initial_file_path, ios::binary);
+			ifstream file_after_sorting(result_file_path, ios::binary);
 			int current_number, previous_number;
 			file_after_sorting.read((char*)&current_number, sizeof(current_number));
 			while (!file_after_sorting.eof()) {
@@ -81,27 +78,25 @@ namespace Lab1tests
 			}
 			file_after_sorting.close();
 
-			_wremove(initial_file_path);
+			remove(result_file_path.c_str());
 		}
 
-		TEST_METHOD(polyphase_merge_sort_test_sorted_desc)
+		TEST_METHOD(polyphase_merge_sort_test_desc)
 		{
-			const int SIZE_OF_FILE_IN_MB = 20;
+			const int AMOUNT_OF_NUMBERS = 10;
 			const int AMOUNT_OF_SUPPORTING_FILES = 3;
 			string file_extension = ".bin";
 			string supporting_file_prefix = "test_supporting_";
+			string result_file_path = "test_result" + file_extension;
 
-			const wchar_t* initial_file_path = L"test_initial.bin";
-			ofstream test_file(initial_file_path, ios::binary);
-			for (int i = SIZE_OF_FILE_IN_MB * 1024 * 1024 / sizeof(int)-1; i >= 0; --i)
-				test_file.write((char*)&i, sizeof(i));
-			test_file.close();
+			int* data{ new int[AMOUNT_OF_NUMBERS] {10, 9, 8, 7, 6, 5, 4, 3, 2, 1} };
 
 
-			FileSorter sorter(initial_file_path, file_extension, supporting_file_prefix, AMOUNT_OF_SUPPORTING_FILES);
+			ArrayReader data_to_sort(data);
+			FileSorter sorter(&data_to_sort, file_extension, supporting_file_prefix, AMOUNT_OF_SUPPORTING_FILES, result_file_path);
 			sorter.polyphase_merge_sort();
 
-			ifstream file_after_sorting(initial_file_path, ios::binary);
+			ifstream file_after_sorting(result_file_path, ios::binary);
 			int current_number, previous_number;
 			file_after_sorting.read((char*)&current_number, sizeof(current_number));
 			while (!file_after_sorting.eof()) {
@@ -111,30 +106,25 @@ namespace Lab1tests
 			}
 			file_after_sorting.close();
 
-			_wremove(initial_file_path);
+			remove(result_file_path.c_str());
 		}
 
-		TEST_METHOD(polyphase_merge_sort_test_sorted_rand)
+		TEST_METHOD(polyphase_merge_sort_test_rand)
 		{
-			srand(time(nullptr));
-			const int SIZE_OF_FILE_IN_MB = 20;
+			const int AMOUNT_OF_NUMBERS = 10;
 			const int AMOUNT_OF_SUPPORTING_FILES = 3;
 			string file_extension = ".bin";
 			string supporting_file_prefix = "test_supporting_";
+			string result_file_path = "test_result" + file_extension;
 
-			const wchar_t* initial_file_path = L"test_initial.bin";
-			ofstream test_file(initial_file_path, ios::binary);
-			for (int i = 0; i < SIZE_OF_FILE_IN_MB * 1024 * 1024 / sizeof(int); ++i) {
-				int random_number = rand();
-				test_file.write((char*)&random_number, sizeof(random_number));
-			}
-			test_file.close();
+			int* data{ new int[AMOUNT_OF_NUMBERS] {5, 3, 8, 1, 2, 6, 10, 7, 4, 9} };
 
 
-			FileSorter sorter(initial_file_path, file_extension, supporting_file_prefix, AMOUNT_OF_SUPPORTING_FILES);
+			ArrayReader data_to_sort(data);
+			FileSorter sorter(&data_to_sort, file_extension, supporting_file_prefix, AMOUNT_OF_SUPPORTING_FILES, result_file_path);
 			sorter.polyphase_merge_sort();
 
-			ifstream file_after_sorting(initial_file_path, ios::binary);
+			ifstream file_after_sorting(result_file_path, ios::binary);
 			int current_number, previous_number;
 			file_after_sorting.read((char*)&current_number, sizeof(current_number));
 			while (!file_after_sorting.eof()) {
@@ -144,7 +134,7 @@ namespace Lab1tests
 			}
 			file_after_sorting.close();
 
-			_wremove(initial_file_path);
+			remove(result_file_path.c_str());
 		}
 	};
 }
