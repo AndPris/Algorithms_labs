@@ -1,10 +1,10 @@
 #pragma once
 
-#include <iostream>
 #include <queue>
 #include <vector>
+#include <stack>
 #include "MemoryHandler.h"
-using namespace std;
+#include "functions.h"
 
 class PuzzleSolver {
     class Node {
@@ -23,8 +23,8 @@ class PuzzleSolver {
         Coords empty_cell_coords;
         int depth;
         int action;
+        Node* parent;
 
-        void copy(int **src);
         Coords find_coords_of_empty_cell() const;
         
         bool is_empty_cell_in_top_row() const;
@@ -39,7 +39,7 @@ class PuzzleSolver {
         void swap(int &first_number, int &second_number);
     public:
         Node() = default;
-        Node(int **puzzle, int puzzle_size, int depth, int action);
+        Node(int **puzzle, int puzzle_size, int depth, int action, Node* parent);
         Node(Node&& obj);
         Node(const Node& obj);
         Node& operator=(Node&& obj);
@@ -51,9 +51,12 @@ class PuzzleSolver {
 
         int** get_state();
         int get_depth() const;
+        int get_size() const;
         int manhattan_distance() const;
 
         bool operator==(const Node& obj) const;
+
+        void display_path();
 
         ~Node();
     };
@@ -62,9 +65,10 @@ class PuzzleSolver {
     int* create_elements_array(int **puzzle, int size) const;
     int count_inversions(int *elements, int size) const;
 
-    int** _LDFS_solve(Node &node, int limit, bool &is_cutoff, bool &is_failure);
+    Node* _LDFS_solve(Node &node, int limit, bool &is_cutoff, bool &is_failure);
+    Node* _A_star(Node& node);
 
-    bool contains(vector<Node> &container, const Node& obj) const;
+    bool contains(vector<Node*> &container, const Node& obj) const;
 public:
     int** LDFS_solve(int** puzzle, int puzzle_size, int limit);
     int** A_star(int** puzzle, int puzzle_size);

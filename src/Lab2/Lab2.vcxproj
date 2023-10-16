@@ -127,12 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="functions.cpp" />
     <ClCompile Include="Lab2.cpp" />
     <ClCompile Include="MemoryHandler.cpp" />
     <ClCompile Include="PuzzleCreator.cpp" />
     <ClCompile Include="PuzzleSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="functions.h" />
     <ClInclude Include="MemoryHandler.h" />
     <ClInclude Include="PuzzleCreator.h" />
     <ClInclude Include="PuzzleSolver.h" />

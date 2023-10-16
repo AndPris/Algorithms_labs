@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
+#include <iostream>
+using namespace std;
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -11,6 +13,8 @@ namespace Lab2tests
 		
 		TEST_METHOD(TestMethod1)
 		{
+			cout << "asd" << endl;
+			Assert::AreEqual(1, 1);
 		}
 	};
 }
