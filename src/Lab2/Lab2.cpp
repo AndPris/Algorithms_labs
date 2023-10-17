@@ -12,12 +12,12 @@ int main() {
     clock_t beginning_of_searching, end_of_searching;
 
     do {
-        int** puzzle{ new int*[PUZZLE_SIZE] {
+        /*int** puzzle{ new int*[PUZZLE_SIZE] {
                             new int [PUZZLE_SIZE] {1, 0, 2},
                             new int [PUZZLE_SIZE] {3, 4, 5},
-                            new int [PUZZLE_SIZE] {6, 7, 8}}};
+                            new int [PUZZLE_SIZE] {6, 7, 8}}};*/
 
-        //int** puzzle = creator.create_puzzle(PUZZLE_SIZE);
+        int** puzzle = creator.create_puzzle(PUZZLE_SIZE);
        
         cout << "Puzzle:" << endl;
         display(puzzle, PUZZLE_SIZE);
