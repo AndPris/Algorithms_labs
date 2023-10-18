@@ -8,7 +8,7 @@ int input_positive_number_in_range(int low, int top) {
     do {
         repeat = false;
         getline(cin, input);
-        if (!is_number(input)) {
+        if (!is_number(input) || (input[0] == '0' && input.length() != 1)) {
             cout << "Invalid data, input positive integer number, please." << endl;
             repeat = true;
             continue;
