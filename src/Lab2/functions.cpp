@@ -9,7 +9,7 @@ int input_positive_number_in_range(int low, int top) {
         repeat = false;
         getline(cin, input);
         if (!is_number(input)) {
-            cout << "Invalid data, input integer number, please." << endl;
+            cout << "Invalid data, input positive integer number, please." << endl;
             repeat = true;
             continue;
         }
