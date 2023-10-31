@@ -3,3 +3,5 @@
 **/initial.bin
 **/supporting_*.bin
 **/result.bin
+**/*.filters
+**/*.user
