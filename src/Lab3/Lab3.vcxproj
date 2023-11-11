@@ -140,10 +140,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="B_Tree.cpp" />
     <ClCompile Include="DBForm.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="B_Tree.h" />
     <ClInclude Include="DBForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
