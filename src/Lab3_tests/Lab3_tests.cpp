@@ -1,16 +1,159 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "../Lab3/B_Tree.h"
+#include "../Lab3_code/B_Tree.h"
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace Lab3tests
 {
-	TEST_CLASS(Lab3tests)
+	TEST_CLASS(BTree_search_insert)
 	{
 	public:
-		
-		TEST_METHOD(TestMethod1)
-		{
+		TEST_METHOD(search_present_one_node) {
+			int amount_of_records = 3;
+			int key_to_search = 1;
+			BTree tree(3);
+			for (int i = 0; i < amount_of_records; ++i) {
+				Record record = { i + 1, "data" + to_string(i + 1) };
+				tree.insert(record);
+			}
+
+			Record result = tree.search(key_to_search);
+
+			Assert::AreEqual(result.key, key_to_search);
+			Assert::AreEqual(result.data, "data" + to_string(key_to_search));
+		}
+		TEST_METHOD(search_present_two_nodes_first) {
+			int amount_of_records = 6;
+			int key_to_search = 1;
+			BTree tree(3);
+			for (int i = 0; i < amount_of_records; ++i) {
+				Record record = { i+1, "data" + to_string(i+1)};
+				tree.insert(record);
+			}
+
+			Record result = tree.search(key_to_search);
+
+			Assert::AreEqual(result.key, key_to_search);
+			Assert::AreEqual(result.data, "data" + to_string(key_to_search));
+		}
+		TEST_METHOD(search_present_two_nodes_median) {
+			int amount_of_records = 6;
+			int key_to_search = 3;
+			BTree tree(3);
+			for (int i = 0; i < amount_of_records; ++i) {
+				Record record = { i + 1, "data" + to_string(i + 1) };
+				tree.insert(record);
+			}
+
+			Record result = tree.search(key_to_search);
+
+			Assert::AreEqual(result.key, key_to_search);
+			Assert::AreEqual(result.data, "data" + to_string(key_to_search));
+		}
+		TEST_METHOD(search_present_two_nodes_last) {
+			int amount_of_records = 6;
+			int key_to_search = 6;
+			BTree tree(3);
+			for (int i = 0; i < amount_of_records; ++i) {
+				Record record = { i + 1, "data" + to_string(i + 1) };
+				tree.insert(record);
+			}
+
+			Record result = tree.search(key_to_search);
+
+			Assert::AreEqual(result.key, key_to_search);
+			Assert::AreEqual(result.data, "data" + to_string(key_to_search));
+		}
+		TEST_METHOD(search_absent) {
+			int amount_of_records = 6;
+			int key_to_search = 7;
+			BTree tree(3);
+			for (int i = 0; i < amount_of_records; ++i) {
+				Record record = { i + 1, "data" + to_string(i + 1) };
+				tree.insert(record);
+			}
+
+			auto func = [&tree, key_to_search] { tree.search(key_to_search); };
+			Assert::ExpectException<const char*>(func);
+		}
+
+		TEST_METHOD(insert_already_present) {
+			int key_to_insert = 3;
+			int amount_of_records = 6;
+			BTree tree(3);
+			for (int i = 0; i < amount_of_records; ++i) {
+				Record record = { i + 1, "data" + to_string(i + 1) };
+				tree.insert(record);
+			}
+
+			Record record = { key_to_insert, "test data" };
+			auto func = [&tree, &record] { tree.insert(record); };
+			Assert::ExpectException<const char*>(func);
+		}
+	};
+
+
+	TEST_CLASS(BTree_delete)
+	{
+	public:
+
+		TEST_METHOD(delete_absent) {
+			int amount_of_records = 6;
+			int key_to_delete = 7;
+			BTree tree(3);
+			for (int i = 0; i < amount_of_records; ++i) {
+				Record record = { i + 1, "data" + to_string(i + 1) };
+				tree.insert(record);
+			}
+
+			auto func = [&tree, key_to_delete] { tree.remove(key_to_delete); };
+			Assert::ExpectException<string>(func);
+		}
+
+		TEST_METHOD(delete_present_first) {
+			int amount_of_records = 6;
+			int key_to_delete = 1;
+			BTree tree(3);
+			for (int i = 0; i < amount_of_records; ++i) {
+				Record record = { i + 1, "data" + to_string(i + 1) };
+				tree.insert(record);
+			}
+
+			tree.remove(key_to_delete);
+
+			auto func = [&tree, key_to_delete] { tree.search(key_to_delete); };
+			Assert::ExpectException<const char*>(func);
+		}
+
+		TEST_METHOD(delete_present_median) {
+			int amount_of_records = 6;
+			int key_to_delete = 3;
+			BTree tree(3);
+			for (int i = 0; i < amount_of_records; ++i) {
+				Record record = { i + 1, "data" + to_string(i + 1) };
+				tree.insert(record);
+			}
+
+			tree.remove(key_to_delete);
+
+			auto func = [&tree, key_to_delete] { tree.search(key_to_delete); };
+			Assert::ExpectException<const char*>(func);
+		}
+
+		TEST_METHOD(delete_present_last) {
+			int amount_of_records = 6;
+			int key_to_delete = 6;
+			BTree tree(3);
+			for (int i = 0; i < amount_of_records; ++i) {
+				Record record = { i + 1, "data" + to_string(i + 1) };
+				tree.insert(record);
+			}
+
+			tree.remove(key_to_delete);
+
+			auto func = [&tree, key_to_delete] { tree.search(key_to_delete); };
+			Assert::ExpectException<const char*>(func);
 		}
 	};
 }
