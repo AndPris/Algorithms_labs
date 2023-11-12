@@ -3,11 +3,12 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 using namespace std;
 
 struct Record {
     int key;
-    string data;
+    char data[250];
 };
 
 class BTree {
@@ -42,12 +43,15 @@ class BTree {
         bool is_full() const;
         bool contains_minimal_allowed_amount_of_records() const;
 
+        void save(ofstream& destination);
+
         friend class BTree;
     };
 
     Node* root;
     int minimum_degree;
 
+    BTree::Node* read_node(ifstream& source);
 public:
     BTree(int minimum_degree);
 
@@ -55,4 +59,7 @@ public:
     Record search(int key);
     void insert(Record record);
     void remove(int key);
+
+    void save(ofstream& destination);
+    void open(ifstream& source);
 };

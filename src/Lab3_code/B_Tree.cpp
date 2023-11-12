@@ -23,6 +23,17 @@ void BTree::insert(Record record) {
         return;
     }
 
+    bool contains_record_with_such_key = true;
+    try {
+        search(record.key);
+    }
+    catch (const char* er) {
+        contains_record_with_such_key = false;
+    }
+    if (contains_record_with_such_key)
+        throw "There is a record with such key";
+
+
     if (root->is_full()) {
         Node* new_root = new Node(minimum_degree, false);
         new_root->children.push_back(root);
@@ -55,6 +66,7 @@ void BTree::remove(int key) {
 }
 
 
+
 BTree::Node::Node(int minimum_degree, bool is_leaf) : minimum_degree(minimum_degree), is_leaf(is_leaf) {
     amount_of_records = 0;
 }
@@ -64,7 +76,7 @@ void BTree::Node::traverse() const {
     for (i = 0; i < amount_of_records; ++i) {
         if (!is_leaf)
             children.at(i)->traverse();
-        cout << records.at(i).key << " : " << records.at(i).data << endl;
+        cout << records.at(i).key << " : " << records.at(i).data << " : size=" << sizeof(*this) << endl;
     }
 
     if (!is_leaf)
@@ -92,9 +104,6 @@ void BTree::Node::insert_in_non_full(Record record) {
         while (i >= 0 && records.at(i).key > record.key)
             --i;
 
-        if (records.at(i).key == record.key)
-            throw "There is a record with such key";
-
         records.insert(records.begin() + i + 1, record);
         ++amount_of_records;
         return;
@@ -103,17 +112,11 @@ void BTree::Node::insert_in_non_full(Record record) {
     while (i >= 0 && records.at(i).key > record.key)
         --i;
 
-    if (records.at(i).key == record.key)
-        throw "There is a record with such key";
-
     if (children.at(i + 1)->is_full()) {
         split_child(i + 1);
 
         if (records.at(i + 1).key < record.key)
             ++i;
-
-        if (records.at(i).key == record.key)
-            throw "There is a record with such key";
     }
     children.at(i + 1)->insert_in_non_full(record);
 }
@@ -281,4 +284,44 @@ void BTree::Node::merge_child(int child_index) {
     child->amount_of_records += sibling_which_merges->amount_of_records + 1;
 
     delete sibling_which_merges;
+}
+
+
+void BTree::save(std::ofstream& destination) {
+    root->save(destination);
+}
+void BTree::Node::save(ofstream& destination) {
+    destination.write(reinterpret_cast<const char*>(&is_leaf), sizeof(is_leaf));
+    destination.write(reinterpret_cast<const char*>(&amount_of_records), sizeof(amount_of_records));
+
+    for (int i = 0; i < amount_of_records; ++i)
+        destination.write(reinterpret_cast<const char*>(&records.at(i)), sizeof(Record));
+
+    for (const auto& child : children)
+        child->save(destination);
+}
+
+void BTree::open(std::ifstream& source) {
+    root = read_node(source);
+}
+
+BTree::Node* BTree::read_node(ifstream& source) {
+    bool is_node_leaf;
+
+    source.read(reinterpret_cast<char*>(&is_node_leaf), sizeof(is_node_leaf));
+    BTree::Node* node = new BTree::Node(minimum_degree, is_node_leaf);
+
+    source.read(reinterpret_cast<char*>(&node->amount_of_records), sizeof(node->amount_of_records));
+    for (int i = 0; i < node->amount_of_records; ++i) {
+        Record rec;
+        source.read(reinterpret_cast<char*>(&rec), sizeof(Record));
+        node->records.push_back(rec);
+    }
+
+    if (!is_node_leaf) {
+        for (int i = 0; i < node->amount_of_records + 1; ++i)
+            node->children.push_back(read_node(source));
+    }
+
+    return node;
 }

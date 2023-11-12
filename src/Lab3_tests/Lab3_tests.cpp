@@ -14,63 +14,86 @@ namespace Lab3tests
 			int key_to_search = 1;
 			BTree tree(3);
 			for (int i = 0; i < amount_of_records; ++i) {
-				Record record = { i + 1, "data" + to_string(i + 1) };
+				Record record;
+				record.key = i + 1;
+				strcpy_s(record.data, "data");
+				strcat_s(record.data, (to_string(i + 1)).c_str());
 				tree.insert(record);
 			}
 
 			Record result = tree.search(key_to_search);
 
 			Assert::AreEqual(result.key, key_to_search);
-			Assert::AreEqual(result.data, "data" + to_string(key_to_search));
+			char expected_data[250] = "data";
+			strcat_s(expected_data, (to_string(key_to_search)).c_str());
+			Assert::AreEqual(result.data, expected_data);
 		}
 		TEST_METHOD(search_present_two_nodes_first) {
 			int amount_of_records = 6;
 			int key_to_search = 1;
 			BTree tree(3);
 			for (int i = 0; i < amount_of_records; ++i) {
-				Record record = { i+1, "data" + to_string(i+1)};
+				Record record;
+				record.key = i + 1;
+				strcpy_s(record.data, "data");
+				strcat_s(record.data, (to_string(i + 1)).c_str());
 				tree.insert(record);
 			}
 
 			Record result = tree.search(key_to_search);
 
 			Assert::AreEqual(result.key, key_to_search);
-			Assert::AreEqual(result.data, "data" + to_string(key_to_search));
+			char expected_data[250] = "data";
+			strcat_s(expected_data, (to_string(key_to_search)).c_str());
+			Assert::AreEqual(result.data, expected_data);
 		}
 		TEST_METHOD(search_present_two_nodes_median) {
 			int amount_of_records = 6;
 			int key_to_search = 3;
 			BTree tree(3);
 			for (int i = 0; i < amount_of_records; ++i) {
-				Record record = { i + 1, "data" + to_string(i + 1) };
+				Record record;
+				record.key = i + 1;
+				strcpy_s(record.data, "data");
+				strcat_s(record.data, (to_string(i + 1)).c_str());
 				tree.insert(record);
 			}
 
 			Record result = tree.search(key_to_search);
 
 			Assert::AreEqual(result.key, key_to_search);
-			Assert::AreEqual(result.data, "data" + to_string(key_to_search));
+			char expected_data[250] = "data";
+			strcat_s(expected_data, (to_string(key_to_search)).c_str());
+			Assert::AreEqual(result.data, expected_data);
 		}
 		TEST_METHOD(search_present_two_nodes_last) {
 			int amount_of_records = 6;
 			int key_to_search = 6;
 			BTree tree(3);
 			for (int i = 0; i < amount_of_records; ++i) {
-				Record record = { i + 1, "data" + to_string(i + 1) };
+				Record record;
+				record.key = i + 1;
+				strcpy_s(record.data, "data");
+				strcat_s(record.data, (to_string(i + 1)).c_str());
 				tree.insert(record);
 			}
 
 			Record result = tree.search(key_to_search);
 
 			Assert::AreEqual(result.key, key_to_search);
-			Assert::AreEqual(result.data, "data" + to_string(key_to_search));
+			char expected_data[250] = "data";
+			strcat_s(expected_data, (to_string(key_to_search)).c_str());
+			Assert::AreEqual(result.data, expected_data);
 		}
 		TEST_METHOD(search_absent) {
 			int amount_of_records = 6;
 			int key_to_search = 7;
 			BTree tree(3);
 			for (int i = 0; i < amount_of_records; ++i) {
-				Record record = { i + 1, "data" + to_string(i + 1) };
+				Record record;
+				record.key = i + 1;
+				strcpy_s(record.data, "data");
+				strcat_s(record.data, (to_string(i + 1)).c_str());
 				tree.insert(record);
 			}
 
@@ -83,7 +106,10 @@ namespace Lab3tests
 			int amount_of_records = 6;
 			BTree tree(3);
 			for (int i = 0; i < amount_of_records; ++i) {
-				Record record = { i + 1, "data" + to_string(i + 1) };
+				Record record;
+				record.key = i + 1;
+				strcpy_s(record.data, "data");
+				strcat_s(record.data, (to_string(i + 1)).c_str());
 				tree.insert(record);
 			}
 
@@ -103,7 +129,10 @@ namespace Lab3tests
 			int key_to_delete = 7;
 			BTree tree(3);
 			for (int i = 0; i < amount_of_records; ++i) {
-				Record record = { i + 1, "data" + to_string(i + 1) };
+				Record record;
+				record.key = i + 1;
+				strcpy_s(record.data, "data");
+				strcat_s(record.data, (to_string(i + 1)).c_str());
 				tree.insert(record);
 			}
 
@@ -116,7 +145,10 @@ namespace Lab3tests
 			int key_to_delete = 1;
 			BTree tree(3);
 			for (int i = 0; i < amount_of_records; ++i) {
-				Record record = { i + 1, "data" + to_string(i + 1) };
+				Record record;
+				record.key = i + 1;
+				strcpy_s(record.data, "data");
+				strcat_s(record.data, (to_string(i + 1)).c_str());
 				tree.insert(record);
 			}
 
@@ -131,7 +163,10 @@ namespace Lab3tests
 			int key_to_delete = 3;
 			BTree tree(3);
 			for (int i = 0; i < amount_of_records; ++i) {
-				Record record = { i + 1, "data" + to_string(i + 1) };
+				Record record;
+				record.key = i + 1;
+				strcpy_s(record.data, "data");
+				strcat_s(record.data, (to_string(i + 1)).c_str());
 				tree.insert(record);
 			}
 
@@ -146,7 +181,10 @@ namespace Lab3tests
 			int key_to_delete = 6;
 			BTree tree(3);
 			for (int i = 0; i < amount_of_records; ++i) {
-				Record record = { i + 1, "data" + to_string(i + 1) };
+				Record record;
+				record.key = i + 1;
+				strcpy_s(record.data, "data");
+				strcat_s(record.data, (to_string(i + 1)).c_str());
 				tree.insert(record);
 			}
 
