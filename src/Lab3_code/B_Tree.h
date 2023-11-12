@@ -4,11 +4,15 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <cstring>
+
 using namespace std;
+
+#define DATA_SIZE 250
 
 struct Record {
     int key;
-    char data[250];
+    char data[DATA_SIZE];
 };
 
 class BTree {
@@ -44,6 +48,7 @@ class BTree {
         bool contains_minimal_allowed_amount_of_records() const;
 
         void save(ofstream& destination);
+        void edit(int key, char new_data[DATA_SIZE]);
 
         friend class BTree;
     };
@@ -58,6 +63,7 @@ public:
     void traverse() const;
     Record search(int key);
     void insert(Record record);
+    void edit(int key, char new_data[DATA_SIZE]);
     void remove(int key);
 
     void save(ofstream& destination);

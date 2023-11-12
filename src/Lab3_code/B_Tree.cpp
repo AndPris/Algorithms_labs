@@ -15,6 +15,13 @@ Record BTree::search(int key) {
     return root->search(key);
 }
 
+void BTree::edit(int key, char* new_data) {
+    if (!root)
+        throw "The tree is empty";
+
+    root->edit(key, new_data);
+}
+
 void BTree::insert(Record record) {
     if (!root) {
         root = new Node(minimum_degree, true);
@@ -95,6 +102,22 @@ Record BTree::Node::search(int key) {
         throw "There is no such element";
 
     return children.at(i)->search(key);
+}
+
+void BTree::Node::edit(int key, char* new_data) {
+    int i = 0;
+    while (i < amount_of_records && key > records.at(i).key)
+        ++i;
+
+    if (i < amount_of_records && records.at(i).key == key) {
+        strcpy_s(records.at(i).data, new_data);
+        return;
+    }
+
+    if (is_leaf)
+        throw "There is no element with such key";
+
+    children.at(i)->edit(key, new_data);
 }
 
 void BTree::Node::insert_in_non_full(Record record) {

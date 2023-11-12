@@ -6,13 +6,10 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace Lab3tests
 {
-	TEST_CLASS(BTree_search_insert)
+	TEST_CLASS(BTree_tests)
 	{
-	public:
-		TEST_METHOD(search_present_one_node) {
-			int amount_of_records = 3;
-			int key_to_search = 1;
-			BTree tree(3);
+		BTree create_BTree(int amount_of_records, int minimal_degree) {
+			BTree tree(minimal_degree);
 			for (int i = 0; i < amount_of_records; ++i) {
 				Record record;
 				record.key = i + 1;
@@ -20,6 +17,13 @@ namespace Lab3tests
 				strcat_s(record.data, (to_string(i + 1)).c_str());
 				tree.insert(record);
 			}
+			return tree;
+		}
+
+	public:
+		TEST_METHOD(search_present_one_node) {
+			BTree tree = create_BTree(6, 3);
+			int key_to_search = 1;
 
 			Record result = tree.search(key_to_search);
 
@@ -29,16 +33,9 @@ namespace Lab3tests
 			Assert::AreEqual(result.data, expected_data);
 		}
 		TEST_METHOD(search_present_two_nodes_first) {
-			int amount_of_records = 6;
+			BTree tree = create_BTree(6, 3);
 			int key_to_search = 1;
-			BTree tree(3);
-			for (int i = 0; i < amount_of_records; ++i) {
-				Record record;
-				record.key = i + 1;
-				strcpy_s(record.data, "data");
-				strcat_s(record.data, (to_string(i + 1)).c_str());
-				tree.insert(record);
-			}
+
 
 			Record result = tree.search(key_to_search);
 
@@ -48,16 +45,8 @@ namespace Lab3tests
 			Assert::AreEqual(result.data, expected_data);
 		}
 		TEST_METHOD(search_present_two_nodes_median) {
-			int amount_of_records = 6;
+			BTree tree = create_BTree(6, 3);
 			int key_to_search = 3;
-			BTree tree(3);
-			for (int i = 0; i < amount_of_records; ++i) {
-				Record record;
-				record.key = i + 1;
-				strcpy_s(record.data, "data");
-				strcat_s(record.data, (to_string(i + 1)).c_str());
-				tree.insert(record);
-			}
 
 			Record result = tree.search(key_to_search);
 
@@ -67,16 +56,8 @@ namespace Lab3tests
 			Assert::AreEqual(result.data, expected_data);
 		}
 		TEST_METHOD(search_present_two_nodes_last) {
-			int amount_of_records = 6;
+			BTree tree = create_BTree(6, 3);
 			int key_to_search = 6;
-			BTree tree(3);
-			for (int i = 0; i < amount_of_records; ++i) {
-				Record record;
-				record.key = i + 1;
-				strcpy_s(record.data, "data");
-				strcat_s(record.data, (to_string(i + 1)).c_str());
-				tree.insert(record);
-			}
 
 			Record result = tree.search(key_to_search);
 
@@ -86,71 +67,32 @@ namespace Lab3tests
 			Assert::AreEqual(result.data, expected_data);
 		}
 		TEST_METHOD(search_absent) {
-			int amount_of_records = 6;
+			BTree tree = create_BTree(6, 3);
 			int key_to_search = 7;
-			BTree tree(3);
-			for (int i = 0; i < amount_of_records; ++i) {
-				Record record;
-				record.key = i + 1;
-				strcpy_s(record.data, "data");
-				strcat_s(record.data, (to_string(i + 1)).c_str());
-				tree.insert(record);
-			}
 
 			auto func = [&tree, key_to_search] { tree.search(key_to_search); };
 			Assert::ExpectException<const char*>(func);
 		}
 
 		TEST_METHOD(insert_already_present) {
+			BTree tree = create_BTree(6, 3);
 			int key_to_insert = 3;
-			int amount_of_records = 6;
-			BTree tree(3);
-			for (int i = 0; i < amount_of_records; ++i) {
-				Record record;
-				record.key = i + 1;
-				strcpy_s(record.data, "data");
-				strcat_s(record.data, (to_string(i + 1)).c_str());
-				tree.insert(record);
-			}
 
 			Record record = { key_to_insert, "test data" };
 			auto func = [&tree, &record] { tree.insert(record); };
 			Assert::ExpectException<const char*>(func);
 		}
-	};
-
-
-	TEST_CLASS(BTree_delete)
-	{
-	public:
-
 		TEST_METHOD(delete_absent) {
-			int amount_of_records = 6;
+			BTree tree = create_BTree(6, 3);
 			int key_to_delete = 7;
-			BTree tree(3);
-			for (int i = 0; i < amount_of_records; ++i) {
-				Record record;
-				record.key = i + 1;
-				strcpy_s(record.data, "data");
-				strcat_s(record.data, (to_string(i + 1)).c_str());
-				tree.insert(record);
-			}
 
 			auto func = [&tree, key_to_delete] { tree.remove(key_to_delete); };
 			Assert::ExpectException<string>(func);
 		}
 
 		TEST_METHOD(delete_present_first) {
-			int amount_of_records = 6;
+			BTree tree = create_BTree(6, 3);
 			int key_to_delete = 1;
-			BTree tree(3);
-			for (int i = 0; i < amount_of_records; ++i) {
-				Record record;
-				record.key = i + 1;
-				strcpy_s(record.data, "data");
-				strcat_s(record.data, (to_string(i + 1)).c_str());
-				tree.insert(record);
-			}
 
 			tree.remove(key_to_delete);
 
@@ -159,16 +101,8 @@ namespace Lab3tests
 		}
 
 		TEST_METHOD(delete_present_median) {
-			int amount_of_records = 6;
+			BTree tree = create_BTree(6, 3);
 			int key_to_delete = 3;
-			BTree tree(3);
-			for (int i = 0; i < amount_of_records; ++i) {
-				Record record;
-				record.key = i + 1;
-				strcpy_s(record.data, "data");
-				strcat_s(record.data, (to_string(i + 1)).c_str());
-				tree.insert(record);
-			}
 
 			tree.remove(key_to_delete);
 
@@ -176,21 +110,50 @@ namespace Lab3tests
 			Assert::ExpectException<const char*>(func);
 		}
 
-		TEST_METHOD(delete_present_last) {
-			int amount_of_records = 6;
-			int key_to_delete = 6;
-			BTree tree(3);
-			for (int i = 0; i < amount_of_records; ++i) {
-				Record record;
-				record.key = i + 1;
-				strcpy_s(record.data, "data");
-				strcat_s(record.data, (to_string(i + 1)).c_str());
-				tree.insert(record);
-			}
+		TEST_METHOD(edit_present_first) {
+			BTree tree = create_BTree(6, 3);
+			int key_to_edit = 1;
+			char* new_data = "new data";
 
-			tree.remove(key_to_delete);
+			tree.edit(key_to_edit, new_data);
 
-			auto func = [&tree, key_to_delete] { tree.search(key_to_delete); };
+			Record result = tree.search(key_to_edit);
+
+			Assert::AreEqual(result.key, key_to_edit);
+			Assert::AreEqual(result.data, new_data);
+		}
+		TEST_METHOD(edit_present_median) {
+			BTree tree = create_BTree(6, 3);
+			int key_to_edit = 3;
+
+			char* new_data = "new data";
+
+			tree.edit(key_to_edit, new_data);
+
+			Record result = tree.search(key_to_edit);
+
+			Assert::AreEqual(result.key, key_to_edit);
+			Assert::AreEqual(result.data, new_data);
+		}
+		TEST_METHOD(edit_present_last) {
+			BTree tree = create_BTree(6, 3);
+			int key_to_edit = 6;
+
+			char* new_data = "new data";
+
+			tree.edit(key_to_edit, new_data);
+
+			Record result = tree.search(key_to_edit);
+
+			Assert::AreEqual(result.key, key_to_edit);
+			Assert::AreEqual(result.data, new_data);
+		}
+		TEST_METHOD(edit_absent) {
+			BTree tree = create_BTree(6, 3);
+			int key_to_edit = 7;
+			char* new_data = "new data";
+
+			auto func = [&tree, key_to_edit, new_data] { tree.edit(key_to_edit, new_data); };
 			Assert::ExpectException<const char*>(func);
 		}
 	};
