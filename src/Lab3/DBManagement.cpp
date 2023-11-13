@@ -11,6 +11,7 @@ DBManagement::DBManagement(string file_path_to_save) {
 	string a = *this->file_path_to_save;
 
 	this->tree = new BTree(this->minimum_degree);
+	disable_edit_delete_search();
 }
 
 Void DBManagement::insertion_btn_Click(Object^ sender, EventArgs^ e) {
@@ -33,6 +34,13 @@ void DBManagement::display() {
 	vector<Record> records;
 	tree->traverse(records);
 
+	if (records.empty()) {
+		disable_edit_delete_search();
+		return;
+	}
+
+	enable_edit_delete_search();
+
 	for(int i = 0; i < records.size() - data_table->Rows->Count; ++i)
 		data_table->Rows->Add();
 
@@ -42,4 +50,28 @@ void DBManagement::display() {
 	}
 
 	records.clear();
+}
+
+void DBManagement::disable_edit_delete_search() {
+	key_to_edit->Enabled = false;
+	key_to_delete->Enabled = false;
+	key_to_find->Enabled = false;
+
+	new_data->Enabled = false;
+
+	deletion_btn->Enabled = false;
+	find_btn->Enabled = false;
+	editing_btn->Enabled = false;
+}
+
+void DBManagement::enable_edit_delete_search() {
+	key_to_edit->Enabled = true;
+	key_to_delete->Enabled = true;
+	key_to_find->Enabled = true;
+
+	new_data->Enabled = true;
+
+	deletion_btn->Enabled = true;
+	find_btn->Enabled = true;
+	editing_btn->Enabled = true;
 }

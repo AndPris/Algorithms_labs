@@ -46,6 +46,8 @@ namespace Lab3 {
 		std::string* file_path_to_save;
 		BTree* tree;
 		void display();
+		void disable_edit_delete_search();
+		void enable_edit_delete_search();
 
 	private: System::Windows::Forms::DataGridView^ data_table;
 	protected:
@@ -183,7 +185,6 @@ namespace Lab3 {
 			// 
 			// key_to_delete
 			// 
-			this->key_to_delete->Enabled = false;
 			this->key_to_delete->Location = System::Drawing::Point(354, 18);
 			this->key_to_delete->MaxLength = 6;
 			this->key_to_delete->Name = L"key_to_delete";
@@ -192,7 +193,6 @@ namespace Lab3 {
 			// 
 			// deletion_btn
 			// 
-			this->deletion_btn->Enabled = false;
 			this->deletion_btn->Location = System::Drawing::Point(323, 63);
 			this->deletion_btn->Name = L"deletion_btn";
 			this->deletion_btn->Size = System::Drawing::Size(102, 40);
@@ -211,7 +211,6 @@ namespace Lab3 {
 			// 
 			// new_data
 			// 
-			this->new_data->Enabled = false;
 			this->new_data->Location = System::Drawing::Point(603, 32);
 			this->new_data->MaxLength = 30;
 			this->new_data->Name = L"new_data";
@@ -220,7 +219,6 @@ namespace Lab3 {
 			// 
 			// key_to_edit
 			// 
-			this->key_to_edit->Enabled = false;
 			this->key_to_edit->Location = System::Drawing::Point(603, 3);
 			this->key_to_edit->MaxLength = 6;
 			this->key_to_edit->Name = L"key_to_edit";
@@ -229,7 +227,6 @@ namespace Lab3 {
 			// 
 			// editing_btn
 			// 
-			this->editing_btn->Enabled = false;
 			this->editing_btn->Location = System::Drawing::Point(572, 60);
 			this->editing_btn->Name = L"editing_btn";
 			this->editing_btn->Size = System::Drawing::Size(102, 40);
@@ -257,7 +254,6 @@ namespace Lab3 {
 			// 
 			// key_to_find
 			// 
-			this->key_to_find->Enabled = false;
 			this->key_to_find->Location = System::Drawing::Point(842, 18);
 			this->key_to_find->MaxLength = 6;
 			this->key_to_find->Name = L"key_to_find";
@@ -266,7 +262,6 @@ namespace Lab3 {
 			// 
 			// find_btn
 			// 
-			this->find_btn->Enabled = false;
 			this->find_btn->Location = System::Drawing::Point(822, 63);
 			this->find_btn->Name = L"find_btn";
 			this->find_btn->Size = System::Drawing::Size(102, 40);
