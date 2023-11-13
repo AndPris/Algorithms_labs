@@ -2,8 +2,7 @@
 
 #include <fstream>
 #include "../Lab3_code/validation_functions.h"
-#include <msclr\marshal_cppstd.h>
-
+#include "DBManagement.h"
 namespace Lab3 {
 
 	using namespace System;

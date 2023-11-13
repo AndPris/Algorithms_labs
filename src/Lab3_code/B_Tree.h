@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define DATA_SIZE 250
+#define DATA_SIZE 35
 
 struct Record {
     int key;
@@ -26,7 +26,7 @@ class BTree {
     public:
         Node(int minimum_degree, bool is_leaf);
 
-        void traverse() const;
+        void traverse(vector<Record>& destination) const;
         Record search(int key);
 
         void insert_in_non_full(Record record);
@@ -60,7 +60,7 @@ class BTree {
 public:
     BTree(int minimum_degree);
 
-    void traverse() const;
+    void traverse(vector<Record>& destination) const;
     Record search(int key);
     void insert(Record record);
     void edit(int key, char new_data[DATA_SIZE]);

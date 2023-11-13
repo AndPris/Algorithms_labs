@@ -4,9 +4,9 @@ BTree::BTree(int minimum_degree) : minimum_degree(minimum_degree) {
     root = nullptr;
 }
 
-void BTree::traverse() const {
+void BTree::traverse(vector<Record>& destination) const {
     if (root)
-        root->traverse();
+        root->traverse(destination);
 }
 
 Record BTree::search(int key) {
@@ -21,7 +21,6 @@ void BTree::edit(int key, char* new_data) {
 
     root->edit(key, new_data);
 }
-
 void BTree::insert(Record record) {
     if (!root) {
         root = new Node(minimum_degree, true);
@@ -78,16 +77,17 @@ BTree::Node::Node(int minimum_degree, bool is_leaf) : minimum_degree(minimum_deg
     amount_of_records = 0;
 }
 
-void BTree::Node::traverse() const {
+void BTree::Node::traverse(vector<Record>& destination) const {
     int i;
     for (i = 0; i < amount_of_records; ++i) {
         if (!is_leaf)
-            children.at(i)->traverse();
-        cout << records.at(i).key << " : " << records.at(i).data << " : size=" << sizeof(*this) << endl;
+            children.at(i)->traverse(destination);
+
+        destination.push_back(records.at(i));
     }
 
     if (!is_leaf)
-        children.at(i)->traverse();
+        children.at(i)->traverse(destination);
 }
 
 Record BTree::Node::search(int key) {

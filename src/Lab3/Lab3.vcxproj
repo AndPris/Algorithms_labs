@@ -142,11 +142,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Data_converters.cpp" />
     <ClCompile Include="DBForm.cpp" />
     <ClCompile Include="DBManagement.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Data_converters.h" />
     <ClInclude Include="DBForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>

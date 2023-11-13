@@ -157,6 +157,17 @@ namespace Lab3tests
 			auto func = [&tree, key_to_edit, new_data] { tree.edit(key_to_edit, new_data); };
 			Assert::ExpectException<const char*>(func);
 		}
+
+		TEST_METHOD(is_empty_empty) {
+			BTree tree(3);
+			
+			Assert::IsTrue(tree.is_empty());
+		}
+		TEST_METHOD(is_empty_non_empty) {
+			BTree tree = create_BTree(6, 3);
+
+			Assert::IsFalse(tree.is_empty());
+		}
 	};
 
 	TEST_CLASS(validation_functions_tests) {

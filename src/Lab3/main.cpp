@@ -5,7 +5,7 @@ using namespace Windows::Forms;
 using namespace Lab3;
 
 [STAThreadAttribute]
-int main(array <String^>^ args) {
+int main() {
 	Application::SetCompatibleTextRenderingDefault(false);
 	Application::EnableVisualStyles();
 
