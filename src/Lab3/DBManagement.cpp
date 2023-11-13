@@ -158,3 +158,20 @@ void DBManagement::enable_edit_delete_search() {
 	find_btn->Enabled = true;
 	editing_btn->Enabled = true;
 }
+
+DBManagement::~DBManagement() {
+	if (components)
+	{
+		delete components;
+	}
+
+	ofstream file_to_save(*file_path_to_save, ios::binary);
+	if(!file_to_save)
+		MessageBox::Show("Can't save tree");
+	else
+		tree->save(file_to_save);
+	file_to_save.close();
+
+	delete tree;
+	delete file_path_to_save;
+}

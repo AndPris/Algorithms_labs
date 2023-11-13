@@ -31,16 +31,7 @@ namespace Lab3 {
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		~DBManagement()
-		{
-			if (components)
-			{
-				delete components;
-			}
-
-			delete tree;
-			delete file_path_to_save;
-		}
+		~DBManagement();
 	private:
 		int minimum_degree;
 		std::string* file_path_to_save;
