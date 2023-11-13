@@ -47,6 +47,8 @@ namespace Lab3 {
 		BTree* tree;
 		void display();
 		void remove_row(int key);
+		void edit_row(int key, char* data);
+
 		void disable_edit_delete_search();
 		void enable_edit_delete_search();
 
@@ -236,6 +238,7 @@ namespace Lab3 {
 			this->editing_btn->TabIndex = 13;
 			this->editing_btn->Text = L"Edit";
 			this->editing_btn->UseVisualStyleBackColor = true;
+			this->editing_btn->Click += gcnew System::EventHandler(this, &DBManagement::editing_btn_Click);
 			// 
 			// label5
 			// 
@@ -317,5 +320,6 @@ namespace Lab3 {
 
 	private: Void insertion_btn_Click(Object^ sender, EventArgs^ e);
 			Void deletion_btn_Click(Object^ sender, EventArgs^ e);
+			Void editing_btn_Click(Object^ sender, EventArgs^ e);
 };
 }

@@ -55,6 +55,28 @@ Void DBManagement::deletion_btn_Click(Object^ sender, EventArgs^ e) {
 		MessageBox::Show(string_to_String(er));
 	}
 }
+Void DBManagement::editing_btn_Click(Object^ sender, EventArgs^ e) {
+	Record new_record;
+	try {
+		new_record.key = get_input(key_to_edit);
+	}
+	catch (const char* er) {
+		MessageBox::Show(char_string_into_String(er));
+		return;
+	}
+
+	strcpy(new_record.data, String_to_string(new_data->Text).c_str());
+
+	try {
+		tree->edit(new_record.key, new_record.data);
+		key_to_edit->Text = "";
+		new_data->Text = "";
+		display();
+	}
+	catch (const char* er) {
+		MessageBox::Show(char_string_into_String(er));
+	}
+}
 
 void DBManagement::display() {
 	vector<Record> records;
@@ -83,6 +105,15 @@ void DBManagement::remove_row(int key) {
 
 	if (data_table->Rows->Count == 0)
 		disable_edit_delete_search();
+}
+void DBManagement::edit_row(int key, char* data) {
+	for (int i = 0; i < data_table->Rows->Count; ++i) {
+		int row_key = Convert::ToInt16(data_table->Rows[i]->Cells[0]->Value);
+		if (row_key == key) {
+			data_table->Rows[i]->Cells[1]->Value = char_string_into_String(data);
+			break;
+		}
+	}
 }
 void DBManagement::disable_edit_delete_search() {
 	key_to_edit->Enabled = false;
