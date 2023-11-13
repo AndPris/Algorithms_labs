@@ -311,6 +311,8 @@ void BTree::Node::merge_child(int child_index) {
 
 
 void BTree::save(std::ofstream& destination) {
+    if (!root)
+        return;
     root->save(destination);
 }
 void BTree::Node::save(ofstream& destination) {

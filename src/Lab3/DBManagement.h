@@ -26,7 +26,7 @@ namespace Lab3 {
 			//
 		}
 
-		DBManagement(std::string file_path_to_save);
+		DBManagement(std::string file_path_to_save, bool open);
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.

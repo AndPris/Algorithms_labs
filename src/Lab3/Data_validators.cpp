@@ -22,3 +22,10 @@ int get_input(TextBox^ source) {
 
 	return stoi(data);
 }
+
+bool is_empty_file(ifstream& file) {
+	file.seekg(0, ios::end);
+	bool result = file.tellg() == 0;
+	file.seekg(0, ios::beg);
+	return result;
+}

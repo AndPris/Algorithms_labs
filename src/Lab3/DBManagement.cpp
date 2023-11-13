@@ -3,7 +3,7 @@
 
 using namespace Lab3;
 
-DBManagement::DBManagement(string file_path_to_save) {
+DBManagement::DBManagement(string file_path_to_save, bool open) {
 	InitializeComponent();
 	this->minimum_degree = MINIMUM_DEGREE;
 	this->file_path_to_save = new string(file_path_to_save);
@@ -11,7 +11,27 @@ DBManagement::DBManagement(string file_path_to_save) {
 	string a = *this->file_path_to_save;
 
 	this->tree = new BTree(this->minimum_degree);
-	disable_edit_delete_search();
+
+	if (!open) {
+		disable_edit_delete_search();
+		return;
+	}
+
+	ifstream file(file_path_to_save, ios::binary);
+
+	if (!file) {
+		MessageBox::Show("Can't open file");
+		return;
+	}
+
+	if (is_empty_file(file)) {
+		disable_edit_delete_search();
+		return;
+	}
+
+	tree->open(file);
+	display();
+	file.close();
 }
 
 Void DBManagement::insertion_btn_Click(Object^ sender, EventArgs^ e) {
@@ -102,7 +122,9 @@ void DBManagement::display() {
 	vector<Record> records;
 	tree->traverse(records);
 
-	enable_edit_delete_search();
+	if(!records.empty())
+		enable_edit_delete_search();
+
 	int amount_of_iterations = records.size() - data_table->Rows->Count;
 	for(int i = 0; i < amount_of_iterations; ++i)
 		data_table->Rows->Add();

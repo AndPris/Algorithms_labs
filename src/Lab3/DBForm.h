@@ -37,6 +37,9 @@ namespace Lab3 {
 				delete components;
 			}
 		}
+	private:
+		void open_db_management_window(String^ file_path, bool open);
+
 	private: System::Windows::Forms::Button^ DB_creation_btn;
 	private: System::Windows::Forms::Button^ DB_opening_btn;
 	protected:
@@ -101,7 +104,6 @@ namespace Lab3 {
 	private: System::Void DBForm_Load(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: Void DB_creation_btn_Click(Object^ sender, EventArgs^ e);
-	private: System::Void DB_opening_btn_Click(System::Object^ sender, System::EventArgs^ e) {
-	}
+		   Void DB_opening_btn_Click(Object^ sender, EventArgs^ e);
 	};
 }
