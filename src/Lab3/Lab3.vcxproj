@@ -143,12 +143,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Data_converters.cpp" />
+    <ClCompile Include="Data_validators.cpp" />
     <ClCompile Include="DBForm.cpp" />
     <ClCompile Include="DBManagement.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Data_converters.h" />
+    <ClInclude Include="Data_validators.h" />
     <ClInclude Include="DBForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>

@@ -4,6 +4,7 @@
 
 using namespace std;
 using namespace System;
+using namespace Windows::Forms;
 
 string String_to_string(String^ data);
 const char* String_to_char_string(String^ data);

@@ -127,7 +127,7 @@ void BTree::Node::insert_in_non_full(Record record) {
         while (i >= 0 && records.at(i).key > record.key)
             --i;
 
-        records.insert(records.begin() + i + 1, record);
+        records.insert(records.begin() + (i + 1), record);
         ++amount_of_records;
         return;
     }

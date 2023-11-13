@@ -16,7 +16,14 @@ DBManagement::DBManagement(string file_path_to_save) {
 
 Void DBManagement::insertion_btn_Click(Object^ sender, EventArgs^ e) {
 	Record rec;
-	rec.key = Convert::ToInt16(key_to_insert->Text);
+	try {
+		rec.key = get_input(key_to_insert);
+	}
+	catch (const char* er) {
+		MessageBox::Show(char_string_into_String(er));
+		return;
+	}
+
 	strcpy(rec.data, String_to_string(data_to_insert->Text).c_str());
 
 	try {
