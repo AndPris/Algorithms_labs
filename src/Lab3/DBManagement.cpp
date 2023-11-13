@@ -77,6 +77,26 @@ Void DBManagement::editing_btn_Click(Object^ sender, EventArgs^ e) {
 		MessageBox::Show(char_string_into_String(er));
 	}
 }
+Void DBManagement::find_btn_Click(Object^ sender, EventArgs^ e) {
+	int key;
+	try {
+		key = get_input(key_to_find);
+	}
+	catch (const char* er) {
+		MessageBox::Show(char_string_into_String(er));
+		return;
+	}
+
+	try {
+		Record rec = tree->search(key);
+		String^ message = "Key: " + Convert::ToString(key) + " , Data: " + char_string_into_String(rec.data);
+		MessageBox::Show(message);
+		key_to_find->Text = "";
+	}
+	catch (const char* er) {
+		MessageBox::Show(char_string_into_String(er));
+	}
+}
 
 void DBManagement::display() {
 	vector<Record> records;

@@ -274,6 +274,7 @@ namespace Lab3 {
 			this->find_btn->TabIndex = 18;
 			this->find_btn->Text = L"Find";
 			this->find_btn->UseVisualStyleBackColor = true;
+			this->find_btn->Click += gcnew System::EventHandler(this, &DBManagement::find_btn_Click);
 			// 
 			// label8
 			// 
@@ -321,5 +322,6 @@ namespace Lab3 {
 	private: Void insertion_btn_Click(Object^ sender, EventArgs^ e);
 			Void deletion_btn_Click(Object^ sender, EventArgs^ e);
 			Void editing_btn_Click(Object^ sender, EventArgs^ e);
+			Void find_btn_Click(Object^ sender, EventArgs^ e);
 };
 }
