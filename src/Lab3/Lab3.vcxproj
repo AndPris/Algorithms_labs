@@ -143,10 +143,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DBForm.cpp" />
+    <ClCompile Include="DBManagement.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DBForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="DBManagement.h">
       <FileType>CppForm</FileType>
     </ClInclude>
   </ItemGroup>
@@ -158,6 +162,9 @@
   <ItemGroup>
     <EmbeddedResource Include="DBForm.resx">
       <DependentUpon>DBForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DBManagement.resx">
+      <DependentUpon>DBManagement.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
