@@ -11,6 +11,9 @@ bool is_number(const string& input) {
 int get_input(TextBox^ source) {
 	string data = String_to_string(source->Text);
 
+	if (data == "")
+		throw "You must enter a key";
+
 	if (!is_number(data))
 		throw "You must enter a positive integer number";
 

@@ -46,6 +46,7 @@ namespace Lab3 {
 		std::string* file_path_to_save;
 		BTree* tree;
 		void display();
+		void remove_row(int key);
 		void disable_edit_delete_search();
 		void enable_edit_delete_search();
 
@@ -111,6 +112,7 @@ namespace Lab3 {
 			// 
 			// data_table
 			// 
+			this->data_table->AllowUserToAddRows = false;
 			this->data_table->BackgroundColor = System::Drawing::SystemColors::ButtonHighlight;
 			this->data_table->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->data_table->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(2) { this->Key, this->Data });
@@ -199,6 +201,7 @@ namespace Lab3 {
 			this->deletion_btn->TabIndex = 8;
 			this->deletion_btn->Text = L"Delete";
 			this->deletion_btn->UseVisualStyleBackColor = true;
+			this->deletion_btn->Click += gcnew System::EventHandler(this, &DBManagement::deletion_btn_Click);
 			// 
 			// label3
 			// 
@@ -313,5 +316,6 @@ namespace Lab3 {
 #pragma endregion
 
 	private: Void insertion_btn_Click(Object^ sender, EventArgs^ e);
+			Void deletion_btn_Click(Object^ sender, EventArgs^ e);
 };
 }

@@ -36,19 +36,33 @@ Void DBManagement::insertion_btn_Click(Object^ sender, EventArgs^ e) {
 		MessageBox::Show(char_string_into_String(er));
 	}
 }
+Void DBManagement::deletion_btn_Click(Object^ sender, EventArgs^ e) {
+	int key;
+	try {
+		key = get_input(key_to_delete);
+	}
+	catch (const char* er) {
+		MessageBox::Show(char_string_into_String(er));
+		return;
+	}
+
+	try {
+		tree->remove(key);
+		key_to_delete->Text = "";
+		remove_row(key);
+	}
+	catch (string er) {
+		MessageBox::Show(string_to_String(er));
+	}
+}
 
 void DBManagement::display() {
 	vector<Record> records;
 	tree->traverse(records);
 
-	if (records.empty()) {
-		disable_edit_delete_search();
-		return;
-	}
-
 	enable_edit_delete_search();
-
-	for(int i = 0; i < records.size() - data_table->Rows->Count; ++i)
+	int amount_of_iterations = records.size() - data_table->Rows->Count;
+	for(int i = 0; i < amount_of_iterations; ++i)
 		data_table->Rows->Add();
 
 	for (int i = 0; i < records.size(); ++i) {
@@ -58,7 +72,18 @@ void DBManagement::display() {
 
 	records.clear();
 }
+void DBManagement::remove_row(int key) {
+	for (int i = 0; i < data_table->Rows->Count; ++i) {
+		int row_key = Convert::ToInt16(data_table->Rows[i]->Cells[0]->Value);
+		if (row_key == key) {
+			data_table->Rows->RemoveAt(i);
+			break;
+		}
+	}
 
+	if (data_table->Rows->Count == 0)
+		disable_edit_delete_search();
+}
 void DBManagement::disable_edit_delete_search() {
 	key_to_edit->Enabled = false;
 	key_to_delete->Enabled = false;
