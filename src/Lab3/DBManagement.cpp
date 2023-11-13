@@ -108,8 +108,9 @@ Void DBManagement::find_btn_Click(Object^ sender, EventArgs^ e) {
 	}
 
 	try {
-		Record rec = tree->search(key);
-		String^ message = "Key: " + Convert::ToString(key) + " , Data: " + char_string_into_String(rec.data);
+		int amount_of_conmarisons = 0;
+		Record rec = tree->search(key, amount_of_conmarisons);
+		String^ message = "Key: " + Convert::ToString(key) + ", Data: " + char_string_into_String(rec.data) + ", Comparisons: " + Convert::ToString(amount_of_conmarisons);
 		MessageBox::Show(message);
 		key_to_find->Text = "";
 	}

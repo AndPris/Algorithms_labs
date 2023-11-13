@@ -27,7 +27,7 @@ class BTree {
         Node(int minimum_degree, bool is_leaf);
 
         void traverse(vector<Record>& destination) const;
-        Record search(int key);
+        Record search(int key, int& amount_of_comparisons);
 
         void insert_in_non_full(Record record);
         void split_child(int index);
@@ -61,11 +61,13 @@ public:
     BTree(int minimum_degree);
 
     void traverse(vector<Record>& destination) const;
-    Record search(int key);
+    Record search(int key, int& amount_of_comparisons);
     void insert(Record record);
     void edit(int key, char new_data[DATA_SIZE]);
     void remove(int key);
 
     void save(ofstream& destination);
     void open(ifstream& source);
+
+    bool is_empty() const;
 };

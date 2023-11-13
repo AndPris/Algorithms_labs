@@ -26,7 +26,8 @@ namespace Lab3tests
 			BTree tree = create_BTree(6, 3);
 			int key_to_search = 1;
 
-			Record result = tree.search(key_to_search);
+			int not_used = 0;
+			Record result = tree.search(key_to_search, not_used);
 
 			Assert::AreEqual(result.key, key_to_search);
 			char expected_data[250] = "data";
@@ -37,8 +38,8 @@ namespace Lab3tests
 			BTree tree = create_BTree(6, 3);
 			int key_to_search = 1;
 
-
-			Record result = tree.search(key_to_search);
+			int not_used = 0;
+			Record result = tree.search(key_to_search, not_used);
 
 			Assert::AreEqual(result.key, key_to_search);
 			char expected_data[250] = "data";
@@ -49,7 +50,8 @@ namespace Lab3tests
 			BTree tree = create_BTree(6, 3);
 			int key_to_search = 3;
 
-			Record result = tree.search(key_to_search);
+			int not_used = 0;
+			Record result = tree.search(key_to_search, not_used);
 
 			Assert::AreEqual(result.key, key_to_search);
 			char expected_data[250] = "data";
@@ -60,7 +62,8 @@ namespace Lab3tests
 			BTree tree = create_BTree(6, 3);
 			int key_to_search = 6;
 
-			Record result = tree.search(key_to_search);
+			int not_used = 0;
+			Record result = tree.search(key_to_search, not_used);
 
 			Assert::AreEqual(result.key, key_to_search);
 			char expected_data[250] = "data";
@@ -71,7 +74,8 @@ namespace Lab3tests
 			BTree tree = create_BTree(6, 3);
 			int key_to_search = 7;
 
-			auto func = [&tree, key_to_search] { tree.search(key_to_search); };
+			int not_used = 0;
+			auto func = [&tree, key_to_search, &not_used] { tree.search(key_to_search, not_used); };
 			Assert::ExpectException<const char*>(func);
 		}
 
@@ -97,7 +101,8 @@ namespace Lab3tests
 
 			tree.remove(key_to_delete);
 
-			auto func = [&tree, key_to_delete] { tree.search(key_to_delete); };
+			int not_used = 0;
+			auto func = [&tree, key_to_delete, &not_used] { tree.search(key_to_delete, not_used); };
 			Assert::ExpectException<const char*>(func);
 		}
 
@@ -107,7 +112,8 @@ namespace Lab3tests
 
 			tree.remove(key_to_delete);
 
-			auto func = [&tree, key_to_delete] { tree.search(key_to_delete); };
+			int not_used = 0;
+			auto func = [&tree, key_to_delete, &not_used] { tree.search(key_to_delete, not_used); };
 			Assert::ExpectException<const char*>(func);
 		}
 
@@ -118,7 +124,8 @@ namespace Lab3tests
 
 			tree.edit(key_to_edit, new_data);
 
-			Record result = tree.search(key_to_edit);
+			int not_used = 0;
+			Record result = tree.search(key_to_edit, not_used);
 
 			Assert::AreEqual(result.key, key_to_edit);
 			Assert::AreEqual(result.data, new_data);
@@ -131,7 +138,8 @@ namespace Lab3tests
 
 			tree.edit(key_to_edit, new_data);
 
-			Record result = tree.search(key_to_edit);
+			int not_used = 0;
+			Record result = tree.search(key_to_edit, not_used);
 
 			Assert::AreEqual(result.key, key_to_edit);
 			Assert::AreEqual(result.data, new_data);
@@ -144,7 +152,8 @@ namespace Lab3tests
 
 			tree.edit(key_to_edit, new_data);
 
-			Record result = tree.search(key_to_edit);
+			int not_used = 0;
+			Record result = tree.search(key_to_edit, not_used);
 
 			Assert::AreEqual(result.key, key_to_edit);
 			Assert::AreEqual(result.data, new_data);

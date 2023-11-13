@@ -4,15 +4,18 @@ BTree::BTree(int minimum_degree) : minimum_degree(minimum_degree) {
     root = nullptr;
 }
 
+bool BTree::is_empty() const {
+    return root == nullptr;
+}
 void BTree::traverse(vector<Record>& destination) const {
     if (root)
         root->traverse(destination);
 }
 
-Record BTree::search(int key) {
+Record BTree::search(int key, int& amount_of_comparisons) {
     if (!root)
         throw "The tree is empty";
-    return root->search(key);
+    return root->search(key, amount_of_comparisons);
 }
 
 void BTree::edit(int key, char* new_data) {
@@ -31,7 +34,8 @@ void BTree::insert(Record record) {
 
     bool contains_record_with_such_key = true;
     try {
-        search(record.key);
+        int not_used = 0;
+        search(record.key, not_used);
     }
     catch (const char* er) {
         contains_record_with_such_key = false;
@@ -90,18 +94,22 @@ void BTree::Node::traverse(vector<Record>& destination) const {
         children.at(i)->traverse(destination);
 }
 
-Record BTree::Node::search(int key) {
+Record BTree::Node::search(int key, int& amount_of_comparisons) {
     int i = 0;
-    while (i < amount_of_records && key > records.at(i).key)
+    while (i < amount_of_records && key > records.at(i).key) {
+        ++amount_of_comparisons;
         ++i;
+    }
 
-    if (i < amount_of_records && records.at(i).key == key)
+    if (i < amount_of_records && records.at(i).key == key) {
+        ++amount_of_comparisons;
         return records.at(i);
+    }
 
     if (is_leaf)
         throw "There is no such element";
 
-    return children.at(i)->search(key);
+    return children.at(i)->search(key, amount_of_comparisons);
 }
 
 void BTree::Node::edit(int key, char* new_data) {
