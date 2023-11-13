@@ -95,7 +95,7 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>B_Tree.obj;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>B_Tree.obj;validation_functions.obj;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>main</EntryPointSymbol>
       <AdditionalLibraryDirectories>..\Lab3_code\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -154,6 +154,11 @@
     <ProjectReference Include="..\Lab3_code\Lab3_code.vcxproj">
       <Project>{1dcc5b65-ae4d-42da-8730-8a211c7d6649}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DBForm.resx">
+      <DependentUpon>DBForm.h</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

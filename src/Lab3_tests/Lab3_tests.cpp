@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "../Lab3_code/B_Tree.h"
+#include "../Lab3_code/validation_functions.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -155,6 +156,38 @@ namespace Lab3tests
 
 			auto func = [&tree, key_to_edit, new_data] { tree.edit(key_to_edit, new_data); };
 			Assert::ExpectException<const char*>(func);
+		}
+	};
+
+	TEST_CLASS(validation_functions_tests) {
+		TEST_METHOD(validate_file_path_correct) {
+			string initial_path = "test.mdb";
+			string expected_result = "test.mdb";
+			string extension = ".mdb";
+
+			validate_file_path(initial_path, extension);
+
+			Assert::AreEqual(initial_path, expected_result);
+		}
+
+		TEST_METHOD(validate_file_path_not_correct1) {
+			string initial_path = ".exe";
+			string expected_result = ".exe.mdb";
+			string extension = ".mdb";
+
+			validate_file_path(initial_path, extension);
+
+			Assert::AreEqual(initial_path, expected_result);
+		}
+
+		TEST_METHOD(validate_file_path_not_correct2) {
+			string initial_path = "test.exe";
+			string expected_result = "test.exe.mdb";
+			string extension = ".mdb";
+
+			validate_file_path(initial_path, extension);
+
+			Assert::AreEqual(initial_path, expected_result);
 		}
 	};
 }

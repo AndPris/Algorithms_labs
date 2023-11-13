@@ -143,9 +143,11 @@
   <ItemGroup>
     <ClCompile Include="B_Tree.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="validation_functions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="B_Tree.h" />
+    <ClInclude Include="validation_functions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
