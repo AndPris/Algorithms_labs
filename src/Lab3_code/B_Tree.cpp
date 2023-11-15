@@ -95,21 +95,29 @@ void BTree::Node::traverse(vector<Record>& destination) const {
 }
 
 Record BTree::Node::search(int key, int& amount_of_comparisons) {
-    int i = 0;
-    while (i < amount_of_records && key > records.at(i).key) {
-        ++amount_of_comparisons;
-        ++i;
-    }
+    int left = 0;
+    int right = records.size() - 1;
 
-    if (i < amount_of_records && records.at(i).key == key) {
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        
+        if (records.at(mid).key == key) {
+            ++amount_of_comparisons;
+            return records.at(mid);
+        }
+
+        if (records.at(mid).key < key)
+            left = mid + 1;
+        else
+            right = mid - 1;
+
         ++amount_of_comparisons;
-        return records.at(i);
     }
 
     if (is_leaf)
         throw "There is no such element";
 
-    return children.at(i)->search(key, amount_of_comparisons);
+    return children.at(left)->search(key, amount_of_comparisons);
 }
 
 void BTree::Node::edit(int key, char* new_data) {

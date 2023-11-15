@@ -3,6 +3,7 @@
 #include "../Lab3_code/B_Tree.h"
 #include "Data_validators.h"
 #include <string>
+#include "random_generators.h"
 namespace Lab3 {
 
 	using namespace System;
@@ -35,13 +36,17 @@ namespace Lab3 {
 	private:
 		int minimum_degree;
 		std::string* file_path_to_save;
-		BTree* tree;
+	private: System::Windows::Forms::Button^ records_addition_btn;
+
+		   BTree* tree;
 		void display();
 		void remove_row(int key);
 		void edit_row(int key, char* data);
 
 		void disable_edit_delete_search();
 		void enable_edit_delete_search();
+		void disable_records_addition();
+		void enable_records_addition();
 
 	private: System::Windows::Forms::DataGridView^ data_table;
 	protected:
@@ -100,6 +105,7 @@ namespace Lab3 {
 			this->key_to_find = (gcnew System::Windows::Forms::TextBox());
 			this->find_btn = (gcnew System::Windows::Forms::Button());
 			this->label8 = (gcnew System::Windows::Forms::Label());
+			this->records_addition_btn = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->data_table))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -276,11 +282,22 @@ namespace Lab3 {
 			this->label8->TabIndex = 16;
 			this->label8->Text = L"Key to find :";
 			// 
+			// records_addition_btn
+			// 
+			this->records_addition_btn->Location = System::Drawing::Point(872, 125);
+			this->records_addition_btn->Name = L"records_addition_btn";
+			this->records_addition_btn->Size = System::Drawing::Size(100, 52);
+			this->records_addition_btn->TabIndex = 20;
+			this->records_addition_btn->Text = L"Add 1000 records";
+			this->records_addition_btn->UseVisualStyleBackColor = true;
+			this->records_addition_btn->Click += gcnew System::EventHandler(this, &DBManagement::records_addition_btn_Click);
+			// 
 			// DBManagement
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1004, 536);
+			this->Controls->Add(this->records_addition_btn);
 			this->Controls->Add(this->key_to_find);
 			this->Controls->Add(this->find_btn);
 			this->Controls->Add(this->label8);
@@ -314,5 +331,6 @@ namespace Lab3 {
 			Void deletion_btn_Click(Object^ sender, EventArgs^ e);
 			Void editing_btn_Click(Object^ sender, EventArgs^ e);
 			Void find_btn_Click(Object^ sender, EventArgs^ e);
+			Void records_addition_btn_Click(Object^ sender, EventArgs^ e);
 };
 }

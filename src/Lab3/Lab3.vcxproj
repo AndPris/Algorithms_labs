@@ -147,6 +147,7 @@
     <ClCompile Include="DBForm.cpp" />
     <ClCompile Include="DBManagement.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="random_generators.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Data_converters.h" />
@@ -157,6 +158,7 @@
     <ClInclude Include="DBManagement.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="random_generators.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lab3_code\Lab3_code.vcxproj">

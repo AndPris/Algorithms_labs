@@ -29,6 +29,7 @@ DBManagement::DBManagement(string file_path_to_save, bool open) {
 		return;
 	}
 
+	disable_records_addition();
 	tree->open(file);
 	display();
 	file.close();
@@ -118,13 +119,40 @@ Void DBManagement::find_btn_Click(Object^ sender, EventArgs^ e) {
 		MessageBox::Show(char_string_into_String(er));
 	}
 }
+Void DBManagement::records_addition_btn_Click(Object^ sender, EventArgs^ e) {
+	srand(time(nullptr));
+
+	int amount_of_records = 1000;
+	int data_length = data_to_insert->MaxLength;
+	vector<int> keys;
+	for (int i = 1; i <= amount_of_records; ++i)
+		keys.push_back(i);
+
+	int i = 0;
+	while(i < amount_of_records) {
+		int index = generate_number_in_range(0, keys.size()-1);
+		int key = keys.at(index);
+
+		keys.erase(keys.begin() + index);
+
+		Record rec;
+		rec.key = key;
+		strcpy(rec.data, generate_string(data_length));
+		tree->insert(rec);
+		++i;
+	}
+
+	display();
+}
 
 void DBManagement::display() {
 	vector<Record> records;
 	tree->traverse(records);
 
-	if(!records.empty())
+	if (!records.empty()) {
 		enable_edit_delete_search();
+		disable_records_addition();
+	}
 
 	int amount_of_iterations = records.size() - data_table->Rows->Count;
 	for(int i = 0; i < amount_of_iterations; ++i)
@@ -146,8 +174,10 @@ void DBManagement::remove_row(int key) {
 		}
 	}
 
-	if (data_table->Rows->Count == 0)
+	if (data_table->Rows->Count == 0) {
 		disable_edit_delete_search();
+		enable_records_addition();
+	}
 }
 void DBManagement::edit_row(int key, char* data) {
 	for (int i = 0; i < data_table->Rows->Count; ++i) {
@@ -181,7 +211,12 @@ void DBManagement::enable_edit_delete_search() {
 	find_btn->Enabled = true;
 	editing_btn->Enabled = true;
 }
-
+void DBManagement::disable_records_addition() {
+	records_addition_btn->Enabled = false;
+}
+void DBManagement::enable_records_addition() {
+	records_addition_btn->Enabled = true;
+}
 DBManagement::~DBManagement() {
 	if (components)
 	{
