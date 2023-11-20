@@ -6,11 +6,12 @@ int main() {
     const int amountOfVertexes = 200;
 
     FullGraph graph(amountOfVertexes);
-//    graph.display();
     FullGraph* graphPointer = &graph;
 
     ACO_TSP_Solver solver(graphPointer);
     Path result = solver.solve();
+    cout << "Greedy algorithm length: " << solver.getOptimalCycleLength() << endl;
+    cout << "Ant colony optimization solution:" << endl;
     result.display();
     return 0;
 }

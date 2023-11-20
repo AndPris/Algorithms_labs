@@ -5,7 +5,7 @@
 #include "TSP_Greedy_Solver.h"
 #include <algorithm>
 
-//TODO: set correct values
+
 #define AMOUNT_OF_ANTS 45
 #define AMOUNT_OF_ELITE_ANTS 10
 #define PHEROMONE_DEGREE 3
@@ -24,14 +24,18 @@ class ACO_TSP_Solver {
     vector<Ant*> currentEliteAnts;
     Path currentBestCycle;
 
+    void calculateOptimalCycleLength();
     void placeAnts();
     void buildCyclesForAnts();
     void findCurrentEliteAnts();
     void renewPheromone();
+    void clearAntsPathes();
 public:
     ACO_TSP_Solver(FullGraph*& graph);
 
     Path solve();
+    
+    int getOptimalCycleLength() const;
 
     ~ACO_TSP_Solver();
 };

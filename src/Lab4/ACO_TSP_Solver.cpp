@@ -8,11 +8,7 @@ ACO_TSP_Solver::ACO_TSP_Solver(FullGraph *&graph) {
 }
 
 Path ACO_TSP_Solver::solve() {
-    TSPGreedySolver solver(graphToSolve);
-    Path greedyResult = solver.solve();
-    optimalCycleLength = greedyResult.getLength();
-    greedyResult.display();
-    cout<<"Optimal length: "<<optimalCycleLength<<endl;
+    calculateOptimalCycleLength();
 
     placeAnts();
 
@@ -21,9 +17,15 @@ Path ACO_TSP_Solver::solve() {
         findCurrentEliteAnts();
         currentBestCycle = ants.at(0)->getPath();
         renewPheromone();
+        clearAntsPathes();
     }
 
     return currentBestCycle;
+}
+void ACO_TSP_Solver::calculateOptimalCycleLength() {
+    TSPGreedySolver solver(graphToSolve);
+    Path greedyResult = solver.solve();
+    optimalCycleLength = greedyResult.getLength();
 }
 void ACO_TSP_Solver::placeAnts() {
     vector<Vertex*> graphVertexes = graphToSolve->getVertexes();
@@ -55,11 +57,18 @@ void ACO_TSP_Solver::renewPheromone() {
     for(auto eliteAnt : currentEliteAnts)
         eliteAnt->extractPheromone();
 
-    for(auto ant : ants) {
+    for(auto ant : ants)
         ant->extractPheromone();
-        ant->clearPath();
-    }
 }
+void ACO_TSP_Solver::clearAntsPathes() {
+    for(auto ant : ants)
+        ant->clearPath();
+}
+
+int ACO_TSP_Solver::getOptimalCycleLength() const {
+    return optimalCycleLength;
+}
+
 ACO_TSP_Solver::~ACO_TSP_Solver() {
     for(auto ant : ants)
         delete ant;
