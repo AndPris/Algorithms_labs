@@ -46,6 +46,50 @@ Edge *FullGraph::getEdgeWithVertexes(Vertex *vertex1, Vertex *vertex2) {
     return nullptr;
 }
 
+void FullGraph::display() {
+    const int amountOfDisplayedVertexes = 5;
+    const int width = 3;
+
+    displayVertexesInTop(width, amountOfDisplayedVertexes);
+
+    for (int i = 0; i < amountOfDisplayedVertexes; ++i)
+        displayFirstAndLastEdges(i, amountOfDisplayedVertexes, width);
+
+    for (int i = 0; i < amountOfDisplayedVertexes * 2 + 2; ++i)
+        cout << "... ";
+    cout << endl;
+
+    for (int i = amountOfVertexes - amountOfDisplayedVertexes; i < amountOfVertexes; ++i)
+        displayFirstAndLastEdges(i, amountOfDisplayedVertexes, width);
+}
+
+void FullGraph::displayFirstAndLastEdges(int vertexIndex, int amount, int width) {
+    cout << setw(width) << vertexes.at(vertexIndex)->getNumber() << " ";
+    displayEdgeLength(vertexIndex, 0, amount, width);
+    cout << "... ";
+    displayEdgeLength(vertexIndex, amountOfVertexes - amount, amountOfVertexes, width);
+    cout << endl;
+}
+void FullGraph::displayVertexesInTop(int width, int amountOfDisplayedVertexes) {
+    cout << setw(width) << "" << " ";
+    for (int i = 0; i < amountOfDisplayedVertexes; ++i)
+        cout << setw(width) << vertexes.at(i)->getNumber() << " ";
+    cout << "... ";
+    for (int i = amountOfVertexes - amountOfDisplayedVertexes; i < amountOfVertexes; ++i)
+        cout << setw(width) << vertexes.at(i)->getNumber() << " ";
+    cout << endl;
+}
+void FullGraph::displayEdgeLength(int vertexIndex, int from, int to, int width) {
+    for (int j = from; j < to; ++j) {
+        if (vertexIndex == j) {
+            cout << setw(width) << "0" << " ";
+            continue;
+        }
+        Edge* edge = getEdgeWithVertexes(vertexes.at(vertexIndex), vertexes.at(j));
+        cout << setw(width) << edge->getLength() << " ";
+    }
+}
+
 FullGraph::~FullGraph() {
     for(auto vertex : vertexes)
         delete vertex;

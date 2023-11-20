@@ -16,6 +16,9 @@ class FullGraph {
 
     void generateVertexes();
     void generateEdges();
+    void displayVertexesInTop(int width, int amountOfDisplayedVertexes);
+    void displayEdgeLength(int vertexIndex, int from, int to, int width);
+    void displayFirstAndLastEdges(int vertexIndex, int amount, int width);
 public:
     FullGraph(int amountOfVertexes);
 
@@ -23,6 +26,7 @@ public:
     vector<Vertex*> getVertexes();
     vector<Edge*> getEdges();
 
+    void display();
     Edge* getEdgeWithVertexes(Vertex* vertex1, Vertex* vertex2);
 
     ~FullGraph();

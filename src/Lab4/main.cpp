@@ -15,6 +15,9 @@ int main() {
         FullGraph graph(AMOUNT_OF_VERTEXES);
         FullGraph* graphPointer = &graph;
 
+        cout << "Graph:" << endl;
+        graph.display();
+
         ACO_TSP_Solver solver(graphPointer);
         Path result = solver.solve();
         cout << "Greedy algorithm length: " << solver.getOptimalCycleLength() << endl;
