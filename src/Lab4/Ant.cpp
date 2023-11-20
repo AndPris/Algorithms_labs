@@ -80,14 +80,3 @@ Path Ant::getPath() {
 void Ant::clearPath() {
     path.clear();
 }
-
-Ant &Ant::operator=(const Ant &obj) {
-    optimalCycleLength = obj.optimalCycleLength;
-    startVertex = obj.startVertex;
-    currentVertex = obj.currentVertex;
-    path = obj.path;
-    pheromoneDegree = obj.pheromoneDegree;
-    visibilityDegree = obj.visibilityDegree;
-
-    return *this;
-}

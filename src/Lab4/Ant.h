@@ -25,6 +25,4 @@ public:
 
     Path getPath();
     void clearPath();
-
-    Ant& operator=(const Ant& obj);
 };
