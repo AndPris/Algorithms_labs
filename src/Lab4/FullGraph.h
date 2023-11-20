@@ -23,7 +23,6 @@ public:
     vector<Vertex*> getVertexes();
     vector<Edge*> getEdges();
 
-    void display();
     Edge* getEdgeWithVertexes(Vertex* vertex1, Vertex* vertex2);
 
     ~FullGraph();

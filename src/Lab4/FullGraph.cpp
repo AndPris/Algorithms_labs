@@ -37,30 +37,6 @@ vector<Edge *> FullGraph::getEdges() {
     return edges;
 }
 
-void FullGraph::display() {
-    const int width = 3;
-
-    cout<<setw(width)<<""<<" ";
-    for(int i = 0; i < amountOfVertexes; ++i)
-        cout<<setw(width)<<vertexes.at(i)->getNumber()<<" ";
-    cout<<endl;
-
-    for(int i = 0; i < amountOfVertexes; ++i) {
-        cout<<setw(width)<<vertexes.at(i)->getNumber()<<" ";
-
-        for(int j = 0; j < amountOfVertexes; ++j) {
-            if(i == j) {
-                cout<<setw(width)<<"0"<<" ";
-                continue;
-            }
-            Edge* edge = getEdgeWithVertexes(vertexes.at(i), vertexes.at(j));
-            cout<<setw(width)<<edge->getLength()<<" ";
-        }
-
-        cout<<endl;
-    }
-}
-
 Edge *FullGraph::getEdgeWithVertexes(Vertex *vertex1, Vertex *vertex2) {
     for(auto &edge : edges) {
         if(edge->contains(vertex1) && edge->contains(vertex2))
