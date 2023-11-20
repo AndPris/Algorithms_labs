@@ -144,6 +144,7 @@
     <ClCompile Include="ACO_TSP_Solver.cpp" />
     <ClCompile Include="Ant.cpp" />
     <ClCompile Include="FullGraph.cpp" />
+    <ClCompile Include="Input_Validators.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Random_generators.cpp" />
     <ClCompile Include="TSP_Greedy_Solver.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="ACO_TSP_Solver.h" />
     <ClInclude Include="Ant.h" />
     <ClInclude Include="FullGraph.h" />
+    <ClInclude Include="Input_Validators.h" />
     <ClInclude Include="Random_generators.h" />
     <ClInclude Include="TSP_Greedy_Solver.h" />
     <ClInclude Include="Vertex_Edge_Path.h" />

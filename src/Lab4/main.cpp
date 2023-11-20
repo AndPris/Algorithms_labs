@@ -1,5 +1,6 @@
 #include "FullGraph.h"
 #include "ACO_TSP_Solver.h"
+#include "Input_Validators.h"
 
 #define AMOUNT_OF_VERTEXES 200
 
@@ -9,15 +10,20 @@ int main() {
     srand(time(nullptr));
     
     displayWelcomeInfo();
+    int run;
+    do {
+        FullGraph graph(AMOUNT_OF_VERTEXES);
+        FullGraph* graphPointer = &graph;
 
-    FullGraph graph(AMOUNT_OF_VERTEXES);
-    FullGraph* graphPointer = &graph;
+        ACO_TSP_Solver solver(graphPointer);
+        Path result = solver.solve();
+        cout << "Greedy algorithm length: " << solver.getOptimalCycleLength() << endl;
+        cout << "Ant colony optimization solution:" << endl;
+        result.display();
 
-    ACO_TSP_Solver solver(graphPointer);
-    Path result = solver.solve();
-    cout << "Greedy algorithm length: " << solver.getOptimalCycleLength() << endl;
-    cout << "Ant colony optimization solution:" << endl;
-    result.display();
+        cout << "Enter 0 to stop the program of 1 to run it again" << endl;
+        run = inputPositiveNumberInRange(0, 1);
+    } while (run);
     return 0;
 }
 
