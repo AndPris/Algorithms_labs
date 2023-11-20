@@ -1,11 +1,16 @@
 #include "FullGraph.h"
 #include "ACO_TSP_Solver.h"
 
+#define AMOUNT_OF_VERTEXES 200
+
+void displayWelcomeInfo();
+
 int main() {
     srand(time(nullptr));
-    const int amountOfVertexes = 200;
+    
+    displayWelcomeInfo();
 
-    FullGraph graph(amountOfVertexes);
+    FullGraph graph(AMOUNT_OF_VERTEXES);
     FullGraph* graphPointer = &graph;
 
     ACO_TSP_Solver solver(graphPointer);
@@ -14,4 +19,15 @@ int main() {
     cout << "Ant colony optimization solution:" << endl;
     result.display();
     return 0;
+}
+
+void displayWelcomeInfo() {
+    cout << "This program implements Ant Colony Optimization algorithm for solving Traveling Salesman Problem" << endl;
+    cout << "Amount of vertexes in graph: " << AMOUNT_OF_VERTEXES << endl;
+    cout << "a (pheromone degree): " << PHEROMONE_DEGREE << endl;
+    cout << "b (visibility degree): " << VISIBILITY_DEGREE << endl;
+    cout << "p (evaporation coefficient: " << EVAPORATION_COEFFICIENT << endl;
+    cout << "Amount of ants: " << AMOUNT_OF_ANTS << endl;
+    cout << "Amount of elite ants: " << AMOUNT_OF_ELITE_ANTS << endl;
+    cout << "Amount of iterations: " << AMOUNT_OF_ITERATIONS << endl;
 }
