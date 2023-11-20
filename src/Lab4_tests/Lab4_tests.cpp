@@ -113,5 +113,81 @@ namespace Lab4tests
 		}
 	};
 
-	
+	TEST_CLASS(PathTests) {
+		Path* path;
+		Vertex* vertex1, * vertex2, * vertex3;
+		int length, amountOfEdges;
+		Edge* edge1, * edge2;
+	public:
+		PathTests() {
+			path = new Path();
+			int number1 = 1, number2 = 2, number3 = 3;
+			vertex1 = new Vertex(number1);
+			vertex2 = new Vertex(number2);
+			vertex3 = new Vertex(number3);
+
+			int length1 = 10, length2 = 15;
+			length = length1 + length2;
+
+			edge1 = new Edge(vertex1, vertex2, length1, 0, 0);
+			edge2 = new Edge(vertex2, vertex3, length2, 0, 0);
+
+			path->addEdge(edge1);
+			path->addEdge(edge2);
+
+			amountOfEdges = 2;
+		}
+
+		TEST_METHOD(getAmountOfEdgesTest) {
+			Assert::AreEqual(amountOfEdges, path->getAmountOfEdges());
+		}
+		TEST_METHOD(getLengthTest) {
+			Assert::AreEqual(length, path->getLength());
+		}
+		TEST_METHOD(clearAmountOfEdgesTest) {
+			path->clear();
+			Assert::AreEqual(0, path->getAmountOfEdges());
+		}
+		TEST_METHOD(clearLengthTest) {
+			path->clear();
+			Assert::AreEqual(0, path->getLength());
+		}
+		TEST_METHOD(containsExistingVertexesTest) {
+			vector<Vertex*> vertexes;
+			vertexes.push_back(vertex1);
+			vertexes.push_back(vertex2);
+
+			Assert::IsTrue(path->containsVertexes(vertexes));
+		}
+		TEST_METHOD(containsNonExistingVertexesTest) {
+			vector<Vertex*> vertexes;
+			Vertex testVertex(7);
+			vertexes.push_back(vertex1);
+			vertexes.push_back(&testVertex);
+
+			Assert::IsFalse(path->containsVertexes(vertexes));
+		}
+		TEST_METHOD(comparisonWithLongerTest) {
+			Edge testEdge(vertex1, vertex2, length + 10, 0, 0);
+			Path testPath;
+			testPath.addEdge(&testEdge);
+
+			Assert::IsTrue(*path < testPath);
+		}
+		TEST_METHOD(comparisonWithShorterTest) {
+			Edge testEdge(vertex1, vertex2, length - 10, 0, 0);
+			Path testPath;
+			testPath.addEdge(&testEdge);
+
+			Assert::IsFalse(*path < testPath);
+		}
+		~PathTests() {
+			delete path;
+			delete vertex1;
+			delete vertex2;
+			delete vertex3;
+			delete edge1;
+			delete edge2;
+		}
+	};
 }
