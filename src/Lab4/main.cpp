@@ -32,7 +32,7 @@ void displayWelcomeInfo() {
     cout << "Amount of vertexes in graph: " << AMOUNT_OF_VERTEXES << endl;
     cout << "a (pheromone degree): " << PHEROMONE_DEGREE << endl;
     cout << "b (visibility degree): " << VISIBILITY_DEGREE << endl;
-    cout << "p (evaporation coefficient: " << EVAPORATION_COEFFICIENT << endl;
+    cout << "p (evaporation coefficient): " << EVAPORATION_COEFFICIENT << endl;
     cout << "Amount of ants: " << AMOUNT_OF_ANTS << endl;
     cout << "Amount of elite ants: " << AMOUNT_OF_ELITE_ANTS << endl;
     cout << "Amount of iterations: " << AMOUNT_OF_ITERATIONS << endl;
