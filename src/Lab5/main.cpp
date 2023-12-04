@@ -14,7 +14,8 @@ int main() {
 
 	vector<Vertex*> vertexes = a.getVertexes();
 
-	GASolver(&a, vertexes.at(0), vertexes.at(7));
+	GASolver solver(&a, vertexes.at(0), vertexes.at(7));
+	solver.solve();
 
 	return 0;
 }

@@ -16,6 +16,10 @@ public:
 	void deleteLastVertex();
 
 	int getLength() const;
+	vector<Vertex*> getVertexes();
+	int findPositionOfIntersection(Chromosome* obj) const;
 
 	void display() const;
+
+	bool operator==(const Chromosome& obj);
 };
