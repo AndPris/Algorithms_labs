@@ -7,50 +7,51 @@ Vertex::Vertex(int number) {
 bool Vertex::operator==(const Vertex& obj) {
     return this->number == obj.number;
 }
+
 void Vertex::addIncidentEdge(Edge* edgeToAdd) {
     incidentEdges.push_back(edgeToAdd);
+}
+
+Edge* Vertex::getConnectingEdge(Vertex* connectedVertex) {
+    for (auto edge : incidentEdges) {
+        if (edge->contains(connectedVertex))
+            return edge;
+    }
+
+    return nullptr;
 }
 
 vector<Edge*> Vertex::getIncidentEdges() {
     return incidentEdges;
 }
+
 int Vertex::getNumber() {
     return number;
 }
 
 
-Edge::Edge(Vertex* vertex1, Vertex* vertex2, int length, float amountOfPheromone, float evaporationCoefficient) {
+Edge::Edge(Vertex* vertex1, Vertex* vertex2, int length) {
     connectedVertexes.push_back(vertex1);
     connectedVertexes.push_back(vertex2);
     this->length = length;
-    this->amountOfPheromone = amountOfPheromone;
-    this->evaporationCoefficient = evaporationCoefficient;
-}
-
-void Edge::addPheromone(float additionalPheromone) {
-    amountOfPheromone += additionalPheromone;
-}
-void Edge::evaporatePheromone() {
-    amountOfPheromone = (1 - evaporationCoefficient) * amountOfPheromone;
 }
 
 int Edge::getLength() const {
     return length;
 }
-float Edge::getAmountOfPheromone() const {
-    return amountOfPheromone;
-}
+
 vector<Vertex*> Edge::getConnectedVertexes() {
     return connectedVertexes;
 }
+
 bool Edge::operator==(const Edge& obj) {
-    return (this->connectedVertexes[0] == obj.connectedVertexes[0] &&
-        this->connectedVertexes[1] == obj.connectedVertexes[1]) ||
-        (this->connectedVertexes[0] == obj.connectedVertexes[1] &&
-            this->connectedVertexes[1] == obj.connectedVertexes[0]);
+    return (this->connectedVertexes.at(0) == obj.connectedVertexes.at(0) &&
+        this->connectedVertexes.at(1) == obj.connectedVertexes.at(1)) ||
+        (this->connectedVertexes.at(0) == obj.connectedVertexes.at(1) &&
+            this->connectedVertexes.at(1) == obj.connectedVertexes.at(0));
 }
 
 bool Edge::contains(Vertex* vertex) const {
-    return (*connectedVertexes[0] == *vertex) ||
-        (*connectedVertexes[1] == *vertex);
+    return (*connectedVertexes.at(0) == *vertex) ||
+        (*connectedVertexes.at(1) == *vertex);
 }

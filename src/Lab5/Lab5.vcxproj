@@ -141,11 +141,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="chromosome.cpp" />
+    <ClCompile Include="GASolver.cpp" />
+    <ClCompile Include="graph.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="random_generators.cpp" />
+    <ClCompile Include="vertex_edge.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="chromosome.h" />
+    <ClInclude Include="GASolver.h" />
+    <ClInclude Include="graph.h" />
     <ClInclude Include="random_generators.h" />
+    <ClInclude Include="vertex_edge.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
