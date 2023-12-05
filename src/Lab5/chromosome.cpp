@@ -39,6 +39,11 @@ int Chromosome::findPositionOfIntersection(Chromosome* obj) const {
 	return -1;
 }
 
+void Chromosome::replace(int begin, int end, Chromosome* newPath) {
+	vertexes.erase(vertexes.begin() + begin, vertexes.begin() + end + 1);
+	vertexes.insert(vertexes.begin() + begin, newPath->vertexes.begin(), newPath->vertexes.end());
+}
+
 void Chromosome::deleteLastVertex() {
 	vertexes.pop_back();
 }

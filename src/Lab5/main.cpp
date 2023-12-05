@@ -8,13 +8,13 @@ using namespace std;
 int main() {
 	srand(time(nullptr));
 
-	int amountOfVertexes = 10;
+	int amountOfVertexes = 300;
 	Graph a(amountOfVertexes);
-	a.display();
+	//a.display();
 
 	vector<Vertex*> vertexes = a.getVertexes();
 
-	GASolver solver(&a, vertexes.at(0), vertexes.at(7));
+	GASolver solver(&a, vertexes.at(0), vertexes.at(290));
 	solver.solve();
 
 	return 0;

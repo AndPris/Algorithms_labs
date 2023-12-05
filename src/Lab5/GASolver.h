@@ -4,8 +4,8 @@
 #include "chromosome.h"
 #include <algorithm>
 
-#define POPULATION_SIZE 10
-#define AMOUNT_OF_ITERATIONS 100
+#define POPULATION_SIZE 30
+#define AMOUNT_OF_ITERATIONS 400
 
 class GASolver {
 	int populationSize;
@@ -19,13 +19,16 @@ class GASolver {
 
 
 	bool getRandomPath(Vertex* startVertex, Vertex* endVertex, Chromosome *&path);
-	vector<Vertex*> getPossibleNextVertexes(Vertex* currentVertex, Chromosome* visitedVertexes);
+	vector<Vertex*> getPossibleNextVertexes(Vertex* currentVertex, Vertex* endVertex, Chromosome* visitedVertexes);
 
 	void createInitialPopulation();
 	void findCurrentBestChromosome();
 
 	Chromosome* crossover(Chromosome* parent1, Chromosome* parent2);
 	Chromosome* getRandomChromosomeForCrossover();
+
+	void mutate(Chromosome* chromosome);
+	void deleteTheWorstChromosome();
 public:
 	GASolver(Graph* graph, Vertex* source, Vertex* destination);
 

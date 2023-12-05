@@ -8,10 +8,6 @@ GASolver::GASolver(Graph* graph, Vertex* source, Vertex* destination) {
 
 	createInitialPopulation();
 
-	/*cout << "Initial:" << endl;
-	for (auto elem : population)
-		elem->display();*/
-
 	findCurrentBestChromosome();
 
 	cout << "Best chromosome:" << endl;
@@ -26,7 +22,7 @@ void GASolver::createInitialPopulation() {
 		getRandomPath(source, destination, path);
 
 		//TODO:: remove
-		path->display();
+		//path->display();
 
 		population.push_back(path);
 	}
@@ -49,7 +45,7 @@ bool GASolver::getRandomPath(Vertex* startVertex, Vertex* endVertex, Chromosome*
 	
 	path->addVertex(startVertex);
 
-	vector<Vertex*> possibleNextVertexes = getPossibleNextVertexes(startVertex, path);
+	vector<Vertex*> possibleNextVertexes = getPossibleNextVertexes(startVertex, endVertex, path);
 
 	if (possibleNextVertexes.empty()) {
 		path->deleteLastVertex();
@@ -67,7 +63,7 @@ bool GASolver::getRandomPath(Vertex* startVertex, Vertex* endVertex, Chromosome*
 	return false;
 }
 
-vector<Vertex*> GASolver::getPossibleNextVertexes(Vertex* currentVertex, Chromosome* visitedVertexes) {
+vector<Vertex*> GASolver::getPossibleNextVertexes(Vertex* currentVertex, Vertex* endVertex, Chromosome* visitedVertexes) {
 	vector<Vertex*> possibleNextVertexes;
 
 	for (auto edge : currentVertex->getIncidentEdges()) {
@@ -79,7 +75,7 @@ vector<Vertex*> GASolver::getPossibleNextVertexes(Vertex* currentVertex, Chromos
 		else
 			nextVertex = connectedVertexes.at(0);
 
-		if (!visitedVertexes->contains(nextVertex))
+		if (!visitedVertexes->contains(nextVertex) && nextVertex->getNumber() > currentVertex->getNumber() && nextVertex->getNumber() <= endVertex->getNumber())
 			possibleNextVertexes.push_back(nextVertex);
 	}
 
@@ -87,11 +83,34 @@ vector<Vertex*> GASolver::getPossibleNextVertexes(Vertex* currentVertex, Chromos
 }
 
 void GASolver::solve() {
-	for (int i = 0; i < 10; ++i) {
+	int iterationsWithoutImprovement = 0;
+
+	/*for (int i = 0; i < AMOUNT_OF_ITERATIONS; ++i) {*/
+	while(iterationsWithoutImprovement < 100) {
+		++iterationsWithoutImprovement;
+
 		Chromosome* randomChromosomeForCrossover = getRandomChromosomeForCrossover();
 		Chromosome* childChromosome = crossover(currentBestChromosome, randomChromosomeForCrossover);
+		/*cout << "Child:" << endl;
+		childChromosome->display();
+		cout << "childChromosome Length: " << childChromosome->getLength() << endl;*/
+
+		mutate(childChromosome);
+		/*cout << "Mutation:" << endl;
+		childChromosome->display();
+		cout << "Mutation Length: " << childChromosome->getLength() << endl;*/
 
 
+		population.push_back(childChromosome);
+
+		if (childChromosome->getLength() <= currentBestChromosome->getLength()) {
+			currentBestChromosome = childChromosome;
+			iterationsWithoutImprovement = 0;
+		}
+		
+		deleteTheWorstChromosome();
+		cout << "Best chromosome Length: " << currentBestChromosome->getLength() << endl;
+		cout << "---------------------------" << endl;
 	}
 }
 
@@ -108,14 +127,6 @@ Chromosome* GASolver::crossover(Chromosome* parent1, Chromosome* parent2) {
 		child->addVertex(parent1Vertexes.at(i));
 	for (int i = pos2; i < parent2Vertexes.size(); ++i)
 		child->addVertex(parent2Vertexes.at(i));
-	
-	cout << "Parent1:" << endl;
-	parent1->display();
-	cout << "Parent2:" << endl;
-	parent2->display();
-	cout << "Child:" << endl;
-	child->display();
-	cout << "------------------------------" << endl;
 
 	return child;
 }
@@ -128,6 +139,33 @@ Chromosome* GASolver::getRandomChromosomeForCrossover() {
 	} while (population.at(index)->findPositionOfIntersection(currentBestChromosome) == -1);
 
 	return population.at(index);
+}
+
+void GASolver::mutate(Chromosome* chromosome) {
+	const int maxMutationLength = 3;
+
+	vector<Vertex*> chromosomeVertexes = chromosome->getVertexes();
+
+	int beginIndex = generateNumberInRange(0, chromosomeVertexes.size() - maxMutationLength -1);
+	int endIndex = beginIndex + generateNumberInRange(1, maxMutationLength);
+
+	//cout << "Begin: " << beginIndex << ", end:" << endIndex << endl;
+	Chromosome* subChromosome = new Chromosome;
+	getRandomPath(chromosomeVertexes.at(beginIndex), chromosomeVertexes.at(endIndex), subChromosome);
+	chromosome->replace(beginIndex, endIndex, subChromosome);
+
+	delete subChromosome;
+}
+
+void GASolver::deleteTheWorstChromosome() {
+	int index = 0;
+	for (int i = 1; i < population.size(); ++i) {
+		if (population.at(i)->getLength() > population.at(index)->getLength())
+			index = i;
+	}
+
+	delete population.at(index);
+	population.erase(population.begin() + index);
 }
 
 
