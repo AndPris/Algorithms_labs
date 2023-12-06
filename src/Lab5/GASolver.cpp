@@ -1,17 +1,16 @@
 #include "GASolver.h"
 
 GASolver::GASolver(Graph* graph, Vertex* source, Vertex* destination) {
-	this->populationSize = POPULATION_SIZE;
 	this->graphToSolve = graph;
 	this->source = source;
 	this->destination = destination;
+	this->populationSize = POPULATION_SIZE;
+	this->mutationChance = MUTATION_CHANCE;
+	this->amountOfIterations = AMOUNT_OF_ITERATIONS;
 
 	createInitialPopulation();
 
 	findCurrentBestChromosome();
-
-	cout << "Best chromosome:" << endl;
-	currentBestChromosome->display();
 }
 
 void GASolver::createInitialPopulation() {
@@ -20,10 +19,9 @@ void GASolver::createInitialPopulation() {
 		Vertex* startVertex = source;
 		Vertex* endVertex = destination;
 		getRandomPath(source, destination, path);
-
-		//TODO:: remove
-		//path->display();
-
+		cout <<endl<< "Path:" << endl;
+		path->display();
+		cout << "---------------" << endl;
 		population.push_back(path);
 	}
 }
@@ -82,36 +80,24 @@ vector<Vertex*> GASolver::getPossibleNextVertexes(Vertex* currentVertex, Vertex*
 	return possibleNextVertexes;
 }
 
-void GASolver::solve() {
-	int iterationsWithoutImprovement = 0;
-
-	/*for (int i = 0; i < AMOUNT_OF_ITERATIONS; ++i) {*/
-	while(iterationsWithoutImprovement < 100) {
-		++iterationsWithoutImprovement;
-
+Chromosome* GASolver::solve() {
+	for (int i = 0; i < amountOfIterations; ++i) {
 		Chromosome* randomChromosomeForCrossover = getRandomChromosomeForCrossover();
 		Chromosome* childChromosome = crossover(currentBestChromosome, randomChromosomeForCrossover);
-		/*cout << "Child:" << endl;
-		childChromosome->display();
-		cout << "childChromosome Length: " << childChromosome->getLength() << endl;*/
-
-		mutate(childChromosome);
-		/*cout << "Mutation:" << endl;
-		childChromosome->display();
-		cout << "Mutation Length: " << childChromosome->getLength() << endl;*/
-
+		
+		int mutationValue = generateNumberInRange(1, 100);
+		if(mutationValue <= mutationChance)
+			mutate(childChromosome);
 
 		population.push_back(childChromosome);
 
-		if (childChromosome->getLength() <= currentBestChromosome->getLength()) {
+		if (childChromosome->getLength() <= currentBestChromosome->getLength())
 			currentBestChromosome = childChromosome;
-			iterationsWithoutImprovement = 0;
-		}
 		
 		deleteTheWorstChromosome();
-		cout << "Best chromosome Length: " << currentBestChromosome->getLength() << endl;
-		cout << "---------------------------" << endl;
 	}
+
+	return currentBestChromosome;
 }
 
 Chromosome* GASolver::crossover(Chromosome* parent1, Chromosome* parent2) {
@@ -146,10 +132,14 @@ void GASolver::mutate(Chromosome* chromosome) {
 
 	vector<Vertex*> chromosomeVertexes = chromosome->getVertexes();
 
-	int beginIndex = generateNumberInRange(0, chromosomeVertexes.size() - maxMutationLength -1);
-	int endIndex = beginIndex + generateNumberInRange(1, maxMutationLength);
+	int beginIndex = generateNumberInRange(0, chromosomeVertexes.size() - maxMutationLength - 1);
+	if (beginIndex < 0)
+		beginIndex = 0;
 
-	//cout << "Begin: " << beginIndex << ", end:" << endIndex << endl;
+	int endIndex = beginIndex + generateNumberInRange(1, maxMutationLength);
+	if (endIndex > chromosomeVertexes.size() - 1)
+		endIndex = chromosomeVertexes.size() - 1;
+
 	Chromosome* subChromosome = new Chromosome;
 	getRandomPath(chromosomeVertexes.at(beginIndex), chromosomeVertexes.at(endIndex), subChromosome);
 	chromosome->replace(beginIndex, endIndex, subChromosome);

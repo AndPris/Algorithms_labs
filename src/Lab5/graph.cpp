@@ -62,7 +62,7 @@ void Graph::display() {
     const int amountOfDisplayedVertexes = 5;
     const int width = 3;
 
-    cout << setw(width) << "" << " ";
+    /*cout << setw(width) << "" << " ";
     for (int i = 0; i < amountOfVertexes; ++i)
         cout << setw(width) << vertexes.at(i)->getNumber() << " ";
     cout << endl;
@@ -81,8 +81,8 @@ void Graph::display() {
                 cout << setw(width) << edge->getLength() << " ";
         }
         cout << endl;
-    }
-    /*displayVertexesInTop(width, amountOfDisplayedVertexes);
+    }*/
+    displayVertexesInTop(width, amountOfDisplayedVertexes);
 
     for (int i = 0; i < amountOfDisplayedVertexes; ++i)
         displayFirstAndLastEdges(i, amountOfDisplayedVertexes, width);
@@ -92,7 +92,7 @@ void Graph::display() {
     cout << endl;
 
     for (int i = amountOfVertexes - amountOfDisplayedVertexes; i < amountOfVertexes; ++i)
-        displayFirstAndLastEdges(i, amountOfDisplayedVertexes, width);*/
+        displayFirstAndLastEdges(i, amountOfDisplayedVertexes, width);
 }
 
 void Graph::displayFirstAndLastEdges(int vertexIndex, int amount, int width) {
@@ -118,7 +118,10 @@ void Graph::displayEdgeLength(int vertexIndex, int from, int to, int width) {
             continue;
         }
         Edge* edge = getEdgeWithVertexes(vertexes.at(vertexIndex), vertexes.at(j));
-        cout << setw(width) << edge->getLength() << " ";
+        if (!edge)
+            cout << setw(width) << "-" << " ";
+        else
+            cout << setw(width) << edge->getLength() << " ";
     }
 }
 

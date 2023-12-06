@@ -36,6 +36,9 @@ int Chromosome::findPositionOfIntersection(Chromosome* obj) const {
 		}
 	}
 
+	if (vertexes.at(0) == obj->vertexes.at(0))
+		return 0;
+
 	return -1;
 }
 

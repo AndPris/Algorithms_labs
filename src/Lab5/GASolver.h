@@ -4,11 +4,15 @@
 #include "chromosome.h"
 #include <algorithm>
 
-#define POPULATION_SIZE 30
-#define AMOUNT_OF_ITERATIONS 400
+#define AMOUNT_OF_ITERATIONS 120
+#define POPULATION_SIZE 130
+#define MUTATION_CHANCE 75
+
 
 class GASolver {
 	int populationSize;
+	int mutationChance;
+	int amountOfIterations;
 
 	Graph* graphToSolve;
 
@@ -32,7 +36,7 @@ class GASolver {
 public:
 	GASolver(Graph* graph, Vertex* source, Vertex* destination);
 
-	void solve();
+	Chromosome* solve();
 
 	~GASolver();
 };
