@@ -17,7 +17,7 @@ public:
 
 	int getLength() const;
 	vector<Vertex*> getVertexes();
-	int findPositionOfIntersection(Chromosome* obj) const;
+	vector<int> findPositionsOfIntersection(Chromosome* obj) const;
 
 	void replace(int begin, int end, Chromosome* newPath);
 

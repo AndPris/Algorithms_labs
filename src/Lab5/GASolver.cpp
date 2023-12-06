@@ -9,21 +9,19 @@ GASolver::GASolver(Graph* graph, Vertex* source, Vertex* destination) {
 	this->amountOfIterations = AMOUNT_OF_ITERATIONS;
 
 	createInitialPopulation();
-
 	findCurrentBestChromosome();
 }
 
 void GASolver::createInitialPopulation() {
+	Chromosome* deadEndVertexes = new Chromosome;
 	for (int i = 0; i < populationSize; ++i) {
 		Chromosome* path = new Chromosome;
 		Vertex* startVertex = source;
 		Vertex* endVertex = destination;
-		getRandomPath(source, destination, path);
-		cout <<endl<< "Path:" << endl;
-		path->display();
-		cout << "---------------" << endl;
+		getRandomPath(source, destination, path, deadEndVertexes);
 		population.push_back(path);
 	}
+	delete deadEndVertexes;
 }
 
 void GASolver::findCurrentBestChromosome() {
@@ -35,7 +33,7 @@ void GASolver::findCurrentBestChromosome() {
 	}
 }
 
-bool GASolver::getRandomPath(Vertex* startVertex, Vertex* endVertex, Chromosome*& path) {
+bool GASolver::getRandomPath(Vertex* startVertex, Vertex* endVertex, Chromosome*& path, Chromosome*& deadEndVertexes) {
 	if (startVertex == endVertex) {
 		path->addVertex(startVertex);
 		return true;
@@ -43,9 +41,10 @@ bool GASolver::getRandomPath(Vertex* startVertex, Vertex* endVertex, Chromosome*
 	
 	path->addVertex(startVertex);
 
-	vector<Vertex*> possibleNextVertexes = getPossibleNextVertexes(startVertex, endVertex, path);
+	vector<Vertex*> possibleNextVertexes = getPossibleNextVertexes(startVertex, endVertex, path, deadEndVertexes);
 
 	if (possibleNextVertexes.empty()) {
+		deadEndVertexes->addVertex(startVertex);
 		path->deleteLastVertex();
 		return false;
 	}
@@ -53,15 +52,16 @@ bool GASolver::getRandomPath(Vertex* startVertex, Vertex* endVertex, Chromosome*
 	random_shuffle(possibleNextVertexes.begin(), possibleNextVertexes.end());
 
 	for (auto vertex : possibleNextVertexes) {
-		if (getRandomPath(vertex, endVertex, path))
+		if (getRandomPath(vertex, endVertex, path, deadEndVertexes))
 			return true;
 	}
 
 	path->deleteLastVertex();
+	deadEndVertexes->addVertex(startVertex);
 	return false;
 }
 
-vector<Vertex*> GASolver::getPossibleNextVertexes(Vertex* currentVertex, Vertex* endVertex, Chromosome* visitedVertexes) {
+vector<Vertex*> GASolver::getPossibleNextVertexes(Vertex* currentVertex, Vertex* endVertex, Chromosome* visitedVertexes, Chromosome* deadEndVertexes) {
 	vector<Vertex*> possibleNextVertexes;
 
 	for (auto edge : currentVertex->getIncidentEdges()) {
@@ -73,7 +73,7 @@ vector<Vertex*> GASolver::getPossibleNextVertexes(Vertex* currentVertex, Vertex*
 		else
 			nextVertex = connectedVertexes.at(0);
 
-		if (!visitedVertexes->contains(nextVertex) && nextVertex->getNumber() > currentVertex->getNumber() && nextVertex->getNumber() <= endVertex->getNumber())
+		if (!visitedVertexes->contains(nextVertex) && !deadEndVertexes->contains(nextVertex))
 			possibleNextVertexes.push_back(nextVertex);
 	}
 
@@ -101,30 +101,30 @@ Chromosome* GASolver::solve() {
 }
 
 Chromosome* GASolver::crossover(Chromosome* parent1, Chromosome* parent2) {
-	int pos1 = parent1->findPositionOfIntersection(parent2);
-	int pos2 = parent2->findPositionOfIntersection(parent1);
-
+	Chromosome* child = new Chromosome;
 	vector<Vertex*> parent1Vertexes = parent1->getVertexes();
 	vector<Vertex*> parent2Vertexes = parent2->getVertexes();
 
-	Chromosome* child = new Chromosome;
+	vector<int> positionsOfIntersection = parent1->findPositionsOfIntersection(parent2);
+	if (positionsOfIntersection.empty()) {
+		for (int i = 0; i < parent2Vertexes.size(); ++i)
+			child->addVertex(parent2Vertexes.at(i));
+		return child;
+	}
+
+	int pos1 = positionsOfIntersection.at(0);
+	int pos2 = positionsOfIntersection.at(1);
 
 	for (int i = 0; i < pos1; ++i)
 		child->addVertex(parent1Vertexes.at(i));
 	for (int i = pos2; i < parent2Vertexes.size(); ++i)
 		child->addVertex(parent2Vertexes.at(i));
-
+	
 	return child;
 }
 
 Chromosome* GASolver::getRandomChromosomeForCrossover() {
-	int index = 0;
-
-	do {
-		index = generateNumberInRange(0, population.size() - 1);
-	} while (population.at(index)->findPositionOfIntersection(currentBestChromosome) == -1);
-
-	return population.at(index);
+	return population.at(generateNumberInRange(0, population.size() - 1));
 }
 
 void GASolver::mutate(Chromosome* chromosome) {
@@ -141,9 +141,12 @@ void GASolver::mutate(Chromosome* chromosome) {
 		endIndex = chromosomeVertexes.size() - 1;
 
 	Chromosome* subChromosome = new Chromosome;
-	getRandomPath(chromosomeVertexes.at(beginIndex), chromosomeVertexes.at(endIndex), subChromosome);
+	Chromosome* deadEndVertexes = new Chromosome;
+
+	getRandomPath(chromosomeVertexes.at(beginIndex), chromosomeVertexes.at(endIndex), subChromosome, deadEndVertexes);
 	chromosome->replace(beginIndex, endIndex, subChromosome);
 
+	delete deadEndVertexes;
 	delete subChromosome;
 }
 

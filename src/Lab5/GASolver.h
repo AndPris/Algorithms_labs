@@ -22,8 +22,8 @@ class GASolver {
 	Chromosome* currentBestChromosome;
 
 
-	bool getRandomPath(Vertex* startVertex, Vertex* endVertex, Chromosome *&path);
-	vector<Vertex*> getPossibleNextVertexes(Vertex* currentVertex, Vertex* endVertex, Chromosome* visitedVertexes);
+	bool getRandomPath(Vertex* startVertex, Vertex* endVertex, Chromosome *&path, Chromosome *&deadEndVertexes);
+	vector<Vertex*> getPossibleNextVertexes(Vertex* currentVertex, Vertex* endVertex, Chromosome* visitedVertexes, Chromosome* deadEndVertexes);
 
 	void createInitialPopulation();
 	void findCurrentBestChromosome();

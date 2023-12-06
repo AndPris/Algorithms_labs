@@ -62,26 +62,6 @@ void Graph::display() {
     const int amountOfDisplayedVertexes = 5;
     const int width = 3;
 
-    /*cout << setw(width) << "" << " ";
-    for (int i = 0; i < amountOfVertexes; ++i)
-        cout << setw(width) << vertexes.at(i)->getNumber() << " ";
-    cout << endl;
-
-    for (int i = 0; i < amountOfVertexes; ++i) {
-        cout << setw(width) << vertexes.at(i)->getNumber() << " ";
-        for (int j = 0; j < amountOfVertexes; ++j) {
-            if (i == j) {
-                cout << setw(width) << "0" << " ";
-                continue;
-            }
-            Edge* edge = getEdgeWithVertexes(vertexes.at(i), vertexes.at(j));
-            if(!edge)
-                cout << setw(width) << "-" << " ";
-            else
-                cout << setw(width) << edge->getLength() << " ";
-        }
-        cout << endl;
-    }*/
     displayVertexesInTop(width, amountOfDisplayedVertexes);
 
     for (int i = 0; i < amountOfDisplayedVertexes; ++i)

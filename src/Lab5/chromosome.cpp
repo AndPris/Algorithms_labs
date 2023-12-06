@@ -28,18 +28,20 @@ bool Chromosome::contains(Vertex* vertex) {
 	return false;
 }
 
-int Chromosome::findPositionOfIntersection(Chromosome* obj) const {
+vector<int> Chromosome::findPositionsOfIntersection(Chromosome* obj) const {
+	vector<int> positionsOfIntersection;
+
 	for (int i = 1; i < vertexes.size() - 1; ++i) {
 		for (int j = 1; j < obj->vertexes.size() - 1; ++j) {
-			if (vertexes.at(i) == obj->vertexes.at(j))
-				return i;
+			if (vertexes.at(i) == obj->vertexes.at(j)) {
+				positionsOfIntersection.push_back(i);
+				positionsOfIntersection.push_back(j);
+				return positionsOfIntersection;
+			}
 		}
 	}
 
-	if (vertexes.at(0) == obj->vertexes.at(0))
-		return 0;
-
-	return -1;
+	return positionsOfIntersection;
 }
 
 void Chromosome::replace(int begin, int end, Chromosome* newPath) {
@@ -52,9 +54,9 @@ void Chromosome::deleteLastVertex() {
 }
 
 void Chromosome::display() const {
-	for (int i = 0; i < vertexes.size() - 1; ++i)
-		cout << vertexes.at(i)->getNumber() << " -> " << vertexes.at(i + 1)->getNumber() << ", ";
-	cout << endl;
+	for (int i = 0; i < vertexes.size()-1; ++i)
+		cout << vertexes.at(i)->getNumber() << " -> ";
+	cout << vertexes.back()->getNumber() << endl;
 }
 
 bool Chromosome::operator==(const Chromosome& obj) {

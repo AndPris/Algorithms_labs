@@ -15,8 +15,8 @@ int main() {
 	vector<Vertex*> vertexes = graph.getVertexes();
 	int run;
 	do {
-		int start = 1;//generateNumberInRange(0, amountOfVertexes / 2);
-			int finish = 2;//generateNumberInRange(start + 1, amountOfVertexes - 1);
+		int start = generateNumberInRange(0, amountOfVertexes / 2);
+		int finish = generateNumberInRange(start + 1, amountOfVertexes - 1);
 
 		GASolver solver(&graph, vertexes.at(start), vertexes.at(finish));
 		Chromosome* solution = solver.solve();
