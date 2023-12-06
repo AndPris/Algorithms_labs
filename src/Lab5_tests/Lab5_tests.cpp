@@ -69,4 +69,57 @@ namespace Lab5tests
 			Assert::IsTrue(vertex2.getConnectingEdge(&vertex1) == &edge);
 		}
 	};
+
+	TEST_CLASS(EdgeTests)
+	{
+	private:
+		Edge* edge;
+		Vertex* vertex1;
+		Vertex* vertex2;
+		int length;
+	public:
+		EdgeTests() {
+			int number1 = 1;
+			int number2 = 2;
+			vertex1 = new Vertex(number1);
+			vertex2 = new Vertex(number2);
+			length = 10;
+			edge = new Edge(vertex1, vertex2, length);
+		}
+
+		TEST_METHOD(getLengthTest) {
+			Assert::AreEqual(length, edge->getLength());
+		}
+		TEST_METHOD(containsExistingTest) {
+			Assert::IsTrue(edge->contains(vertex1));
+		}
+		TEST_METHOD(containsNonExistingTest) {
+			Vertex vertex(5);
+			Assert::IsFalse(edge->contains(&vertex));
+		}
+		TEST_METHOD(getConnectedVertexesTest) {
+			vector<Vertex*> connectedVertexes = edge->getConnectedVertexes();
+			Assert::IsTrue(vertex1 == connectedVertexes.at(0));
+			Assert::IsTrue(vertex2 == connectedVertexes.at(1));
+		}
+
+		TEST_METHOD(equalEdgesComparrisonTest) {
+			Edge testEdge(vertex1, vertex2, length);
+			Assert::IsTrue(*edge == testEdge);
+		}
+
+		TEST_METHOD(nonEqualEdgesComparrisonTest) {
+			int number1 = 5;
+			int number2 = 6;
+			Vertex testVertex1(number1);
+			Vertex testVertex2(number2);
+			Edge testEdge(&testVertex1, &testVertex2, length);
+			Assert::IsFalse(*edge == testEdge);
+		}
+		~EdgeTests() {
+			delete edge;
+			delete vertex1;
+			delete vertex2;
+		}
+	};
 }
