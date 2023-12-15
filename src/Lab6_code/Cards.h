@@ -1,5 +1,11 @@
 #pragma once
 
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+
 enum Suits {
 	CLUBS,		//хреста
 	DIAMONDS,	//бубна
@@ -8,7 +14,7 @@ enum Suits {
 };
 
 enum CardNames {
-	TREE = 1,
+	THREE = 1,
 	FOUR,
 	FIVE,
 	SIX,
@@ -35,4 +41,19 @@ public:
 
 	bool operator==(const Card& obj) const;
 	bool operator>(const Card& obj) const;
+};
+
+
+class Deck {
+	vector<Card*> cards;
+
+public:
+	Deck();
+
+	void shuffle();
+	Card* getCard();
+
+	bool isEmpty() const;
+
+	~Deck();
 };
