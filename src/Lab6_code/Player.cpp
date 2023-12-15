@@ -14,6 +14,10 @@ void Player::addCard(Card* card) {
 	cards.insert(cards.begin() + index, card);
 }
 
+vector<Card*> Player::getCards() {
+	return cards;
+}
+
 void Player::setCardsToBeat(vector<Card*> cards) {
 	copy(cards.begin(), cards.end(), back_inserter(cardsToBeat));
 }
@@ -76,4 +80,8 @@ void AIPlayer::selectCardsForBeatTurn() {
 		if (!selectedCards.empty())
 			break;
 	}
+}
+
+void HumanPlayer::selectCardsForTurn() {
+
 }

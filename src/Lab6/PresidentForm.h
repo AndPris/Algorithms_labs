@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PresidentI.h"
+
 namespace Lab6 {
 
 	using namespace System;
@@ -14,26 +16,21 @@ namespace Lab6 {
 	/// </summary>
 	public ref class PresidentForm : public System::Windows::Forms::Form
 	{
+	private:
+		PresidentI* president;
 	public:
-		PresidentForm(void)
-		{
-			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
-		}
+		PresidentForm(void);
 
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		~PresidentForm()
-		{
-			if (components)
-			{
-				delete components;
-			}
-		}
+		~PresidentForm();
+
+	private: System::Windows::Forms::FlowLayoutPanel^ humanCards;
+	protected:
+
+	protected:
 
 	private:
 		/// <summary>
@@ -48,11 +45,29 @@ namespace Lab6 {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->components = gcnew System::ComponentModel::Container();
-			this->Size = System::Drawing::Size(300,300);
-			this->Text = L"PresidentForm";
-			this->Padding = System::Windows::Forms::Padding(0);
+			this->humanCards = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->SuspendLayout();
+			// 
+			// humanCards
+			// 
+			this->humanCards->Location = System::Drawing::Point(343, 456);
+			this->humanCards->Name = L"humanCards";
+			this->humanCards->Size = System::Drawing::Size(646, 261);
+			this->humanCards->TabIndex = 0;
+			// 
+			// PresidentForm
+			// 
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->BackColor = System::Drawing::Color::OliveDrab;
+			this->ClientSize = System::Drawing::Size(1316, 718);
+			this->Controls->Add(this->humanCards);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->MaximizeBox = false;
+			this->Name = L"PresidentForm";
+			this->Text = L"President";
+			this->ResumeLayout(false);
+
 		}
 #pragma endregion
 	};

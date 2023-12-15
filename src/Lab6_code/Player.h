@@ -15,6 +15,7 @@ protected:
 
 public:
 	void addCard(Card* card);
+	vector<Card*> getCards();
 	void setCardsToBeat(vector<Card*> cards);
 	vector<Card*> makeTurn();
 	bool hasWon() const;
@@ -27,4 +28,9 @@ class AIPlayer : public Player {
 	void selectCardsForBeatTurn();
 public:
 
+};
+
+
+class HumanPlayer : public Player {
+	void selectCardsForTurn() override;
 };
