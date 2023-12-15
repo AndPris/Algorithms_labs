@@ -76,33 +76,59 @@ PlayerI::PlayerI(Player* player, RotateFlipType rotationDegree) {
 	this->rotationDegree = rotationDegree;
 }
 
-void PlayerI::display(FlowLayoutPanel^ cardsContainer) {
-	clearCardsContainer(cardsContainer);
+PictureBox^ PlayerI::getPicture(String^ cardPath) {
+	PictureBox^ pictureBoxCard = gcnew PictureBox();
+	pictureBoxCard->Image = Image::FromFile(cardPath);
+	pictureBoxCard->Image->RotateFlip(rotationDegree);
+	pictureBoxCard->SizeMode = PictureBoxSizeMode::Zoom;
 
-	for (auto card : player->getCards()) {
-		String^ cardPath = gcnew String(getCardPath(card).c_str());
+	if (rotationDegree == RotateFlipType::Rotate90FlipNone || rotationDegree == RotateFlipType::Rotate270FlipNone)
+		pictureBoxCard->Size = Size(CARD_HEIGHT, CARD_WIDTH);
+	else
+		pictureBoxCard->Size = Size(CARD_WIDTH, CARD_HEIGHT);
 
-		PictureBox^ pictureBoxCard = gcnew PictureBox();
-		pictureBoxCard->Image = Image::FromFile(cardPath);
-		pictureBoxCard->Image->RotateFlip(rotationDegree);
-		pictureBoxCard->SizeMode = PictureBoxSizeMode::Zoom;
+	pictureBoxCard->Margin = Padding(0, 0, 5, 0);
 
-		if(rotationDegree == RotateFlipType::Rotate90FlipNone || rotationDegree == RotateFlipType::Rotate270FlipNone)
-			pictureBoxCard->Size = Size(CARD_HEIGHT, CARD_WIDTH);
-		else
-			pictureBoxCard->Size = Size(CARD_WIDTH, CARD_HEIGHT);
-
-		pictureBoxCard->Margin = Padding(0, 0, 5, 0);
-
-		cardsContainer->Controls->Add(pictureBoxCard);
-	}
+	return pictureBoxCard;
 }
 
 void PlayerI::addCard(Card* card) {
 	player->addCard(card);
 }
 
+bool PlayerI::hasWon() const {
+	return player->hasWon();
+}
+
 PlayerI::~PlayerI() {
 	delete player;
 }
 
+
+
+void AIPlayerI::display(FlowLayoutPanel^ cardsContainer) {
+	clearCardsContainer(cardsContainer);
+
+	for (auto card : player->getCards()) {
+		String^ cardPath = gcnew String(getCardPath(card).c_str());
+		cardsContainer->Controls->Add(getPicture(cardPath));
+	}
+}
+
+
+void HumanPlayerI::display(FlowLayoutPanel^ cardsContainer) {
+	clearCardsContainer(cardsContainer);
+
+	for (auto card : player->getCards()) {
+		String^ cardPath = gcnew String(getCardPath(card).c_str());
+		PictureBox^ picture = getPicture(cardPath);
+
+		cardInfo^ info = gcnew cardInfo;
+		info->name = card->getName();
+		info->suit = card->getSuit();
+
+		picture->Tag = info;
+
+		cardsContainer->Controls->Add(picture);
+	}
+}
