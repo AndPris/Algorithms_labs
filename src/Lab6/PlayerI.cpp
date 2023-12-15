@@ -1,7 +1,7 @@
 #include "PlayerI.h"
 
 string PlayerI::getCardPath(Card* card) {
-	string path = "";
+	string path = "cards\\";
 
 	switch (card->getName()) {
 	case TWO:
@@ -78,25 +78,15 @@ PlayerI::PlayerI(Player* player) {
 void PlayerI::display(FlowLayoutPanel^ cardsContainer) {
 	clearCardsContainer(cardsContainer);
 
-	const int cardWidth = 100;
-	const int cardHeight = 150;
-	const int spacing = 10;
-
-	int x = 0;
-	int y = 0;
-
 	for (auto card : player->getCards()) {
-		string cardPath = getCardPath(card);
+		String^ cardPath = gcnew String(getCardPath(card).c_str());
 
 		PictureBox^ pictureBoxCard = gcnew PictureBox();
-		pictureBoxCard->Image = Image::FromFile(gcnew String(cardPath.c_str()));
+		pictureBoxCard->Image = Image::FromFile(cardPath);
 		pictureBoxCard->SizeMode = PictureBoxSizeMode::Zoom;
-		pictureBoxCard->Size = Size(cardWidth, cardHeight);
-		pictureBoxCard->Location = Point(x, y);
+		pictureBoxCard->Size = Size(CARD_WIDTH, CARD_HEIGHT);
 
 		cardsContainer->Controls->Add(pictureBoxCard);
-
-		x += cardWidth + spacing;
 	}
 }
 

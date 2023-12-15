@@ -50,9 +50,9 @@ namespace Lab6 {
 			// 
 			// humanCards
 			// 
-			this->humanCards->Location = System::Drawing::Point(343, 456);
+			this->humanCards->Location = System::Drawing::Point(148, 797);
 			this->humanCards->Name = L"humanCards";
-			this->humanCards->Size = System::Drawing::Size(646, 261);
+			this->humanCards->Size = System::Drawing::Size(1608, 261);
 			this->humanCards->TabIndex = 0;
 			// 
 			// PresidentForm
@@ -60,12 +60,14 @@ namespace Lab6 {
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::OliveDrab;
-			this->ClientSize = System::Drawing::Size(1316, 718);
+			this->ClientSize = System::Drawing::Size(1924, 1055);
 			this->Controls->Add(this->humanCards);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->MaximizeBox = false;
 			this->Name = L"PresidentForm";
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"President";
+			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->ResumeLayout(false);
 
 		}

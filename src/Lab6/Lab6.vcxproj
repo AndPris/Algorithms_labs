@@ -160,6 +160,8 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="PresidentI.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PresidentForm.resx">
