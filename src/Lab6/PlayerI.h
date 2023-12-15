@@ -4,9 +4,8 @@
 #include <string>
 #include <Windows.h>
 
-#define CARD_WIDTH 90
-#define CARD_HEIGHT 140
-#define SPACING 5
+#define CARD_WIDTH 72
+#define CARD_HEIGHT 130
 
 using namespace System;
 using namespace System::Drawing;
@@ -21,10 +20,12 @@ using namespace std;
 class PlayerI {
 	Player* player;
 
+	RotateFlipType rotationDegree;
+
 	string getCardPath(Card* card);
 	void clearCardsContainer(FlowLayoutPanel^ cardsContainer);
 public:
-	PlayerI(Player* player);
+	PlayerI(Player* player, RotateFlipType rotationDegree);
 
 	void display(FlowLayoutPanel^ cardsContainer);
 

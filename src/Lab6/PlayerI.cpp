@@ -71,8 +71,9 @@ void PlayerI::clearCardsContainer(FlowLayoutPanel^ cardsContainer) {
 		cardsContainer->Controls->Remove(control);
 }
 
-PlayerI::PlayerI(Player* player) {
+PlayerI::PlayerI(Player* player, RotateFlipType rotationDegree) {
 	this->player = player;
+	this->rotationDegree = rotationDegree;
 }
 
 void PlayerI::display(FlowLayoutPanel^ cardsContainer) {
@@ -83,8 +84,15 @@ void PlayerI::display(FlowLayoutPanel^ cardsContainer) {
 
 		PictureBox^ pictureBoxCard = gcnew PictureBox();
 		pictureBoxCard->Image = Image::FromFile(cardPath);
+		pictureBoxCard->Image->RotateFlip(rotationDegree);
 		pictureBoxCard->SizeMode = PictureBoxSizeMode::Zoom;
-		pictureBoxCard->Size = Size(CARD_WIDTH, CARD_HEIGHT);
+
+		if(rotationDegree == RotateFlipType::Rotate90FlipNone || rotationDegree == RotateFlipType::Rotate270FlipNone)
+			pictureBoxCard->Size = Size(CARD_HEIGHT, CARD_WIDTH);
+		else
+			pictureBoxCard->Size = Size(CARD_WIDTH, CARD_HEIGHT);
+
+		pictureBoxCard->Margin = Padding(0, 0, 5, 0);
 
 		cardsContainer->Controls->Add(pictureBoxCard);
 	}

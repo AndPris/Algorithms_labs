@@ -28,6 +28,9 @@ namespace Lab6 {
 		~PresidentForm();
 
 	private: System::Windows::Forms::FlowLayoutPanel^ humanCards;
+	private: System::Windows::Forms::FlowLayoutPanel^ AI1Cards;
+	private: System::Windows::Forms::FlowLayoutPanel^ AI2Cards;
+	private: System::Windows::Forms::FlowLayoutPanel^ AI3Cards;
 	protected:
 
 	protected:
@@ -46,14 +49,40 @@ namespace Lab6 {
 		void InitializeComponent(void)
 		{
 			this->humanCards = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->AI1Cards = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->AI2Cards = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->AI3Cards = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->SuspendLayout();
 			// 
 			// humanCards
 			// 
 			this->humanCards->Location = System::Drawing::Point(148, 797);
 			this->humanCards->Name = L"humanCards";
-			this->humanCards->Size = System::Drawing::Size(1608, 261);
+			this->humanCards->Size = System::Drawing::Size(1628, 261);
 			this->humanCards->TabIndex = 0;
+			// 
+			// AI1Cards
+			// 
+			this->AI1Cards->FlowDirection = System::Windows::Forms::FlowDirection::TopDown;
+			this->AI1Cards->Location = System::Drawing::Point(12, 12);
+			this->AI1Cards->Name = L"AI1Cards";
+			this->AI1Cards->Size = System::Drawing::Size(130, 1031);
+			this->AI1Cards->TabIndex = 1;
+			// 
+			// AI2Cards
+			// 
+			this->AI2Cards->Location = System::Drawing::Point(148, 12);
+			this->AI2Cards->Name = L"AI2Cards";
+			this->AI2Cards->Size = System::Drawing::Size(1628, 173);
+			this->AI2Cards->TabIndex = 2;
+			// 
+			// AI3Cards
+			// 
+			this->AI3Cards->FlowDirection = System::Windows::Forms::FlowDirection::TopDown;
+			this->AI3Cards->Location = System::Drawing::Point(1782, 12);
+			this->AI3Cards->Name = L"AI3Cards";
+			this->AI3Cards->Size = System::Drawing::Size(130, 1031);
+			this->AI3Cards->TabIndex = 3;
 			// 
 			// PresidentForm
 			// 
@@ -61,6 +90,9 @@ namespace Lab6 {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::OliveDrab;
 			this->ClientSize = System::Drawing::Size(1924, 1055);
+			this->Controls->Add(this->AI3Cards);
+			this->Controls->Add(this->AI2Cards);
+			this->Controls->Add(this->AI1Cards);
 			this->Controls->Add(this->humanCards);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->MaximizeBox = false;
