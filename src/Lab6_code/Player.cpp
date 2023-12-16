@@ -23,8 +23,6 @@ void Player::setCardsToBeat(vector<Card*> cards) {
 }
 
 vector<Card*> Player::makeTurn() {
-	selectCardsForTurn();
-
 	if(!selectedCards.empty())
 		cards.erase(cards.begin(), cards.begin() + selectedCards.size());
 
@@ -82,6 +80,9 @@ void AIPlayer::selectCardsForBeatTurn() {
 	}
 }
 
-void HumanPlayer::selectCardsForTurn() {
-
+void HumanPlayer::selectCardsForTurn(Card* selectedCard) {
+	for (auto card : cards) {
+		if (card == selectedCard)
+			selectedCards.push_back(card);
+	}
 }

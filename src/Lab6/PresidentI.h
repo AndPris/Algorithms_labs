@@ -17,7 +17,20 @@ using namespace std;
 #define AMOUNT_OF_AI_PLAYERS 3
 #define CARD_WIDTH 72
 #define CARD_HEIGHT 130
+#define PADDING 5
 
+ref class cardsContainers {
+public:
+	static List<FlowLayoutPanel^>^ containers = gcnew List<FlowLayoutPanel^>;
+};
+
+enum containersNumbers{
+	HUMAN_CONTAINER,
+	AI1_CONTAINER,
+	AI2_CONTAINER,
+	AI3_CONTAINER,
+	CARDS_ON_DESK_CONTAINER,
+};
 
 enum WinResults {
 	NO_WIN,
@@ -31,6 +44,7 @@ public:
 	CardNames name;
 };
 
+
 class PresidentI {
 	Deck* deck;
 	vector<Card*> cardsOnDesk;
@@ -39,17 +53,24 @@ class PresidentI {
 	HumanPlayer* humanPlayer;
 
 	void distributeCards();
+
 	WinResults checkWinCondition() const;
+
 	void displayCards(FlowLayoutPanel^ cardContainer, vector<Card*> cards, RotateFlipType rotationDegree);
 	void clearCardsContainer(FlowLayoutPanel^ cardsContainer);
 	string getCardPath(Card* card);
 	PictureBox^ getPicture(String^ cardPath, RotateFlipType rotationDegree);
+	void setHumanCardsInfo(FlowLayoutPanel^ cardsContainer, vector<Card*> cards);
+	Card* getHumanCardFromCardInfo(Object^ info);
 public:
 	PresidentI();
 
-	void displayAllCards(List<FlowLayoutPanel^>^ cardsContainers);
-	void game(List<FlowLayoutPanel^>^ cardsContainers);
+	void displayAllCards();
+
+	void setCardsOnDesc(vector<Card*> cards);
+	void removeHumanCards(vector<Card*> cards);
+
+	void makeHumanMove(Object^ info);
 
 	~PresidentI();
 };
-

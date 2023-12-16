@@ -11,7 +11,7 @@ protected:
 
 	int findPositionForCard(Card* card);
 
-	virtual void selectCardsForTurn() = 0;
+	//virtual void selectCardsForTurn() = 0;
 
 public:
 	void addCard(Card* card);
@@ -23,7 +23,7 @@ public:
 
 
 class AIPlayer : public Player {
-	void selectCardsForTurn() override;
+	void selectCardsForTurn();
 	void selectCardsForFirstTurn();
 	void selectCardsForBeatTurn();
 public:
@@ -32,5 +32,6 @@ public:
 
 
 class HumanPlayer : public Player {
-	void selectCardsForTurn() override;
+public:
+	void selectCardsForTurn(Card* selectedCard);
 };

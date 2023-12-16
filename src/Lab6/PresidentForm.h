@@ -18,6 +18,9 @@ namespace Lab6 {
 	{
 	private:
 		PresidentI* president;
+
+		void setCardsClickHandlers();
+		Void Card_Click(Object^ sender, EventArgs^ e);
 	public:
 		PresidentForm(void);
 
@@ -31,6 +34,8 @@ namespace Lab6 {
 	private: System::Windows::Forms::FlowLayoutPanel^ AI1Cards;
 	private: System::Windows::Forms::FlowLayoutPanel^ AI2Cards;
 	private: System::Windows::Forms::FlowLayoutPanel^ AI3Cards;
+	private: System::Windows::Forms::FlowLayoutPanel^ cardsOnDesk;
+
 	protected:
 
 	protected:
@@ -52,6 +57,7 @@ namespace Lab6 {
 			this->AI1Cards = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->AI2Cards = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->AI3Cards = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->cardsOnDesk = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->SuspendLayout();
 			// 
 			// humanCards
@@ -84,12 +90,20 @@ namespace Lab6 {
 			this->AI3Cards->Size = System::Drawing::Size(130, 1031);
 			this->AI3Cards->TabIndex = 3;
 			// 
+			// cardsOnDesk
+			// 
+			this->cardsOnDesk->Location = System::Drawing::Point(633, 374);
+			this->cardsOnDesk->Name = L"cardsOnDesk";
+			this->cardsOnDesk->Size = System::Drawing::Size(735, 228);
+			this->cardsOnDesk->TabIndex = 4;
+			// 
 			// PresidentForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::OliveDrab;
 			this->ClientSize = System::Drawing::Size(1924, 1055);
+			this->Controls->Add(this->cardsOnDesk);
 			this->Controls->Add(this->AI3Cards);
 			this->Controls->Add(this->AI2Cards);
 			this->Controls->Add(this->AI1Cards);

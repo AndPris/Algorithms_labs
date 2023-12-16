@@ -150,12 +150,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="PlayerI.cpp" />
     <ClCompile Include="PresidentForm.cpp" />
     <ClCompile Include="PresidentI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PlayerI.h" />
     <ClInclude Include="PresidentForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
