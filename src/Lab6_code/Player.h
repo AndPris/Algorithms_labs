@@ -11,8 +11,7 @@ protected:
 
 	int findPositionForCard(Card* card);
 
-	//virtual void selectCardsForTurn() = 0;
-	void removeSelectedCards();
+	void removeSelectedCardsFromAllCards();
 public:
 	void addCard(Card* card);
 	vector<Card*> getCards();
@@ -24,11 +23,10 @@ public:
 
 
 class AIPlayer : public Player {
-	void selectCardsForTurn();
 	void selectCardsForFirstTurn();
 	void selectCardsForBeatTurn();
 public:
-
+	void selectCardsForTurn();
 };
 
 

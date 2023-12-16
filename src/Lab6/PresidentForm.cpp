@@ -36,8 +36,6 @@ PresidentForm::PresidentForm(void) {
 	srand(time(nullptr));
 	president = new PresidentI;
 
-	//List<FlowLayoutPanel^>^ cardsContainers = gcnew List<FlowLayoutPanel^>;
-
 	cardsContainers::containers->Add(humanCards);
 	cardsContainers::containers->Add(AI1Cards);
 	cardsContainers::containers->Add(AI2Cards);
@@ -58,8 +56,6 @@ void PresidentForm::setCardsClickHandlers() {
 Void PresidentForm::Card_Click(Object^ sender, EventArgs^ e) {
 	PictureBox^ clickedPictureBox = dynamic_cast<PictureBox^>(sender);
 	president->makeHumanMove(clickedPictureBox->Tag);
-	/*president->displayAllCards();
-	setCardsClickHandlers();*/
 }
 
 PresidentForm::~PresidentForm() {

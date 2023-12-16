@@ -7,6 +7,29 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace Lab6tests
 {
+	bool areEqual(Card* card1, Card* card2) {
+		return card1->getName() == card2->getName() && card1->getSuit() == card2->getSuit();
+	}
+
+	bool contains(vector<Card*> cards, Card* card) {
+		for (auto availableCard : cards) {
+			if (areEqual(card, availableCard))
+				return true;
+		}
+		return false;
+	}
+
+	bool areEqual(vector<Card*> cards1, vector<Card*> cards2) {
+		if (cards1.size() != cards2.size())
+			return false;
+
+		for (auto card1 : cards1) {
+			if (!contains(cards2, card1))
+				return false;
+		}
+		return true;
+	}
+
 	TEST_CLASS(CardTests)
 	{
 	private:
@@ -89,30 +112,6 @@ namespace Lab6tests
 	private:
 		HumanPlayer* player;
 		vector<Card*> playerCards;
-
-		bool areEqual(Card* card1, Card* card2) {
-			return card1->getName() == card2->getName() && card1->getSuit() == card2->getSuit();
-		}
-
-		bool contains(vector<Card*> cards, Card* card) {
-			for (auto availableCard : cards) {
-				if (areEqual(card, availableCard))
-					return true;
-			}
-			return false;
-		}
-
-		bool areEqual(vector<Card*> cards1, vector<Card*> cards2) {
-			if (cards1.size() != cards2.size())
-				return false;
-
-			for (auto card1 : cards1) {
-				if (!contains(cards2, card1))
-					return false;
-			}
-			return true;
-		}
-
 	public:
 		HumanPlayerTest() {
 			player = new HumanPlayer;
@@ -164,6 +163,83 @@ namespace Lab6tests
 		}
 
 		~HumanPlayerTest() {
+			delete player;
+			for (auto card : playerCards)
+				delete card;
+		}
+	};
+
+	TEST_CLASS(AIPlayerTest)
+	{
+	private:
+		AIPlayer* player;
+		vector<Card*> playerCards;
+	public:
+		AIPlayerTest() {
+			player = new AIPlayer;
+			playerCards.push_back(new Card(HEARTS, TEN));
+			playerCards.push_back(new Card(SPADES, TEN));
+			playerCards.push_back(new Card(DIAMONDS, TEN));
+			playerCards.push_back(new Card(HEARTS, JACK));
+			playerCards.push_back(new Card(SPADES, JACK));
+
+			for (auto card : playerCards)
+				player->addCard(card);
+		}
+
+		TEST_METHOD(selectCardsForTurnTest) {
+			player->selectCardsForTurn();
+			vector<Card*> selectedCards = player->getSelectedCards();
+
+			Assert::IsTrue(selectedCards.size() == 3);
+			Assert::IsTrue(contains(selectedCards, new Card(HEARTS, TEN)));
+			Assert::IsTrue(contains(selectedCards, new Card(SPADES, TEN)));
+			Assert::IsTrue(contains(selectedCards, new Card(DIAMONDS, TEN)));
+		}
+		
+		TEST_METHOD(makeMoveTest1) {
+			vector<Card*> cardsToBeat = { new Card(HEARTS, THREE) };
+			player->setCardsToBeat(cardsToBeat);
+			player->selectCardsForTurn();
+			vector<Card*> selectedCards = player->getSelectedCards();
+
+			Assert::IsTrue(selectedCards.size() == 1);
+			Assert::IsTrue(contains(selectedCards, new Card(DIAMONDS, TEN)));
+		}
+
+		TEST_METHOD(makeMoveTest2) {
+			vector<Card*> cardsToBeat = { new Card(HEARTS, THREE), new Card(CLUBS, THREE) };
+			player->setCardsToBeat(cardsToBeat);
+			player->selectCardsForTurn();
+			vector<Card*> selectedCards = player->getSelectedCards();
+
+			Assert::IsTrue(selectedCards.size() == 2);
+			Assert::IsTrue(contains(selectedCards, new Card(DIAMONDS, TEN)));
+			Assert::IsTrue(contains(selectedCards, new Card(SPADES, TEN)));
+		}
+
+		TEST_METHOD(makeMoveTest3) {
+			vector<Card*> cardsToBeat = { new Card(HEARTS, THREE), new Card(CLUBS, THREE), new Card(SPADES, THREE)};
+			player->setCardsToBeat(cardsToBeat);
+			player->selectCardsForTurn();
+			vector<Card*> selectedCards = player->getSelectedCards();
+
+			Assert::IsTrue(selectedCards.size() == 3);
+			Assert::IsTrue(contains(selectedCards, new Card(HEARTS, TEN)));
+			Assert::IsTrue(contains(selectedCards, new Card(SPADES, TEN)));
+			Assert::IsTrue(contains(selectedCards, new Card(DIAMONDS, TEN)));
+		}
+
+		TEST_METHOD(makeMoveTest4) {
+			vector<Card*> cardsToBeat = { new Card(HEARTS, THREE), new Card(CLUBS, THREE), new Card(SPADES, THREE), new Card(DIAMONDS, THREE) };
+			player->setCardsToBeat(cardsToBeat);
+			player->selectCardsForTurn();
+			vector<Card*> selectedCards = player->getSelectedCards();
+
+			Assert::IsTrue(selectedCards.empty());
+		}
+
+		~AIPlayerTest() {
 			delete player;
 			for (auto card : playerCards)
 				delete card;

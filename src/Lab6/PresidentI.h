@@ -44,6 +44,10 @@ public:
 	CardNames name;
 };
 
+ref class UIUpdate {
+public:
+	static Threading::ManualResetEvent^ uiUpdateComplete = gcnew Threading::ManualResetEvent(false);
+};
 
 class PresidentI {
 	Deck* deck;
@@ -60,15 +64,15 @@ class PresidentI {
 	void clearCardsContainer(FlowLayoutPanel^ cardsContainer);
 	string getCardPath(Card* card);
 	PictureBox^ getPicture(String^ cardPath, RotateFlipType rotationDegree);
-	void setHumanCardsInfo(FlowLayoutPanel^ cardsContainer, vector<Card*> cards);
 	Card* getHumanCardFromCardInfo(Object^ info);
+	void makeAIPlayersMoves();
 public:
 	PresidentI();
-
+	
 	void displayAllCards();
 
-	void setCardsOnDesc(vector<Card*> cards);
-	void removeHumanCards(vector<Card*> cards);
+	void setCardsOnDesk(vector<Card*> cards);
+	void removeCards(FlowLayoutPanel^ cardsContainer, vector<Card*> cards);
 
 	void makeHumanMove(Object^ info);
 

@@ -9,7 +9,7 @@ int Player::findPositionForCard(Card* card) {
 	return index;
 }
 
-void Player::removeSelectedCards() {
+void Player::removeSelectedCardsFromAllCards() {
 	if (selectedCards.empty())
 		return;
 
@@ -37,7 +37,7 @@ void Player::setCardsToBeat(vector<Card*> cards) {
 }
 
 vector<Card*> Player::makeTurn() {
-	removeSelectedCards();
+	removeSelectedCardsFromAllCards();
 
 	vector<Card*> cardsToReturn;
 	copy(selectedCards.begin(), selectedCards.end(), back_inserter(cardsToReturn));
@@ -64,7 +64,7 @@ void AIPlayer::selectCardsForTurn() {
 void AIPlayer::selectCardsForFirstTurn() {
 	int i = 0;
 
-	while (i < cards.size() && cards.at(0) == cards.at(i)) {
+	while (i < cards.size() && *cards.at(0) == *cards.at(i)) {
 		selectedCards.push_back(cards.at(i));
 		++i;
 	}
@@ -73,15 +73,21 @@ void AIPlayer::selectCardsForFirstTurn() {
 void AIPlayer::selectCardsForBeatTurn() {
 	int i = 0;
 	while(i < cards.size()) {
-		if (cardsToBeat.at(0) > cards.at(i)) {
+		if (*cardsToBeat.at(0) > *cards.at(i)) {
 			++i;
 			continue;
 		}
 
 		for (int j = 0; j < cardsToBeat.size(); ++j) {
+			if (i + j >= cards.size()) {
+				i = cards.size();
+				selectedCards.clear();
+				break;
+			}
+
 			selectedCards.push_back(cards.at(i + j));
 
-			if (!(selectedCards.at(j) == selectedCards.at(0))) {
+			if (!(*selectedCards.at(j) == *selectedCards.at(0))) {
 				selectedCards.clear();
 				i += j;
 				break;
