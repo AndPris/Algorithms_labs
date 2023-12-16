@@ -24,6 +24,11 @@ public:
 	static List<FlowLayoutPanel^>^ containers = gcnew List<FlowLayoutPanel^>;
 };
 
+ref class label {
+public:
+	static Label^ resultLabel;
+};
+
 enum containersNumbers{
 	HUMAN_CONTAINER,
 	AI1_CONTAINER,
@@ -42,11 +47,6 @@ ref class cardInfo {
 public:
 	Suits suit;
 	CardNames name;
-};
-
-ref class UIUpdate {
-public:
-	static Threading::ManualResetEvent^ uiUpdateComplete = gcnew Threading::ManualResetEvent(false);
 };
 
 class PresidentI {

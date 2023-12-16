@@ -35,6 +35,7 @@ namespace Lab6 {
 	private: System::Windows::Forms::FlowLayoutPanel^ AI2Cards;
 	private: System::Windows::Forms::FlowLayoutPanel^ AI3Cards;
 	private: System::Windows::Forms::FlowLayoutPanel^ cardsOnDesk;
+	private: System::Windows::Forms::Label^ resultLabel;
 
 	protected:
 
@@ -58,6 +59,7 @@ namespace Lab6 {
 			this->AI2Cards = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->AI3Cards = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->cardsOnDesk = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->resultLabel = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// humanCards
@@ -97,12 +99,24 @@ namespace Lab6 {
 			this->cardsOnDesk->Size = System::Drawing::Size(735, 228);
 			this->cardsOnDesk->TabIndex = 4;
 			// 
+			// resultLabel
+			// 
+			this->resultLabel->AutoSize = true;
+			this->resultLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->resultLabel->Location = System::Drawing::Point(1180, 252);
+			this->resultLabel->Name = L"resultLabel";
+			this->resultLabel->Size = System::Drawing::Size(119, 29);
+			this->resultLabel->TabIndex = 5;
+			this->resultLabel->Text = L"Your turn";
+			// 
 			// PresidentForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::OliveDrab;
 			this->ClientSize = System::Drawing::Size(1924, 1055);
+			this->Controls->Add(this->resultLabel);
 			this->Controls->Add(this->cardsOnDesk);
 			this->Controls->Add(this->AI3Cards);
 			this->Controls->Add(this->AI2Cards);
@@ -115,6 +129,7 @@ namespace Lab6 {
 			this->Text = L"President";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion

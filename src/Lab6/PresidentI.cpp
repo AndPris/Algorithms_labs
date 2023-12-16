@@ -173,23 +173,31 @@ void PresidentI::makeHumanMove(Object^ info) {
 	setCardsOnDesk(playedCards);
 	removeCards(cardsContainers::containers[HUMAN_CONTAINER], playedCards);
 
+	Sleep(2000);
+
 	makeAIPlayersMoves();
 }
 
 void PresidentI::makeAIPlayersMoves() {
 	for (int i = 0; i < AIPlayers.size(); ++i) {
-		Sleep(2000);
-
 		AIPlayers.at(i)->setCardsToBeat(cardsOnDesk);
 		AIPlayers.at(i)->selectCardsForTurn();
 		vector<Card*> playedCards(AIPlayers.at(i)->makeTurn());
 
-		if(!playedCards.empty())
+		if (!playedCards.empty()) {
 			setCardsOnDesk(playedCards);
+			label::resultLabel->Text = "AI player " + (i + 1) + " made turn";
+		} else {
+			label::resultLabel->Text = "AI player " + (i + 1) + " can't make turn";
+		}
+
+		Application::DoEvents();
 
 		removeCards(cardsContainers::containers[i+1], playedCards);
-
+		Sleep(2000);
 	}
+
+	label::resultLabel->Text = "Your turn";
 }
 
 void PresidentI::removeCards(FlowLayoutPanel^ cardsContainer, vector<Card*> cards) {

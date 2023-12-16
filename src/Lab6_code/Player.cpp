@@ -73,7 +73,7 @@ void AIPlayer::selectCardsForFirstTurn() {
 void AIPlayer::selectCardsForBeatTurn() {
 	int i = 0;
 	while(i < cards.size()) {
-		if (*cardsToBeat.at(0) > *cards.at(i)) {
+		if (*cardsToBeat.at(0) > *cards.at(i) || *cardsToBeat.at(0) == *cards.at(i)) {
 			++i;
 			continue;
 		}

@@ -42,6 +42,8 @@ PresidentForm::PresidentForm(void) {
 	cardsContainers::containers->Add(AI3Cards);
 	cardsContainers::containers->Add(cardsOnDesk);
 
+	label::resultLabel = resultLabel;
+
 	president->displayAllCards();
 	setCardsClickHandlers();
 }
