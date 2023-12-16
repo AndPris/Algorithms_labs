@@ -13,7 +13,7 @@ PresidentForm::PresidentForm(void) {
 	int maxHeight = CARD_HEIGHT;
 
 	humanCards->Height = maxHeight+60;
-	humanCards->Width = maxWidth;
+	humanCards->Width = maxWidth + CARD_WIDTH;
 	humanCards->Location = Point((this->Width - humanCards->Width) / 2, this->Height - humanCards->Height);
 
 	AI1Cards->Height = maxWidth/2+CARD_WIDTH;
@@ -21,13 +21,13 @@ PresidentForm::PresidentForm(void) {
 	AI1Cards->Location = Point(0, (this->Height - AI1Cards->Height)/2);
 
 	AI2Cards->Height = maxHeight;
-	AI2Cards->Width = maxWidth;
+	AI2Cards->Width = maxWidth + CARD_WIDTH;
 	AI2Cards->Location = Point((this->Width - AI2Cards->Width) / 2, 0);
 
 	
 	AI3Cards->Height = maxWidth / 2 + CARD_WIDTH;
 	AI3Cards->Width = maxHeight * 2;
-	AI3Cards->Location = Point(this->Width - AI3Cards->Width, (this->Height - AI3Cards->Height) / 2);
+	AI3Cards->Location = Point(this->Width - AI3Cards->Width + CARD_WIDTH, (this->Height - AI3Cards->Height) / 2);
 
 	srand(time(nullptr));
 	president = new PresidentI;
