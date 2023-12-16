@@ -12,10 +12,11 @@ protected:
 	int findPositionForCard(Card* card);
 
 	//virtual void selectCardsForTurn() = 0;
-
+	void removeSelectedCards();
 public:
 	void addCard(Card* card);
 	vector<Card*> getCards();
+	vector<Card*> getSelectedCards();
 	void setCardsToBeat(vector<Card*> cards);
 	vector<Card*> makeTurn();
 	bool hasWon() const;

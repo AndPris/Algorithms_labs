@@ -9,6 +9,16 @@ int Player::findPositionForCard(Card* card) {
 	return index;
 }
 
+void Player::removeSelectedCards() {
+	if (selectedCards.empty())
+		return;
+
+	for (auto card : cards) {
+		if (card == selectedCards.at(0))
+			cards.erase(find(cards.begin(), cards.end(), card));
+	}
+}
+
 void Player::addCard(Card* card) {
 	int index = findPositionForCard(card);
 	cards.insert(cards.begin() + index, card);
@@ -18,13 +28,16 @@ vector<Card*> Player::getCards() {
 	return cards;
 }
 
+vector<Card*> Player::getSelectedCards() {
+	return selectedCards;
+}
+
 void Player::setCardsToBeat(vector<Card*> cards) {
 	copy(cards.begin(), cards.end(), back_inserter(cardsToBeat));
 }
 
 vector<Card*> Player::makeTurn() {
-	if(!selectedCards.empty())
-		cards.erase(cards.begin(), cards.begin() + selectedCards.size());
+	removeSelectedCards();
 
 	vector<Card*> cardsToReturn;
 	copy(selectedCards.begin(), selectedCards.end(), back_inserter(cardsToReturn));
@@ -82,7 +95,7 @@ void AIPlayer::selectCardsForBeatTurn() {
 
 void HumanPlayer::selectCardsForTurn(Card* selectedCard) {
 	for (auto card : cards) {
-		if (card == selectedCard)
+		if (*card == *selectedCard)
 			selectedCards.push_back(card);
 	}
 }

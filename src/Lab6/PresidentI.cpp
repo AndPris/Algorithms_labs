@@ -142,8 +142,8 @@ PictureBox^ PresidentI::getPicture(String^ cardPath, RotateFlipType rotationDegr
 }
 
 void PresidentI::clearCardsContainer(FlowLayoutPanel^ cardsContainer) {
-	for each (Control ^ control in cardsContainer->Controls)
-		cardsContainer->Controls->Remove(control);
+	while (cardsContainer->Controls->Count > 0)
+		cardsContainer->Controls->Remove(cardsContainer->Controls[0]);
 }
 
 void PresidentI::setHumanCardsInfo(FlowLayoutPanel^ cardsContainer, vector<Card*> cards) {
@@ -176,20 +176,24 @@ void PresidentI::makeHumanMove(Object^ info) {
 	cardsOnDesk.clear();
 	Card* selectedCard = getHumanCardFromCardInfo(info);
 	humanPlayer->selectCardsForTurn(selectedCard);
-	vector<Card*> playedCards = humanPlayer->makeTurn();
+	vector<Card*> playedCards(humanPlayer->makeTurn());
 	setCardsOnDesc(playedCards);
 	removeHumanCards(playedCards);
 }
 
 void PresidentI::removeHumanCards(vector<Card*> cards) {
-	for each (Control ^ control in cardsContainers::containers[HUMAN_CONTAINER]->Controls) {
-		PictureBox^ pictureBoxCard = dynamic_cast<PictureBox^>(control);
+	int i = 0;
+	while (i < cardsContainers::containers[HUMAN_CONTAINER]->Controls->Count) {
+		PictureBox^ pictureBoxCard = dynamic_cast<PictureBox^>(cardsContainers::containers[HUMAN_CONTAINER]->Controls[i]);
 		cardInfo^ info = dynamic_cast<cardInfo^>(pictureBoxCard->Tag);
 
 		for (auto card : cards) {
-			if (card->getName() == info->name && card->getSuit() == info->suit)
-				cardsContainers::containers[HUMAN_CONTAINER]->Controls->Remove(control);
+			if (card->getName() == info->name && card->getSuit() == info->suit) {
+				cardsContainers::containers[HUMAN_CONTAINER]->Controls->Remove(cardsContainers::containers[HUMAN_CONTAINER]->Controls[i]);
+				--i;
+			}
 		}
+		++i;
 	}
 }
 
