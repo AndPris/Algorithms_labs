@@ -19,6 +19,16 @@ void Player::removeSelectedCardsFromAllCards() {
 	}
 }
 
+void Player::selectCardsToFightBack(Card* anchorCard) {
+	for (auto card : cards) {
+		if (*card == *anchorCard && selectedCards.size() < cardsToBeat.size())
+			selectedCards.push_back(card);
+	}
+
+	if (selectedCards.size() != cardsToBeat.size())
+		selectedCards.clear();
+}
+
 void Player::addCard(Card* card) {
 	int index = findPositionForCard(card);
 	cards.insert(cards.begin() + index, card);
@@ -77,31 +87,47 @@ void AIPlayer::selectCardsForBeatTurn() {
 			++i;
 			continue;
 		}
-
-		for (int j = 0; j < cardsToBeat.size(); ++j) {
-			if (i + j >= cards.size()) {
-				i = cards.size();
-				selectedCards.clear();
-				break;
-			}
-
-			selectedCards.push_back(cards.at(i + j));
-
-			if (!(*selectedCards.at(j) == *selectedCards.at(0))) {
-				selectedCards.clear();
-				i += j;
-				break;
-			}
-		}
-
+		selectCardsToFightBack(cards.at(i));
 		if (!selectedCards.empty())
 			break;
+
+		++i; 
 	}
 }
 
-void HumanPlayer::selectCardsForTurn(Card* selectedCard) {
-	for (auto card : cards) {
-		if (*card == *selectedCard)
-			selectedCards.push_back(card);
+bool HumanPlayer::selectCardsForTurn(Card* selectedCard) {
+	if (cardsToBeat.empty()) {
+		for (auto card : cards) {
+			if (*card == *selectedCard)
+				selectedCards.push_back(card);
+		}
+
+		return true;
 	}
+
+	if (!(*selectedCard > *cardsToBeat.at(0)))
+		return false;
+
+	selectCardsToFightBack(selectedCard);
+
+	return selectedCards.size() > 0;
+}
+
+bool HumanPlayer::canFightBack() {
+	if (cardsToBeat.empty())
+		return true;
+
+	for (auto card : cards) {
+		if (!(*card > *cardsToBeat.front()))
+			continue;
+
+		selectCardsToFightBack(card);
+
+		if (!selectedCards.empty()) {
+			selectedCards.clear();
+			return true;
+		}
+	}
+
+	return false;
 }

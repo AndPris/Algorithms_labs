@@ -136,7 +136,7 @@ namespace Lab6tests
 			Assert::IsTrue(contains(player->getCards(), newCard));
 		}
 
-		TEST_METHOD(selectCardsForTurnTest) {
+		TEST_METHOD(selectCardsForTurnTest1) {
 			Card* cardToSelect = new Card(HEARTS, TEN);
 
 			player->selectCardsForTurn(cardToSelect);
@@ -148,6 +148,54 @@ namespace Lab6tests
 			Assert::IsTrue(contains(selectedCards, new Card(DIAMONDS, TEN)));
 		}
 
+		TEST_METHOD(selectCardsForTurnTest2) {
+			vector<Card*> cardsToBeat = { new Card(SPADES, THREE) };
+			Card* cardToSelect = new Card(HEARTS, TEN);
+
+			player->setCardsToBeat(cardsToBeat);
+			bool res = player->selectCardsForTurn(cardToSelect);
+			vector<Card*> selectedCards = player->getSelectedCards();
+
+			Assert::IsTrue(res);
+			Assert::IsTrue(selectedCards.size() == 1);
+			Assert::IsTrue(contains(selectedCards, new Card(DIAMONDS, TEN)));
+		}
+
+		TEST_METHOD(selectCardsForTurnTest3) {
+			vector<Card*> cardsToBeat = { new Card(SPADES, TWO) };
+			Card* cardToSelect = new Card(HEARTS, TEN);
+
+			player->setCardsToBeat(cardsToBeat);
+			bool res = player->selectCardsForTurn(cardToSelect);
+			vector<Card*> selectedCards = player->getSelectedCards();
+
+			Assert::IsFalse(res);
+			Assert::IsTrue(selectedCards.empty());
+		}
+
+		TEST_METHOD(canFightBack1) {
+			vector<Card*> cardsToBeat = { new Card(SPADES, TWO) };
+
+			player->setCardsToBeat(cardsToBeat);
+			
+			Assert::IsFalse(player->canFightBack());
+		}
+
+		TEST_METHOD(canFightBack2) {
+			vector<Card*> cardsToBeat = { new Card(SPADES, THREE) };
+
+			player->setCardsToBeat(cardsToBeat);
+
+			Assert::IsTrue(player->canFightBack());
+		}
+
+		TEST_METHOD(canFightBack3) {
+			vector<Card*> cardsToBeat = { new Card(HEARTS, THREE), new Card(CLUBS, THREE), new Card(SPADES, THREE), new Card(DIAMONDS, THREE) };
+
+			player->setCardsToBeat(cardsToBeat);
+
+			Assert::IsFalse(player->canFightBack());
+		}
 		TEST_METHOD(makeTurnTest) {
 			Card* cardToSelect = new Card(HEARTS, TEN);
 

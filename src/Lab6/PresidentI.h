@@ -18,6 +18,7 @@ using namespace std;
 #define CARD_WIDTH 72
 #define CARD_HEIGHT 130
 #define PADDING 5
+#define PAUSE 2000
 
 ref class cardsContainers {
 public:
@@ -66,6 +67,7 @@ class PresidentI {
 	PictureBox^ getPicture(String^ cardPath, RotateFlipType rotationDegree);
 	Card* getHumanCardFromCardInfo(Object^ info);
 	void makeAIPlayersMoves();
+	void changeResultLabelText(String^ newText);
 public:
 	PresidentI();
 	

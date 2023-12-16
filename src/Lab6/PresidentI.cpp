@@ -166,15 +166,25 @@ void PresidentI::setCardsOnDesk(vector<Card*> cards) {
 }
 
 void PresidentI::makeHumanMove(Object^ info) {
-	cardsOnDesk.clear();
+	if (!humanPlayer->canFightBack()) {
+		changeResultLabelText("You can't beat these cards");
+		Sleep(PAUSE);
+		makeAIPlayersMoves();
+		return;
+	}
+
 	Card* selectedCard = getHumanCardFromCardInfo(info);
-	humanPlayer->selectCardsForTurn(selectedCard);
+	if (!humanPlayer->selectCardsForTurn(selectedCard)) {
+		changeResultLabelText("You can't make turn using these cards");
+		Sleep(PAUSE);
+		return;
+	}
+
 	vector<Card*> playedCards(humanPlayer->makeTurn());
 	setCardsOnDesk(playedCards);
 	removeCards(cardsContainers::containers[HUMAN_CONTAINER], playedCards);
 
-	Sleep(2000);
-
+	Sleep(PAUSE);
 	makeAIPlayersMoves();
 }
 
@@ -186,18 +196,22 @@ void PresidentI::makeAIPlayersMoves() {
 
 		if (!playedCards.empty()) {
 			setCardsOnDesk(playedCards);
-			label::resultLabel->Text = "AI player " + (i + 1) + " made turn";
+			changeResultLabelText("AI player " + (i + 1) + " made turn");
 		} else {
-			label::resultLabel->Text = "AI player " + (i + 1) + " can't make turn";
+			changeResultLabelText("AI player " + (i + 1) + " can't make turn");
 		}
 
-		Application::DoEvents();
-
 		removeCards(cardsContainers::containers[i+1], playedCards);
-		Sleep(2000);
+		Sleep(PAUSE);
 	}
 
-	label::resultLabel->Text = "Your turn";
+	humanPlayer->setCardsToBeat(cardsOnDesk);
+	changeResultLabelText("Your turn");
+}
+
+void PresidentI::changeResultLabelText(String^ newText) {
+	label::resultLabel->Text = newText;
+	Application::DoEvents();
 }
 
 void PresidentI::removeCards(FlowLayoutPanel^ cardsContainer, vector<Card*> cards) {

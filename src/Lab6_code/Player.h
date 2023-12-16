@@ -12,6 +12,7 @@ protected:
 	int findPositionForCard(Card* card);
 
 	void removeSelectedCardsFromAllCards();
+	void selectCardsToFightBack(Card* anchorCard);
 public:
 	void addCard(Card* card);
 	vector<Card*> getCards();
@@ -32,5 +33,6 @@ public:
 
 class HumanPlayer : public Player {
 public:
-	void selectCardsForTurn(Card* selectedCard);
+	bool selectCardsForTurn(Card* selectedCard);
+	bool canFightBack();
 };
