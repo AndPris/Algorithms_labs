@@ -70,6 +70,12 @@ bool Player::hasWon() const {
 	return cards.empty();
 }
 
+void Player::clearAllCards() {
+	cards.clear();
+	selectedCards.clear();
+	cardsToBeat.clear();
+}
+
 
 
 void AIPlayer::selectCardsForTurn() {

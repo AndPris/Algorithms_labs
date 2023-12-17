@@ -45,7 +45,7 @@ void PresidentI::displayAllCards() {
 			displayCards(cardsContainers::containers[i + 1], AIPlayers.at(i)->getCards(), RotateFlipType::Rotate90FlipNone);
 	}
 
-	displayCards(cardsContainers::containers[AMOUNT_OF_AI_PLAYERS + 1], cardsOnDesk, RotateFlipType::RotateNoneFlipNone);
+	displayCards(cardsContainers::containers[CARDS_ON_DESK_CONTAINER], cardsOnDesk, RotateFlipType::RotateNoneFlipNone);
 }
 
 void PresidentI::displayCards(FlowLayoutPanel^ cardsContainer, vector<Card*> cards, RotateFlipType rotationDegree) {
@@ -188,10 +188,6 @@ WinResults PresidentI::makeHumanMove(Object^ info) {
 		return AI_WIN;
 }
 
-void PresidentI::restart() {
-
-}
-
 WinResults PresidentI::makeAIPlayersMoves() {
 	for (int i = 0; i < AIPlayers.size(); ++i) {
 		if (lastActingPlayer == AIPlayers.at(i)) {
@@ -230,7 +226,8 @@ WinResults PresidentI::makeAIPlayersMoves() {
 	if (!humanPlayer->canFightBack()) {
 		changeResultLabelText("You can't beat these cards");
 		Sleep(PAUSE);
-		makeAIPlayersMoves();
+		if (makeAIPlayersMoves() == AI_WIN)
+			return AI_WIN;
 	} else {
 		changeResultLabelText("Your turn");
 	}
@@ -275,6 +272,22 @@ void PresidentI::enableHumanPlayerCards() {
 		control->Enabled = true;
 
 	Application::DoEvents();
+}
+
+
+void PresidentI::restart() {
+	deck->fill();
+	deck->shuffle();
+
+	humanPlayer->clearAllCards();
+	for (auto player : AIPlayers)
+		player->clearAllCards();
+
+	cardsOnDesk.clear();
+	distributeCards();
+	displayAllCards();
+	changeResultLabelText("Your turn");
+	enableHumanPlayerCards();
 }
 
 PresidentI::~PresidentI() {

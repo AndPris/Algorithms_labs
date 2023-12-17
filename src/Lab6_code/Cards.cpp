@@ -24,17 +24,20 @@ bool Card::operator>(const Card& obj) const {
 
 
 Deck::Deck() {
+	fill();
+	shuffle();
+}
+
+void Deck::fill() {
 	vector<Suits> suits = { CLUBS, DIAMONDS, HEARTS, SPADES };
 	vector<CardNames> cardNames = { TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE };
 
 	for (auto suit : suits) {
 		for (auto cardName : cardNames) {
-			Card *card = new Card(suit, cardName);
+			Card* card = new Card(suit, cardName);
 			cards.push_back(card);
 		}
 	}
-
-	shuffle();
 }
 
 void Deck::shuffle() {

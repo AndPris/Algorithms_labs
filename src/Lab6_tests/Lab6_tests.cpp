@@ -318,6 +318,15 @@ namespace Lab6tests
 			Assert::IsTrue(contains(selectedCards, new Card(DIAMONDS, TEN)));
 		}
 
+		TEST_METHOD(clearAllCardsTest) {
+			player->clearAllCards();
+			vector<Card*> selectedCards = player->getSelectedCards();
+			vector<Card*> cards = player->getCards();
+
+			Assert::IsTrue(selectedCards.empty());
+			Assert::IsTrue(cards.empty());
+		}
+
 		~AIPlayerTest() {
 			delete player;
 			for (auto card : playerCards)

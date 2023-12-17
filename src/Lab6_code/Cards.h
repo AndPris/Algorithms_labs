@@ -7,10 +7,10 @@ using namespace std;
 
 
 enum Suits {
-	CLUBS,		//хреста
-	DIAMONDS,	//бубна
-	HEARTS,		//черва
-	SPADES,		//піка
+	CLUBS,
+	DIAMONDS,
+	HEARTS,
+	SPADES,
 };
 
 enum CardNames {
@@ -52,7 +52,7 @@ public:
 
 	void shuffle();
 	Card* getCard();
-
+	void fill();
 	bool isEmpty() const;
 
 	~Deck();

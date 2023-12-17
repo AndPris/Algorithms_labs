@@ -66,6 +66,7 @@ Void PresidentForm::Card_Click(Object^ sender, EventArgs^ e) {
 
 Void PresidentForm::restartBtn_Click(Object^ sender, EventArgs^ e) {
 	president->restart();
+	setCardsClickHandlers();
 	restartBtn->Enabled = false;
 	restartBtn->Visible = false;
 }

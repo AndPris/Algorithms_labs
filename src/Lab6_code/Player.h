@@ -20,6 +20,7 @@ public:
 	void setCardsToBeat(vector<Card*> cards);
 	vector<Card*> makeTurn();
 	bool hasWon() const;
+	void clearAllCards();
 };
 
 
