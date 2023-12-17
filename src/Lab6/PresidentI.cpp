@@ -176,13 +176,13 @@ void PresidentI::makeHumanMove(Object^ info) {
 	Card* selectedCard = getHumanCardFromCardInfo(info);
 	if (!humanPlayer->selectCardsForTurn(selectedCard)) {
 		changeResultLabelText("You can't make turn using these cards");
-		Sleep(PAUSE);
 		return;
 	}
 
 	vector<Card*> playedCards(humanPlayer->makeTurn());
 	setCardsOnDesk(playedCards);
 	removeCards(cardsContainers::containers[HUMAN_CONTAINER], playedCards);
+	lastActingPlayer = humanPlayer;
 
 	Sleep(PAUSE);
 	makeAIPlayersMoves();
@@ -190,6 +190,13 @@ void PresidentI::makeHumanMove(Object^ info) {
 
 void PresidentI::makeAIPlayersMoves() {
 	for (int i = 0; i < AIPlayers.size(); ++i) {
+		if (lastActingPlayer == AIPlayers.at(i)) {
+			changeResultLabelText("No one could beat " + (i+1) + " AI player's cards!");
+			/*clearCardsContainer(cardsContainers::containers[CARDS_ON_DESK_CONTAINER]);*/
+			setCardsOnDesk(vector<Card*>{});
+			Sleep(PAUSE / 2);
+		}
+
 		AIPlayers.at(i)->setCardsToBeat(cardsOnDesk);
 		AIPlayers.at(i)->selectCardsForTurn();
 		vector<Card*> playedCards(AIPlayers.at(i)->makeTurn());
@@ -197,6 +204,7 @@ void PresidentI::makeAIPlayersMoves() {
 		if (!playedCards.empty()) {
 			setCardsOnDesk(playedCards);
 			changeResultLabelText("AI player " + (i + 1) + " made turn");
+			lastActingPlayer = AIPlayers.at(i);
 		} else {
 			changeResultLabelText("AI player " + (i + 1) + " can't make turn");
 		}
@@ -205,6 +213,12 @@ void PresidentI::makeAIPlayersMoves() {
 		Sleep(PAUSE);
 	}
 
+	if (lastActingPlayer == humanPlayer) {
+		changeResultLabelText("No one could beat your cards!");
+		/*clearCardsContainer(cardsContainers::containers[CARDS_ON_DESK_CONTAINER]);*/
+		setCardsOnDesk(vector<Card*>{});
+		Sleep(PAUSE / 2);
+	}
 	humanPlayer->setCardsToBeat(cardsOnDesk);
 	changeResultLabelText("Your turn");
 }

@@ -43,6 +43,7 @@ vector<Card*> Player::getSelectedCards() {
 }
 
 void Player::setCardsToBeat(vector<Card*> cards) {
+	cardsToBeat.clear();
 	copy(cards.begin(), cards.end(), back_inserter(cardsToBeat));
 }
 

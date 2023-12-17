@@ -56,6 +56,7 @@ class PresidentI {
 
 	vector<AIPlayer*> AIPlayers;
 	HumanPlayer* humanPlayer;
+	Player* lastActingPlayer;
 
 	void distributeCards();
 
