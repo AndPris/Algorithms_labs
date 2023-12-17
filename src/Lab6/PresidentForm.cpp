@@ -57,7 +57,17 @@ void PresidentForm::setCardsClickHandlers() {
 
 Void PresidentForm::Card_Click(Object^ sender, EventArgs^ e) {
 	PictureBox^ clickedPictureBox = dynamic_cast<PictureBox^>(sender);
-	president->makeHumanMove(clickedPictureBox->Tag);
+	auto result = president->makeHumanMove(clickedPictureBox->Tag);
+	if (result == AI_WIN || result == HUMAN_WIN) {
+		restartBtn->Enabled = true;
+		restartBtn->Visible = true;
+	}
+}
+
+Void PresidentForm::restartBtn_Click(Object^ sender, EventArgs^ e) {
+	president->restart();
+	restartBtn->Enabled = false;
+	restartBtn->Visible = false;
 }
 
 PresidentForm::~PresidentForm() {

@@ -36,6 +36,7 @@ namespace Lab6 {
 	private: System::Windows::Forms::FlowLayoutPanel^ AI3Cards;
 	private: System::Windows::Forms::FlowLayoutPanel^ cardsOnDesk;
 	private: System::Windows::Forms::Label^ resultLabel;
+	private: System::Windows::Forms::Button^ restartBtn;
 
 	protected:
 
@@ -60,6 +61,7 @@ namespace Lab6 {
 			this->AI3Cards = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->cardsOnDesk = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->resultLabel = (gcnew System::Windows::Forms::Label());
+			this->restartBtn = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// humanCards
@@ -110,12 +112,27 @@ namespace Lab6 {
 			this->resultLabel->TabIndex = 5;
 			this->resultLabel->Text = L"Your turn";
 			// 
+			// restartBtn
+			// 
+			this->restartBtn->Enabled = false;
+			this->restartBtn->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13.8F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->restartBtn->Location = System::Drawing::Point(1185, 295);
+			this->restartBtn->Name = L"restartBtn";
+			this->restartBtn->Size = System::Drawing::Size(137, 54);
+			this->restartBtn->TabIndex = 6;
+			this->restartBtn->Text = L"Restart";
+			this->restartBtn->UseVisualStyleBackColor = true;
+			this->restartBtn->Visible = false;
+			this->restartBtn->Click += gcnew System::EventHandler(this, &PresidentForm::restartBtn_Click);
+			// 
 			// PresidentForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::OliveDrab;
 			this->ClientSize = System::Drawing::Size(1924, 1055);
+			this->Controls->Add(this->restartBtn);
 			this->Controls->Add(this->resultLabel);
 			this->Controls->Add(this->cardsOnDesk);
 			this->Controls->Add(this->AI3Cards);
@@ -133,5 +150,6 @@ namespace Lab6 {
 
 		}
 #pragma endregion
-	};
+	private: Void restartBtn_Click(Object^ sender, EventArgs^ e);
+};
 }

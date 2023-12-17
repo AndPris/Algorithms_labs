@@ -165,11 +165,11 @@ void PresidentI::setCardsOnDesk(vector<Card*> cards) {
 	displayCards(cardsContainers::containers[CARDS_ON_DESK_CONTAINER], cardsOnDesk, RotateFlipType::RotateNoneFlipNone);
 }
 
-void PresidentI::makeHumanMove(Object^ info) {
+WinResults PresidentI::makeHumanMove(Object^ info) {
 	Card* selectedCard = getHumanCardFromCardInfo(info);
 	if (!humanPlayer->selectCardsForTurn(selectedCard)) {
 		changeResultLabelText("You can't make turn using these cards");
-		return;
+		return NO_WIN;
 	}
 	disableHumanPlayerCards();
 	vector<Card*> playedCards(humanPlayer->makeTurn());
@@ -179,14 +179,19 @@ void PresidentI::makeHumanMove(Object^ info) {
 
 	if (checkWinCondition() == HUMAN_WIN) {
 		changeResultLabelText("You won!");
-		return;
+		return HUMAN_WIN;
 	}
 
 	Sleep(PAUSE);
-	makeAIPlayersMoves();
+	if (makeAIPlayersMoves() == AI_WIN)
+		return AI_WIN;
 }
 
-void PresidentI::makeAIPlayersMoves() {
+void PresidentI::restart() {
+
+}
+
+WinResults PresidentI::makeAIPlayersMoves() {
 	for (int i = 0; i < AIPlayers.size(); ++i) {
 		if (lastActingPlayer == AIPlayers.at(i)) {
 			changeResultLabelText("No one could beat " + (i+1) + " AI player's cards!");
@@ -210,7 +215,7 @@ void PresidentI::makeAIPlayersMoves() {
 
 		if (checkWinCondition() == AI_WIN) {
 			changeResultLabelText("AI player " + (i + 1) + " won!");
-			return;
+			return AI_WIN;
 		}
 		Sleep(PAUSE);
 	}

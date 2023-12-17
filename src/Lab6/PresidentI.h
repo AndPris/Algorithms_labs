@@ -67,7 +67,7 @@ class PresidentI {
 	string getCardPath(Card* card);
 	PictureBox^ getPicture(String^ cardPath, RotateFlipType rotationDegree);
 	Card* getHumanCardFromCardInfo(Object^ info);
-	void makeAIPlayersMoves();
+	WinResults makeAIPlayersMoves();
 	void changeResultLabelText(String^ newText);
 	void disableHumanPlayerCards();
 	void enableHumanPlayerCards();
@@ -79,7 +79,9 @@ public:
 	void setCardsOnDesk(vector<Card*> cards);
 	void removeCards(FlowLayoutPanel^ cardsContainer, vector<Card*> cards);
 
-	void makeHumanMove(Object^ info);
+	WinResults makeHumanMove(Object^ info);
+
+	void restart();
 
 	~PresidentI();
 };
