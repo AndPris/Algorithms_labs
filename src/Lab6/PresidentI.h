@@ -62,7 +62,7 @@ class PresidentI {
 
 	WinResults checkWinCondition() const;
 
-	void displayCards(FlowLayoutPanel^ cardContainer, vector<Card*> cards, RotateFlipType rotationDegree);
+	void displayCards(FlowLayoutPanel^ cardContainer, vector<Card*> cards, RotateFlipType rotationDegree, bool hide = false);
 	void clearCardsContainer(FlowLayoutPanel^ cardsContainer);
 	string getCardPath(Card* card);
 	PictureBox^ getPicture(String^ cardPath, RotateFlipType rotationDegree);

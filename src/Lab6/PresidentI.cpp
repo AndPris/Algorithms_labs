@@ -40,19 +40,23 @@ void PresidentI::displayAllCards() {
 
 	for (int i = 0; i < AMOUNT_OF_AI_PLAYERS; ++i) {
 		if(i%2 == 1)
-			displayCards(cardsContainers::containers[i + 1], AIPlayers.at(i)->getCards(), RotateFlipType::RotateNoneFlipNone);
+			displayCards(cardsContainers::containers[i + 1], AIPlayers.at(i)->getCards(), RotateFlipType::RotateNoneFlipNone, true);
 		else
-			displayCards(cardsContainers::containers[i + 1], AIPlayers.at(i)->getCards(), RotateFlipType::Rotate90FlipNone);
+			displayCards(cardsContainers::containers[i + 1], AIPlayers.at(i)->getCards(), RotateFlipType::Rotate90FlipNone, true);
 	}
 
 	displayCards(cardsContainers::containers[CARDS_ON_DESK_CONTAINER], cardsOnDesk, RotateFlipType::RotateNoneFlipNone);
 }
 
-void PresidentI::displayCards(FlowLayoutPanel^ cardsContainer, vector<Card*> cards, RotateFlipType rotationDegree) {
+void PresidentI::displayCards(FlowLayoutPanel^ cardsContainer, vector<Card*> cards, RotateFlipType rotationDegree, bool hide) {
 	clearCardsContainer(cardsContainer);
 
 	for (auto card : cards) {
-		String^ cardPath = gcnew String(getCardPath(card).c_str());
+		String^ cardPath;
+		if (hide)
+			cardPath = "cards\\back_side.png";
+		else
+			cardPath = gcnew String(getCardPath(card).c_str());
 		PictureBox^ picture = getPicture(cardPath, rotationDegree);
 		cardInfo^ info = gcnew cardInfo;
 		info->name = card->getName();
