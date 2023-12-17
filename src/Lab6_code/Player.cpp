@@ -12,14 +12,17 @@ int Player::findPositionForCard(Card* card) {
 void Player::removeSelectedCardsFromAllCards() {
 	if (selectedCards.empty())
 		return;
+	
+	for (auto selectedCard : selectedCards) {
+		int i = 0;
 
-	int i = 0;
-	while (i < cards.size()) {
-		if (*cards.at(i) == *selectedCards.at(0)) {
-			cards.erase(find(cards.begin(), cards.end(), cards.at(i)));
-			--i;
+		while (i < cards.size()) {
+			if (*cards.at(i) == *selectedCard && cards.at(i)->getSuit() == selectedCard->getSuit()) {
+				cards.erase(find(cards.begin(), cards.end(), cards.at(i)));
+				--i;
+			}
+			++i;
 		}
-		++i;
 	}
 }
 

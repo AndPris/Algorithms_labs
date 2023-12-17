@@ -152,7 +152,8 @@ void PresidentI::clearCardsContainer(FlowLayoutPanel^ cardsContainer) {
 
 Card* PresidentI::getHumanCardFromCardInfo(Object^ info) {
 	cardInfo^ clickedCardInfo = dynamic_cast<cardInfo^>(info);
-	for (auto card : humanPlayer->getCards()) {
+	vector<Card*> cards = humanPlayer->getCards();
+	for (auto card : cards) {
 		if (card->getName() == clickedCardInfo->name && card->getSuit() == clickedCardInfo->suit)
 			return card;
 	}
