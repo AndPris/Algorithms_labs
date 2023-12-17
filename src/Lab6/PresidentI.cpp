@@ -166,23 +166,21 @@ void PresidentI::setCardsOnDesk(vector<Card*> cards) {
 }
 
 void PresidentI::makeHumanMove(Object^ info) {
-	if (!humanPlayer->canFightBack()) {
-		changeResultLabelText("You can't beat these cards");
-		Sleep(PAUSE);
-		makeAIPlayersMoves();
-		return;
-	}
-
 	Card* selectedCard = getHumanCardFromCardInfo(info);
 	if (!humanPlayer->selectCardsForTurn(selectedCard)) {
 		changeResultLabelText("You can't make turn using these cards");
 		return;
 	}
-
+	disableHumanPlayerCards();
 	vector<Card*> playedCards(humanPlayer->makeTurn());
 	setCardsOnDesk(playedCards);
 	removeCards(cardsContainers::containers[HUMAN_CONTAINER], playedCards);
 	lastActingPlayer = humanPlayer;
+
+	if (checkWinCondition() == HUMAN_WIN) {
+		changeResultLabelText("You won!");
+		return;
+	}
 
 	Sleep(PAUSE);
 	makeAIPlayersMoves();
@@ -192,7 +190,6 @@ void PresidentI::makeAIPlayersMoves() {
 	for (int i = 0; i < AIPlayers.size(); ++i) {
 		if (lastActingPlayer == AIPlayers.at(i)) {
 			changeResultLabelText("No one could beat " + (i+1) + " AI player's cards!");
-			/*clearCardsContainer(cardsContainers::containers[CARDS_ON_DESK_CONTAINER]);*/
 			setCardsOnDesk(vector<Card*>{});
 			Sleep(PAUSE / 2);
 		}
@@ -210,17 +207,28 @@ void PresidentI::makeAIPlayersMoves() {
 		}
 
 		removeCards(cardsContainers::containers[i+1], playedCards);
+
+		if (checkWinCondition() == AI_WIN) {
+			changeResultLabelText("AI player " + (i + 1) + " won!");
+			return;
+		}
+		enableHumanPlayerCards();
 		Sleep(PAUSE);
 	}
 
 	if (lastActingPlayer == humanPlayer) {
 		changeResultLabelText("No one could beat your cards!");
-		/*clearCardsContainer(cardsContainers::containers[CARDS_ON_DESK_CONTAINER]);*/
 		setCardsOnDesk(vector<Card*>{});
 		Sleep(PAUSE / 2);
 	}
 	humanPlayer->setCardsToBeat(cardsOnDesk);
-	changeResultLabelText("Your turn");
+	if (!humanPlayer->canFightBack()) {
+		changeResultLabelText("You can't beat these cards");
+		Sleep(PAUSE);
+		makeAIPlayersMoves();
+	} else {
+		changeResultLabelText("Your turn");
+	}
 }
 
 void PresidentI::changeResultLabelText(String^ newText) {
@@ -243,6 +251,24 @@ void PresidentI::removeCards(FlowLayoutPanel^ cardsContainer, vector<Card*> card
 		}
 		++i;
 	}
+}
+
+void PresidentI::disableHumanPlayerCards() {
+	for each (Control ^ control in cardsContainers::containers[HUMAN_CONTAINER]->Controls) {
+		control->Enabled = false;
+		Application::DoEvents();
+	}
+	cardsContainers::containers[HUMAN_CONTAINER]->Enabled = false;
+	Application::DoEvents();
+}
+
+void PresidentI::enableHumanPlayerCards() {
+	for each (Control ^ control in cardsContainers::containers[HUMAN_CONTAINER]->Controls) {
+		control->Enabled = true;
+		Application::DoEvents();
+	}
+	cardsContainers::containers[HUMAN_CONTAINER]->Enabled = true;
+	Application::DoEvents();
 }
 
 PresidentI::~PresidentI() {

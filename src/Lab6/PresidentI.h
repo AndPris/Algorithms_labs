@@ -69,6 +69,8 @@ class PresidentI {
 	Card* getHumanCardFromCardInfo(Object^ info);
 	void makeAIPlayersMoves();
 	void changeResultLabelText(String^ newText);
+	void disableHumanPlayerCards();
+	void enableHumanPlayerCards();
 public:
 	PresidentI();
 	
