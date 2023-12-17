@@ -212,7 +212,6 @@ void PresidentI::makeAIPlayersMoves() {
 			changeResultLabelText("AI player " + (i + 1) + " won!");
 			return;
 		}
-		enableHumanPlayerCards();
 		Sleep(PAUSE);
 	}
 
@@ -229,6 +228,7 @@ void PresidentI::makeAIPlayersMoves() {
 	} else {
 		changeResultLabelText("Your turn");
 	}
+	enableHumanPlayerCards();
 }
 
 void PresidentI::changeResultLabelText(String^ newText) {
@@ -254,20 +254,20 @@ void PresidentI::removeCards(FlowLayoutPanel^ cardsContainer, vector<Card*> card
 }
 
 void PresidentI::disableHumanPlayerCards() {
-	for each (Control ^ control in cardsContainers::containers[HUMAN_CONTAINER]->Controls) {
-		control->Enabled = false;
-		Application::DoEvents();
-	}
 	cardsContainers::containers[HUMAN_CONTAINER]->Enabled = false;
+
+	for each (Control ^ control in cardsContainers::containers[HUMAN_CONTAINER]->Controls)
+		control->Enabled = false;
+
 	Application::DoEvents();
 }
 
 void PresidentI::enableHumanPlayerCards() {
-	for each (Control ^ control in cardsContainers::containers[HUMAN_CONTAINER]->Controls) {
-		control->Enabled = true;
-		Application::DoEvents();
-	}
 	cardsContainers::containers[HUMAN_CONTAINER]->Enabled = true;
+
+	for each (Control ^ control in cardsContainers::containers[HUMAN_CONTAINER]->Controls)
+		control->Enabled = true;
+
 	Application::DoEvents();
 }
 

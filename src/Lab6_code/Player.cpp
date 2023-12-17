@@ -13,9 +13,13 @@ void Player::removeSelectedCardsFromAllCards() {
 	if (selectedCards.empty())
 		return;
 
-	for (auto card : cards) {
-		if (card == selectedCards.at(0))
-			cards.erase(find(cards.begin(), cards.end(), card));
+	int i = 0;
+	while (i < cards.size()) {
+		if (*cards.at(i) == *selectedCards.at(0)) {
+			cards.erase(find(cards.begin(), cards.end(), cards.at(i)));
+			--i;
+		}
+		++i;
 	}
 }
 
